@@ -13,7 +13,8 @@
   :components ((:module "src"
                 :serial t
                 :components
-                ((:file "download"))))
+                ((:file "error")
+                 (:file "download"))))
   :description "Common Lisp web apps on the desktop"
   :long-description
   #.(uiop:read-file-string

@@ -20,9 +20,8 @@
          :linux64
          :linux32))
     (t
-     ;(error 'ceramic.error:unsupported-os
-     ;       :os-name (uiop:operating-system))
-     ))
+     (error 'ceramic.error:unsupported-os
+            :os-name (uiop:operating-system))))
   "A keyword describing the type of the OS: :linux64, :linux32, :windows
 and :mac.")
 
