@@ -9,12 +9,16 @@
   :depends-on (:trivial-types
                :trivial-download
                :trivial-extract
-               :anaphora)
+               :anaphora
+               :cffi
+               :external-program)
   :components ((:module "src"
                 :serial t
                 :components
                 ((:file "error")
-                 (:file "download"))))
+                 (:file "os")
+                 (:file "download")
+                 (:file "browser"))))
   :description "Common Lisp web apps on the desktop"
   :long-description
   #.(uiop:read-file-string
