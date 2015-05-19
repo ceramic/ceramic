@@ -6,5 +6,6 @@
   :components ((:module "t"
                 :serial t
                 :components
-                ((:file "download")
+                ((:file "util")
+                 (:file "download")
                  (:file "ceramic")))))

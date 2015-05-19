@@ -34,19 +34,3 @@
 (defclass mac (operating-system)
   ()
   (:documentation "Mac."))
-
-(defun current-os ()
-  "Return the current operating system, an instance of operating-system."
-  (let ((64-bit (eql (cffi:foreign-type-size '(:pointer :int)) 8)))
-    (cond
-      ((uiop:os-windows-p)
-       (make-instance 'windows))
-      ((uiop:os-macosx-p)
-       (make-instance 'mac))
-      ((eq (uiop:operating-system) :linux)
-       (if 64-bit
-           (make-instance 'linux-64)
-           (make-instance 'linux-32)))
-      (t
-       (error 'ceramic.error:unsupported-os
-              :os-name (uiop:operating-system))))))

@@ -6,19 +6,13 @@
   :homepage ""
   :bug-tracker ""
   :source-control (:git "")
-  :depends-on (:trivial-types
-               :trivial-download
-               :trivial-extract
-               :anaphora
-               :cffi
-               :external-program)
+  :depends-on (:chrome-tools
+               :buildapp)
   :components ((:module "src"
                 :serial t
                 :components
-                ((:file "error")
-                 (:file "os")
-                 (:file "download")
-                 (:file "browser"))))
+                ((:file "file")
+                 (:file "build"))))
   :description "Common Lisp web apps on the desktop"
   :long-description
   #.(uiop:read-file-string
