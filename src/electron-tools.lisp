@@ -2,7 +2,9 @@
 (defpackage electron-tools
   (:use :cl)
   (:export :+download-url+
-           :download-url)
+           :download-url
+           :download
+           :binary-pathname)
   (:documentation "Tools for Electron."))
 (in-package :electron-tools)
 
@@ -32,3 +34,11 @@ system, architecture.")
                                            :version version
                                            :architecture architecture)
                              pathname))
+
+(defun binary-pathname (directory &key operating-system)
+  "The pathname to the Electron binary inside the directory it was extracted to."
+  (merge-pathnames (case operating-system
+                     (:linux #p"electron")
+                     (:mac #p"Electron.app/Contents/MacOS/Electron")
+                     (:windows #p"electron.exe"))
+                   directory))
