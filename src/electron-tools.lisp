@@ -26,7 +26,7 @@ system, architecture.")
         (arch (case architecture
                 (:64 "x64")
                 (:32 "ia32"))))
-  (format nil +download-url+ os os version arch)))
+  (format nil +download-url+ version version os arch)))
 
 (defun download (pathname &key operating-system version architecture)
   "Download a release to a pathname."
@@ -42,19 +42,3 @@ system, architecture.")
                      (:mac #p"Electron.app/Contents/MacOS/Electron")
                      (:windows #p"electron.exe"))
                    directory))
-
-(defun run-binary (pathname &key operating-system arguments)
-  "Run the binary."
-  (case operating-system
-    (:linux
-     (format nil "~S ~{~A ~}"
-             (namestring pathname)
-             arguments))
-    (:windows
-     (format nil "~S ~{~A ~}"
-             (namestring pathname)
-             arguments))
-    (:mac
-     (format nil "open -n ~S --args ~{~A ~}"
-             (namestring pathname)
-             arguments))))
