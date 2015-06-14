@@ -42,3 +42,19 @@ system, architecture.")
                      (:mac #p"Electron.app/Contents/MacOS/Electron")
                      (:windows #p"electron.exe"))
                    directory))
+
+(defun run-binary (pathname &key operating-system arguments)
+  "Run the binary."
+  (case operating-system
+    (:linux
+     (format nil "~S ~{~A ~}"
+             (namestring pathname)
+             arguments))
+    (:windows
+     (format nil "~S ~{~A ~}"
+             (namestring pathname)
+             arguments))
+    (:mac
+     (format nil "open -n ~S --args ~{~A ~}"
+             (namestring pathname)
+             arguments))))
