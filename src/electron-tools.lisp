@@ -16,8 +16,7 @@ system, architecture.")
 ;;; OS-specific utilities
 
 (defun download-url (&key operating-system version architecture)
-  "A download link to the snapshot, for a given operating system, version and
-architecture."
+  "A download link to the specified release."
   (let ((os (case operating-system
               (:linux "linux")
               (:mac "darwin")
@@ -26,3 +25,10 @@ architecture."
                 (:64 "x64")
                 (:32 "ia32"))))
   (format nil +download-url+ os os version arch)))
+
+(defun download (pathname &key operating-system version architecture)
+  "Download a release to a pathname."
+  (trivial-download:download (download-url :operating-system operating-system
+                                           :version version
+                                           :architecture architecture)
+                             pathname))
