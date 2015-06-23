@@ -6,7 +6,10 @@
   :homepage ""
   :bug-tracker ""
   :source-control (:git "")
-  :depends-on (:trivial-download)
+  :depends-on (:trivial-download
+               :trivial-extract
+               #-(or win32 mswindows)
+               :osicat)
   :components ((:module "src"
                 :serial t
                 :components
