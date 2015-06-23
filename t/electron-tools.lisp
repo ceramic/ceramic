@@ -19,7 +19,7 @@
                                :version "0.28.1"
                                :architecture arch))
     (finishes
-      (trivial-extract:extract-zip pathname))
+      (electron-tools:extract pathname))
     (is-true
      (probe-file (electron-tools:binary-pathname *test-directory*
                                                  :operating-system os)))))
