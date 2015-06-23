@@ -4,6 +4,7 @@
   (:export :+download-url+
            :download-url
            :download
+           :extract
            :binary-pathname)
   (:documentation "Tools for Electron."))
 (in-package :electron-tools)
@@ -34,6 +35,22 @@ system, architecture.")
                                            :version version
                                            :architecture architecture)
                              pathname))
+
+(defun extract (pathname)
+  "Extract an Electron snapshot into its containing directory."
+  (trivial-extract:extract-zip pathname)
+  ;; When on Unix, set the executable bit on the file
+  #-(or win32 mswindows)
+  (let* ((parent (uiop:pathname-directory-pathname pathname))
+         (binary (or (probe-file (binary-pathname parent
+                                                  :operating-system :linux))
+                     (probe-file (binary-pathname parent
+                                                  :operating-system :mac)))))
+    (when binary
+      (setf (osicat:file-permissions binary)
+            (list :user-read
+                  :user-write
+                  :user-exec)))))
 
 (defun binary-pathname (directory &key operating-system)
   "The pathname to the Electron binary inside the directory it was extracted to."
