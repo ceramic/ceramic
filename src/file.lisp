@@ -14,10 +14,19 @@
 
 (defvar *bundler-directory*
   (merge-pathnames #p"bundler/"
-                   (user-homedir-pathname))
+                   *ceramic-directory*)
   "The directory where Ceramic stores files related to the bundler.")
 
 (defvar *buildapp-pathname*
   (merge-pathnames #p"buildapp"
                    *bundler-directory*)
   "The pathname to the local copy of Buildapp.")
+
+(defun ensure-ceramic-directory ()
+  "Ensure the Ceramic directory exists."
+  (ensure-directories-exist *ceramic-directory*))
+
+(defun ensure-bundler-directory ()
+  "Ensure the bundler directory exists."
+  (ensure-ceramic-directory)
+  (ensure-directories-exist *bundler-directory*))
