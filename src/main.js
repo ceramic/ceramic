@@ -218,12 +218,41 @@ const dispatcher = {
    windowSetTitle(data['name'], data['title']);
   },
   //// Contents
-  'load-url': function(data) {
+  'window-load-url': function(data) {
     windowLoadUrl(data['name'], data['url']);
   },
-  'show-window': function(data) {
-    windowShow(data['name']);
+  'window-reload': function(data) {
+    windowReload(data['name']);
   },
+  'window-open-dev-tools': function(data) {
+    windowOpenDevTools(data['name']);
+  },
+  'window-close-dev-tools': function(data) {
+    windowCloseDevTools(data['name']);
+  },
+  ////// Text
+  'window-undo': function(data) {
+    windowUndo(data['name']);
+  },
+  'window-redo': function(data) {
+    windowRedo(data['name']);
+  },
+  'window-cut': function(data) {
+    windowCut(data['name']);
+  },
+  'window-copy': function(data) {
+    windowCopy(data['name']);
+  },
+  'window-paste': function(data) {
+    windowPaste(data['name']);
+  },
+  'window-delete': function(data) {
+    windowDelete(data['name']);
+  },
+  'window-select-all': function(data) {
+    windowSelectAll(data['name']);
+  },
+  // Other
   'quit': function(data) {
     quit();
   }
