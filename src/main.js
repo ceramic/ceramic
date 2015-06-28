@@ -39,9 +39,7 @@ function windowHide(name) {
   window_db[name].show();
 };
 
-function windowResize(name, width_str, height_str) {
-  const width = parseInt(width_str);
-  const height = parseInt(height_str);
+function windowResize(name, width, height) {
   window_db[name].setSize(width, height)
 };
 
@@ -77,7 +75,7 @@ function windowSetResizable(name) {
   window_db[name].setResizable(true);
 };
 
-function windowSetUnResizable(name) {
+function windowSetUnresizable(name) {
   window_db[name].setResizable(false);
 };
 
@@ -85,9 +83,7 @@ function windowCenter(name) {
   window_db[name].center();
 };
 
-function windowSetPosition(name, x_str, y_str) {
-  const x = parseInt(x_str);
-  const y = parseInt(y_str);
+function windowSetPosition(name, x, y) {
   window_db[name].setPosition(x,y);
 };
 
@@ -164,9 +160,64 @@ var iointerface = readline.createInterface({
 });
 
 const dispatcher = {
+  // Windows
+  //// Management
   'create-window': function(data) {
     windowCreate(data['name'], data);
   },
+  'close-window': function(data) {
+    windowClose(data['name']);
+  },
+  'destroy-window': function(data) {
+    windowDestroy(data['name']);
+  },
+  //// Display
+  'show-window': function(data) {
+    windowShow(data['name']);
+  },
+  'hide-window': function(data) {
+    windowHide(data['name']);
+  },
+  'resize-window': function(data) {
+    windowResize(data['name'], data['width'], data['height']);
+  },
+  'focus-window': function(data) {
+   windowFocus(data['name']);
+  },
+  'maximize-window': function(data) {
+   windowMaximize(data['name']);
+  },
+  'unmaximize-window': function(data) {
+   windowUnmaximize(data['name']);
+  },
+  'minimize-window': function(data) {
+   windowMinimize(data['name']);
+  },
+  'unminimize-window': function(data) {
+   windowUnminimize(data['name']);
+  },
+  'fullscreen-window': function(data) {
+   windowSetFullscreen(data['name']);
+  },
+  'unfullscreen-window': function(data) {
+   windowSetNoFullscreen(data['name']);
+  },
+  'resizable-window': function(data) {
+   windowSetResizable(data['name']);
+  },
+  'unresizable-window': function(data) {
+   windowSetUnresizable(data['name']);
+  },
+  'center-window': function(data) {
+   windowCenter(data['name']);
+  },
+  'set-window-position': function(data) {
+   windowSetPosition(data['name'], data['x'], data['y']);
+  },
+  'set-window-title': function(data) {
+   windowSetTitle(data['name'], data['title']);
+  },
+  //// Contents
   'load-url': function(data) {
     windowLoadUrl(data['name'], data['url']);
   },
