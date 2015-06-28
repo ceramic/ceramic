@@ -6,13 +6,22 @@
   :homepage ""
   :bug-tracker ""
   :source-control (:git "")
-  :depends-on (:chrome-tools
-               :buildapp)
+  :depends-on (:trivial-download
+               :trivial-extract
+               #-(or win32 mswindows)
+               :osicat
+               :jonathan
+               :cl-json
+               :external-program)
   :components ((:module "src"
                 :serial t
                 :components
-                ((:file "file")
-                 (:file "build"))))
+                ((:module "electron"
+                  :serial t
+                  :components
+                  ((:file "tools")
+                   (:static-file "main.js")
+                   (:file "driver"))))))
   :description "Common Lisp web apps on the desktop"
   :long-description
   #.(uiop:read-file-string
