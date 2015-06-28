@@ -1,11 +1,13 @@
 (in-package :cl-user)
-(defpackage ceramic-electron
+(defpackage ceramic.electron
   (:use :cl)
+  (:import-from :ceramic.electron.tools
+                :binary-pathname)
   (:export :start-process
            :send-command)
   ;; Commands
   (:export :quit))
-(in-package :ceramic-electron)
+(in-package :ceramic.electron)
 
 (defparameter +main-javascript+
   (asdf:system-relative-pathname :ceramic-electron #p"src/main.js")
@@ -43,8 +45,8 @@
 
 (defun start-process (directory &key operating-system)
   "Start an Electron process, returning the process object."
-  (let ((binary-pathname (electron-tools:binary-pathname directory
-                                                         :operating-system operating-system)))
+  (let ((binary-pathname (binary-pathname directory
+                                          :operating-system operating-system)))
     (external-program:start binary-pathname
                             (list)
                             :input :stream

@@ -1,5 +1,5 @@
 (in-package :cl-user)
-(defpackage electron-tools
+(defpackage ceramic.electron.tools
   (:use :cl)
   (:export :+download-url+
            :download-url
@@ -7,7 +7,7 @@
            :extract
            :binary-pathname)
   (:documentation "Tools for Electron."))
-(in-package :electron-tools)
+(in-package :ceramic.electron.tools)
 
 ;;; Constants
 
