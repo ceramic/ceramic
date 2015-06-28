@@ -8,7 +8,7 @@
                 :app-directory
                 :clean-release
                 :insert-javascript
-                :insert-package-json)
+                :insert-package-definition)
   (:export :tests))
 (in-package :ceramic-test.electron.tools)
 
@@ -17,29 +17,44 @@
 (defvar *test-directory*
   (asdf:system-relative-pathname :ceramic-test #p"t/test/"))
 
-(defun test-download-and-extract (os arch)
-  (when (probe-file *test-directory*)
-    (uiop:delete-directory-tree *test-directory* :validate t))
+(defun test-download-and-extract (os arch directory)
   (let ((pathname (merge-pathnames #p"electron.zip"
-                                   *test-directory*)))
-    (finishes
-      (download pathname
-                :operating-system os
-                :version "0.28.1"
-                :architecture arch))
+                                   directory)))
+    (unless (probe-file pathname)
+      (finishes
+        (download pathname
+                  :operating-system os
+                  :version "0.28.1"
+                  :architecture arch)))
     (finishes
       (extract pathname))
     (is-true
-     (probe-file (binary-pathname *test-directory*
-                                  :operating-system os)))
-    ;; Changes
-    (finishes
-      (clean-release *test-directory*))
-    (finishes
-      (insert-javascript *test-directory*))
-    (is-true
-     (probe-file (merge-pathnames #p"main.js"
-                                  (app-directory *test-directory*))))))
+     (probe-file (binary-pathname directory
+                                  :operating-system os)))))
+
+(defun test-changes (directory)
+  (finishes
+    (clean-release directory))
+  (finishes
+    (insert-javascript directory))
+  (is-true
+   (probe-file (merge-pathnames #p"main.js"
+                                (app-directory directory))))
+  (finishes
+    (insert-package-definition directory
+                               :name "test"
+                               :version "0.1"))
+  (is-true
+   (probe-file (merge-pathnames #p"package.json"
+                                (app-directory directory)))))
+
+(defun test-release (os arch)
+  (let ((directory (merge-pathnames
+                    (make-pathname :directory (list :relative
+                                                    (format nil "~A~A" os arch)))
+                    *test-directory*)))
+    (test-download-and-extract os arch directory)
+    (test-changes directory)))
 
 ;;; Tests
 
@@ -47,14 +62,16 @@
   :description "Electron tools tests.")
 (in-suite tests)
 
-(test linux-download
-  (test-download-and-extract :linux :64)
-  #|(test-download-and-extract :linux :32)|#)
+(test linux64-release
+ (test-release :linux :64))
 
 #| Takes too long
+(test linux32-release
+ (test-release :linux :32))
+
 (test windows-download
-  (test-download-and-extract :windows :64))
+ (test-release :windows :64))
 
 (test mac-download
-  (test-download-and-extract :mac :64))
+ (test-release :mac :64))
 |#

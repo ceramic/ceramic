@@ -6,12 +6,9 @@
   (:export :start-process
            :send-command)
   ;; Commands
-  (:export :quit))
+  (:export :create-window
+           :quit))
 (in-package :ceramic.electron)
-
-(defparameter +main-javascript+
-  (asdf:system-relative-pathname :ceramic-electron #p"src/main.js")
-  "Pathname to the JavaScript file for the main process.")
 
 (defun start-process (directory &key operating-system)
   "Start an Electron process, returning the process object."
