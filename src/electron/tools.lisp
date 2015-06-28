@@ -6,9 +6,10 @@
            :download
            :extract
            :binary-pathname
+           :app-directory
            :clean-release
            :insert-javascript
-           :insert-package:definition)
+           :insert-package-definition)
   (:documentation "Tools for Electron."))
 (in-package :ceramic.electron.tools)
 
@@ -67,6 +68,11 @@ system, architecture.")
                      (:windows #p"electron.exe"))
                    directory))
 
+(defun app-directory (directory)
+  "The pathname to the application directory of an Electron release."
+  (merge-pathnames #p"resources/default_app/"
+                   directory))
+
 (defun clean-release (directory)
   "Clean up default files from an Electron release."
   (let ((app-files (list #p"main.js"
@@ -75,8 +81,7 @@ system, architecture.")
                          #p"package.json")))
     (loop for file in app-files do
       (let ((pathname (merge-pathnames file
-                                       (merge-pathnames #p"resources/default_app/"
-                                                        directory))))
+                                       (app-directory directory))))
         (delete-file pathname)))))
 
 (defun insert-javascript (directory)

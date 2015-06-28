@@ -4,7 +4,12 @@
   (:import-from :ceramic.electron.tools
                 :download
                 :extract
-                :binary-pathname))
+                :binary-pathname
+                :app-directory
+                :clean-release
+                :insert-javascript
+                :insert-package-json)
+  (:export :tests))
 (in-package :ceramic-test.electron.tools)
 
 ;; Utilities
@@ -26,22 +31,30 @@
       (extract pathname))
     (is-true
      (probe-file (binary-pathname *test-directory*
-                                  :operating-system os)))))
+                                  :operating-system os)))
+    ;; Changes
+    (finishes
+      (clean-release *test-directory*))
+    (finishes
+      (insert-javascript *test-directory*))
+    (is-true
+     (probe-file (merge-pathnames #p"main.js"
+                                  (app-directory *test-directory*))))))
 
 ;;; Tests
 
 (def-suite tests
-  :description "electron-tools tests.")
+  :description "Electron tools tests.")
 (in-suite tests)
 
 (test linux-download
   (test-download-and-extract :linux :64)
-  (test-download-and-extract :linux :32))
+  #|(test-download-and-extract :linux :32)|#)
 
+#| Takes too long
 (test windows-download
   (test-download-and-extract :windows :64))
 
 (test mac-download
   (test-download-and-extract :mac :64))
-
-(run! 'tests)
+|#
