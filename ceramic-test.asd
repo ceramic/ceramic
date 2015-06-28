@@ -9,5 +9,6 @@
                 ((:module "electron"
                   :serial t
                   :components
-                  ((:file "tools")))
+                  ((:file "tools")
+                   (:file "driver")))
                  (:file "ceramic")))))

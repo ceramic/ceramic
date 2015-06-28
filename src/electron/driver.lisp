@@ -7,6 +7,8 @@
            :send-command)
   ;; Commands
   (:export :create-window
+           :window-load-url
+           :show-window
            :quit))
 (in-package :ceramic.electron)
 

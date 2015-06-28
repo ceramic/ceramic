@@ -4,3 +4,4 @@
 (in-package :ceramic-test)
 
 (run! 'ceramic-test.electron.tools:tests)
+(run! 'ceramic-test.electron:tests)

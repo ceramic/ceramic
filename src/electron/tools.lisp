@@ -21,7 +21,7 @@
 system, architecture.")
 
 (defparameter +main-javascript+
-  (asdf:system-relative-pathname :ceramic-electron #p"src/main.js")
+  (asdf:system-relative-pathname :ceramic #p"src/electron/main.js")
   "Pathname to the JavaScript file for the main process.")
 
 ;;; OS-specific utilities

@@ -9,10 +9,9 @@
                 :clean-release
                 :insert-javascript
                 :insert-package-definition)
-  (:export :tests))
+  (:export :*test-directory*
+           :tests))
 (in-package :ceramic-test.electron.tools)
-
-;; Utilities
 
 (defvar *test-directory*
   (asdf:system-relative-pathname :ceramic-test #p"t/test/"))
@@ -20,12 +19,11 @@
 (defun test-download-and-extract (os arch directory)
   (let ((pathname (merge-pathnames #p"electron.zip"
                                    directory)))
-    (unless (probe-file pathname)
-      (finishes
-        (download pathname
-                  :operating-system os
-                  :version "0.28.1"
-                  :architecture arch)))
+    (finishes
+      (download pathname
+                :operating-system os
+                :version "0.28.1"
+                :architecture arch))
     (finishes
       (extract pathname))
     (is-true
@@ -55,8 +53,6 @@
                     *test-directory*)))
     (test-download-and-extract os arch directory)
     (test-changes directory)))
-
-;;; Tests
 
 (def-suite tests
   :description "Electron tools tests.")
