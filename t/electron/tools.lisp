@@ -1,12 +1,16 @@
 (in-package :cl-user)
-(defpackage electron-tools-test
-  (:use :cl :fiveam))
-(in-package :electron-tools-test)
+(defpackage ceramic-test.electron.tools
+  (:use :cl :fiveam)
+  (:import-from :ceramic.electron.tools
+                :download
+                :extract
+                :binary-pathname))
+(in-package :ceramic-test.electron.tools)
 
 ;; Utilities
 
 (defvar *test-directory*
-  (asdf:system-relative-pathname :electron-tools-test #p"t/test/"))
+  (asdf:system-relative-pathname :ceramic-test #p"t/test/"))
 
 (defun test-download-and-extract (os arch)
   (when (probe-file *test-directory*)
@@ -14,15 +18,15 @@
   (let ((pathname (merge-pathnames #p"electron.zip"
                                    *test-directory*)))
     (finishes
-      (electron-tools:download pathname
-                               :operating-system os
-                               :version "0.28.1"
-                               :architecture arch))
+      (download pathname
+                :operating-system os
+                :version "0.28.1"
+                :architecture arch))
     (finishes
-      (electron-tools:extract pathname))
+      (extract pathname))
     (is-true
-     (probe-file (electron-tools:binary-pathname *test-directory*
-                                                 :operating-system os)))))
+     (probe-file (binary-pathname *test-directory*
+                                  :operating-system os)))))
 
 ;;; Tests
 
