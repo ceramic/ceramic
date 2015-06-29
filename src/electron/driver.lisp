@@ -27,7 +27,7 @@
                       (append (list (cons "cmd" command))
                               alist)))
         (input-stream (external-program:process-input-stream process)))
-    (format t "Sending ~A~%" json-string)
+    (format t "~&Sending ~A" json-string)
     (write-string json-string input-stream)
     (write-char #\Newline input-stream)
     (finish-output input-stream)
