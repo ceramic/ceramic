@@ -82,8 +82,8 @@
                            (progn
                              ,@alist)))))
 
-(define-window-command create-window "create-window" ()
-  ())
+(define-window-command create-window "create-window" (options)
+  options)
 
 (define-window-command close-window "close-window" ()
   ())
