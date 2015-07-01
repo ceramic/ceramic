@@ -7,14 +7,20 @@
                 :start-process
                 :release-directory)
   (:export :interactive)
-  ;; Window class
+  ;; Window & accessors
   (:export :window
+           :make-window
            :window-title
            :window-x
            :window-y
            :window-width
            :window-height
            :window-resizable-p)
+  ;; Methods
+  (:export :show-window
+           :hide-window
+           :close-window
+           :destroy-window)
   (:documentation "The main interface."))
 (in-package :ceramic)
 
@@ -132,12 +138,13 @@
     (call-with-defaults ceramic.electron:create-window
                         window
                         (append
+                         (list (cons "show" (cl-json:json-bool nil)))
                          (slot title "title")
                          (slot x "x")
                          (slot y "y")
                          (slot width "width")
                          (slot height "height")
-                         (cons "resizable" (window-resizable-p window))))))
+                         (list (cons "resizable" (window-resizable-p window)))))))
 
 (defmethod show-window ((window window))
   "Show the window."

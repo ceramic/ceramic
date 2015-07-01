@@ -62,11 +62,11 @@
 
 (defun send-command (process command alist)
   "Send a command Electron process."
-  (let ((json-string (cl-json:encode-json-alist-to-string
-                      (append (list (cons "cmd" command))
-                              alist)))
+  (let ((json-string (cl-json:with-explicit-encoder
+                       (cl-json:encode-json-alist-to-string
+                        (append (list (cons "cmd" command))
+                                alist))))
         (input-stream (external-program:process-input-stream process)))
-    (format t "~&Sending ~A" json-string)
     (write-string json-string input-stream)
     (write-char #\Newline input-stream)
     (finish-output input-stream)
