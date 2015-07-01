@@ -12,16 +12,22 @@
                :osicat
                :jonathan
                :cl-json
-               :external-program)
+               :external-program
+               :buildapp)
   :components ((:module "src"
                 :serial t
                 :components
-                ((:module "electron"
+                ((:file "util")
+                 (:file "error")
+                 (:file "os")
+                 (:file "file")
+                 (:module "electron"
                   :serial t
                   :components
                   ((:file "tools")
                    (:static-file "main.js")
-                   (:file "driver"))))))
+                   (:file "driver")))
+                 (:file "setup"))))
   :description "Common Lisp web apps on the desktop"
   :long-description
   #.(uiop:read-file-string

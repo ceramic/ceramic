@@ -2,13 +2,10 @@
 (defpackage ceramic-test.electron.tools
   (:use :cl :fiveam)
   (:import-from :ceramic.electron.tools
-                :download
-                :extract
+                :get-release
                 :binary-pathname
                 :app-directory
-                :clean-release
-                :insert-javascript
-                :insert-package-definition)
+                :prepare-release)
   (:export :*test-directory*
            :tests))
 (in-package :ceramic-test.electron.tools)
@@ -17,31 +14,21 @@
   (asdf:system-relative-pathname :ceramic-test #p"t/test/"))
 
 (defun test-download-and-extract (os arch directory)
-  (let ((pathname (merge-pathnames #p"electron.zip"
-                                   directory)))
-    (finishes
-      (download pathname
+  (finishes
+   (get-release directory
                 :operating-system os
                 :version "0.28.1"
                 :architecture arch))
-    (finishes
-      (extract pathname))
-    (is-true
-     (probe-file (binary-pathname directory
-                                  :operating-system os)))))
+  (is-true
+   (probe-file (binary-pathname directory
+                                :operating-system os))))
 
 (defun test-changes (directory)
   (finishes
-    (clean-release directory))
-  (finishes
-    (insert-javascript directory))
+    (prepare-release directory))
   (is-true
    (probe-file (merge-pathnames #p"main.js"
                                 (app-directory directory))))
-  (finishes
-    (insert-package-definition directory
-                               :name "test"
-                               :version "0.1"))
   (is-true
    (probe-file (merge-pathnames #p"package.json"
                                 (app-directory directory)))))

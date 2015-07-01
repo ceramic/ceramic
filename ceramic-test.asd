@@ -11,4 +11,5 @@
                   :components
                   ((:file "tools")
                    (:file "driver")))
+                 (:file "setup")
                  (:file "ceramic")))))
