@@ -11,6 +11,7 @@
   (:export :window
            :make-window
            :window-title
+           :window-url
            :window-x
            :window-y
            :window-width
@@ -23,7 +24,6 @@
            :destroy-window)
   (:documentation "The main interface."))
 (in-package :ceramic)
-
 ;;; Process management
 
 (defvar *process* nil
@@ -46,6 +46,10 @@
           :initarg :title
           :type string
           :documentation "The window title.")
+   (url :reader window-url
+        :initarg :url
+        :type string
+        :documentation "The window URL.")
    ;; Window geometry
    (x :reader window-x
       :initarg :x
@@ -70,10 +74,11 @@
                :documentation "Whether or not the window is resizable."))
   (:documentation "A browser window."))
 
-(defun make-window (&key title x y width height resizablep)
+(defun make-window (&key title url x y width height resizablep)
   (let ((args (remove-if #'(lambda (pair)
                              (null (rest pair)))
                          (list (cons :title title)
+                               (cons :url url)
                                (cons :x x)
                                (cons :y y)
                                (cons :width width)
@@ -95,6 +100,12 @@
                       window
                       title)
   (setf (slot-value window 'title) title))
+
+(defmethod (setf window-url) (url (window window))
+  (call-with-defaults ceramic.electron:window-load-url
+                      window
+                      url)
+  (setf (slot-value window 'url) url))
 
 (defmethod (setf window-x) (x (window window))
   (call-with-defaults ceramic.electron:set-window-position
@@ -143,13 +154,16 @@
     (call-with-defaults ceramic.electron:create-window
                         window
                         (append
-                         (list (cons "show" (cl-json:json-bool nil)))
                          (slot title "title")
                          (slot x "x")
                          (slot y "y")
                          (slot width "width")
                          (slot height "height")
-                         (list (cons "resizable" (window-resizable-p window)))))))
+                         (list (cons "resizable" (window-resizable-p window)))))
+    (when (slot-boundp window 'url)
+      (call-with-defaults ceramic.electron:window-load-url
+                          window
+                          (window-url window)))))
 
 (defmethod show-window ((window window))
   "Show the window."

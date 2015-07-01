@@ -83,7 +83,8 @@
                              ,@alist)))))
 
 (define-window-command create-window "create-window" (options)
-  options)
+  (append (list (cons "show" (cl-json:json-bool nil)))
+          options))
 
 (define-window-command close-window "close-window" ()
   ())
