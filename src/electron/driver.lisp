@@ -40,6 +40,14 @@
            :set-window-title
            :window-load-url
            :window-reload
+           :window-open-dev-tools
+           :window-close-dev-tools
+           :window-undo
+           :window-redo
+           :window-cut
+           :window-paste
+           :window-delete
+           :window-select-all
            :quit))
 (in-package :ceramic.electron)
 
