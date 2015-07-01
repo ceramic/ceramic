@@ -1,14 +1,45 @@
 (in-package :cl-user)
 (defpackage ceramic.electron
   (:use :cl)
+  (:import-from :ceramic.file
+                :*ceramic-directory*)
+  (:import-from :ceramic.os
+                :*operating-system*
+                :*architecture*)
   (:import-from :ceramic.electron.tools
-                :binary-pathname)
-  (:export :start-process
+                :binary-pathname
+                :get-release
+                :prepare-release)
+  ;; Interface
+  (:export :*electron-version*
+           :release-directory
+           :global-binary-pathame
+           :setup)
+  ;; Functions
+  (:export :*binary-pathname*
+           :start-process
            :send-command)
   ;; Commands
   (:export :create-window
-           :window-load-url
+           :close-window
+           :destroy-window
            :show-window
+           :hide-window
+           :resize-window
+           :focus-window
+           :maximize-window
+           :unmaximize-window
+           :minimize-window
+           :unminimize-window
+           :fullscreen-window
+           :unfullscreen-window
+           :resizeable-window
+           :unresizeable-window
+           :center-window
+           :set-window-position
+           :set-window-title
+           :window-load-url
+           :window-reload
            :quit))
 (in-package :ceramic.electron)
 
@@ -35,18 +66,127 @@
 
 ;;; Commands
 
-(defun create-window (process name)
-  (send-command process "create-window"
-                (list (cons "name" name))))
+(defmacro define-window-command (name string (&rest args) &body alist)
+  `(defun ,name (process name ,@args)
+     (send-command process
+                   ,string
+                   (append (list (cons "name" name))
+                           (progn
+                             ,@alist)))))
 
-(defun window-load-url (process name url)
-  (send-command process "load-url"
-                (list (cons "name" name)
-                      (cons "url" url))))
+(define-window-command create-window "create-window" ()
+  ())
 
-(defun show-window (process name)
-  (send-command process "show-window"
-                (list (cons "name" name))))
+(define-window-command close-window "close-window" ()
+  ())
+
+(define-window-command destroy-window "destroy-window" ()
+  ())
+
+(define-window-command show-window "show-window" ()
+  ())
+
+(define-window-command hide-window "hide-window" ()
+  ())
+
+(define-window-command resize-window "resize-window" (width height)
+  (list (cons "width" width)
+        (cons "height" height)))
+
+(define-window-command focus-window "focus-window" ()
+  ())
+
+(define-window-command maximize-window "maximize-window" ()
+  ())
+
+(define-window-command unmaximize-window "unmaximize-window" ()
+  ())
+
+(define-window-command minimize-window "minimize-window" ()
+  ())
+
+(define-window-command unminimize-window "unminimize-window" ()
+  ())
+
+(define-window-command fullscreen-window "fullscreen-window" ()
+  ())
+
+(define-window-command unfullscreen-window "unfullscreen-window" ()
+  ())
+
+(define-window-command resizable-window "resizable-window" ()
+  ())
+
+(define-window-command unresizable-window "unresizable-window" ()
+  ())
+
+(define-window-command center-window "center-window" ()
+  ())
+
+(define-window-command set-window-position "set-window-position" (x y)
+  (list (cons "x" x)
+        (cons "y" y)))
+
+(define-window-command set-window-title "set-window-title" (title)
+  (list (cons "title" title)))
+
+(define-window-command window-load-url "window-load-url" (url)
+  (list (cons "url" url)))
+
+(define-window-command window-reload "window-reload" ()
+  ())
+
+(define-window-command window-open-dev-tools "window-open-dev-tools" ()
+  ())
+
+(define-window-command window-close-dev-tools "window-close-dev-tools" ()
+  ())
+
+(define-window-command window-undo "window-undo" ()
+  ())
+
+(define-window-command window-redo "window-redo" ()
+  ())
+
+(define-window-command window-cut "window-cut" ()
+  ())
+
+(define-window-command window-copy "window-copy" ()
+  ())
+
+(define-window-command window-paste "window-paste" ()
+  ())
+
+(define-window-command window-delete "window-delete" ()
+  ())
+
+(define-window-command window-select-all "window-select-all" ()
+  ())
 
 (defun quit (process)
+  "End the Electron process."
   (send-command process "quit" nil))
+
+;;; Interface
+
+(defvar *electron-version* "0.28.1"
+  "The version of Electron to use.")
+
+(defun release-directory ()
+  "Pathname to the local copy of the Electron release."
+  (merge-pathnames #p"electron/" *ceramic-directory*))
+
+(defun global-binary-pathname ()
+  "The pathname to the downloaded Electron binary. Used for interactive
+  testing."
+  (binary-pathname (release-directory)
+                   :operating-system *operating-system*))
+
+(defun setup ()
+  "Set up the Electron driver."
+  (ensure-directories-exist (release-directory))
+  (get-release (release-directory)
+               :operating-system *operating-system*
+               :architecture *architecture*
+               :version *electron-version*)
+  (prepare-release (release-directory)))
