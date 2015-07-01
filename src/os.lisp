@@ -1,36 +1,32 @@
 (in-package :cl-user)
 (defpackage ceramic.os
   (:use :cl)
-  (:export :operating-system
-           :linux
-           :linux-32
-           :linux-64
-           :windows
-           :mac
-           :current-os)
-  (:documentation "Operating system classes for Ceramic."))
+  (:import-from :ceramic.error
+                :unsupported-operating-system)
+  (:export :*operating-system*
+           :*architecture*)
+  (:documentation "Operating system-related stuff."))
 (in-package :ceramic.os)
 
-(defclass operating-system ()
-  ()
-  (:documentation "The base class for an operating system."))
+(defun detect-operating-system ()
+  (cond
+    ((uiop:os-windows-p)
+     :windows)
+    ((uiop:os-macosx-p)
+     :mac)
+    ((uiop:os-unix-p)
+     :linux)
+    (t
+     (error 'unsupported-operating-system
+            :os-name (uiop:operating-system)))))
 
-(defclass linux (operating-system)
-  ()
-  (:documentation "Generic Linux."))
+(defun detect-architecture ()
+  (if (eql (cffi:foreign-type-size '(:pointer :int)) 8)
+      :64
+      :32))
 
-(defclass linux-32 (linux)
-  ()
-  (:documentation "32-bit Linux."))
+(defvar *operating-system* (detect-operating-system)
+  "The operating system.")
 
-(defclass linux-64 (linux)
-  ()
-  (:documentation "64-bit Linux."))
-
-(defclass windows (operating-system)
-  ()
-  (:documentation "Windows."))
-
-(defclass mac (operating-system)
-  ()
-  (:documentation "Mac."))
+(defvar *architecture* (detect-architecture)
+  "The OS architecture.")
