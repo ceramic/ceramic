@@ -33,8 +33,8 @@
            :unminimize-window
            :fullscreen-window
            :unfullscreen-window
-           :resizeable-window
-           :unresizeable-window
+           :resizable-window
+           :unresizable-window
            :center-window
            :set-window-position
            :set-window-title
