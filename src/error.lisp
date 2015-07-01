@@ -2,11 +2,15 @@
 (defpackage ceramic.error
   (:use :cl)
   (:export :ceramic-error
-           :unsupported-os)
+           :unsupported-operating-system)
   (:documentation "Error conditions."))
 (in-package :ceramic.error)
 
-(define-condition unsupported-os ()
+(define-condition ceramic-error ()
+  ()
+  (:documentation "The base class of Ceramic-related conditions."))
+
+(define-condition unsupported-operating-system ()
   ((os-name :reader os-name
             :initarg :os-name
             :type keyword
