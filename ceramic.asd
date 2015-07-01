@@ -13,7 +13,8 @@
                :jonathan
                :cl-json
                :external-program
-               :buildapp)
+               :buildapp
+               :uuid)
   :components ((:module "src"
                 :serial t
                 :components
@@ -27,7 +28,8 @@
                   ((:file "tools")
                    (:static-file "main.js")
                    (:file "driver")))
-                 (:file "setup"))))
+                 (:file "setup")
+                 (:file "ceramic"))))
   :description "Common Lisp web apps on the desktop"
   :long-description
   #.(uiop:read-file-string
