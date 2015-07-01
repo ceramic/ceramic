@@ -39,7 +39,7 @@
 
 (defclass window ()
   ((id :reader window-id
-       :initform (uuid:make-v4-uuid)
+       :initform (uuid:format-as-urn nil (uuid:make-v4-uuid))
        :type string
        :documentation "A unique string ID for the window.")
    (title :reader window-title
@@ -71,13 +71,18 @@
   (:documentation "A browser window."))
 
 (defun make-window (&key title x y width height resizablep)
-  (make-instance 'window
-                 :title title
-                 :x x
-                 :y y
-                 :width width
-                 :height height
-                 :resizablep resizablep))
+  (let ((args (remove-if #'(lambda (pair)
+                             (null (rest pair)))
+                         (list (cons :title title)
+                               (cons :x x)
+                               (cons :y y)
+                               (cons :width width)
+                               (cons :height height)
+                               (cons :resizablep resizablep)))))
+    (apply #'make-instance
+           (cons 'window
+                 (loop for (key . value) in args appending
+                   (list key value))))))
 
 ;;; Setters
 

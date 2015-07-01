@@ -8,7 +8,7 @@
 (in-package :ceramic.file)
 
 (defvar *ceramic-directory*
-  (merge-pathnames #p".ceramic"
+  (merge-pathnames #p".ceramic/"
                    (user-homedir-pathname))
   "The directory where Ceramic stores its files.")
 
