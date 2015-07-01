@@ -14,6 +14,7 @@
   (run! 'ceramic-test.electron.tools:tests)
   (run! 'ceramic-test.electron:tests)
   (run! 'ceramic-test.setup:tests)
+  (run! 'ceramic-test.integration:tests)
   ;; Cleanup
   (when (probe-file *ceramic-directory*)
     (wipe-data)))
