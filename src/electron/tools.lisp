@@ -3,13 +3,10 @@
   (:use :cl)
   (:export :+download-url+
            :download-url
-           :download
-           :extract
+           :get-release
            :binary-pathname
            :app-directory
-           :clean-release
-           :insert-javascript
-           :insert-package-definition)
+           :prepare-release)
   (:documentation "Tools for Electron."))
 (in-package :ceramic.electron.tools)
 
@@ -60,12 +57,26 @@ system, architecture.")
                   :user-write
                   :user-exec)))))
 
+(defun get-release (directory &key operating-system version architecture)
+  "Download an Electron release to the directory."
+  (let ((archive (merge-pathnames #p"electron.zip" directory)))
+    ;; Download the release to the directory
+    (download archive :operating-system operating-system
+                      :version version
+                      :architecture architecture)
+    ;; Extract it
+    (extract archive)
+    ;; Delete it
+    (delete-file archive)
+    t))
+
 (defun binary-pathname (directory &key operating-system)
   "The pathname to the Electron binary inside the directory it was extracted to."
   (merge-pathnames (case operating-system
                      (:linux #p"electron")
                      (:mac #p"Electron.app/Contents/MacOS/Electron")
-                     (:windows #p"electron.exe"))
+                     (:windows #p"electron.exe")
+                     (t (error "Unsupported operating system.")))
                    directory))
 
 (defun app-directory (directory)
@@ -90,14 +101,22 @@ system, architecture.")
                   (merge-pathnames #p"resources/default_app/main.js"
                                    directory)))
 
-(defun insert-package-definition (directory &key name version)
+(defun insert-package-definition (directory)
   "Insert the package.json into an Electron release."
   (with-open-file (output-stream (merge-pathnames #p"resources/default_app/package.json"
                                                   directory)
                                  :direction :output
                                  :if-does-not-exist :create)
-    (write-string (jonathan:to-json (list (cons "name" name)
-                                          (cons "version" version)
+    (write-string (jonathan:to-json (list (cons "name" "Ceramic/Electron")
+                                          (cons "version"
+                                                (asdf:component-version
+                                                 (asdf:find-system :ceramic)))
                                           (cons "main" "main.js"))
                                     :from :alist)
                   output-stream)))
+
+(defun prepare-release (directory)
+  "Prepare an Electron release."
+  (clean-release directory)
+  (insert-javascript directory)
+  (insert-package-definition directory))
