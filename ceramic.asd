@@ -3,9 +3,9 @@
   :maintainer "Fernando Borretti <eudoxiahp@gmail.com>"
   :license "MIT"
   :version "0.1"
-  :homepage ""
-  :bug-tracker ""
-  :source-control (:git "")
+  :homepage "http://ceramic.github.io/"
+  :bug-tracker "https://github.com/ceramic/ceramic/issues"
+  :source-control (:git "git@github.com:ceramic/ceramic.git")
   :depends-on (:trivial-download
                :trivial-extract
                #-(or win32 mswindows)
