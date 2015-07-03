@@ -1,0 +1,202 @@
+@begin(section)
+@title(Introduction)
+
+Ceramic is a library for creating desktop applications with web technologies and
+Common Lisp. It allows you to ship a native application that runs a Lisp web
+server, and displays browser windows to use that server, effectively turning a
+web application into a desktop app.
+
+Ceramic is inspired by @link[uri="http://nwjs.io/"](NW.js) and uses
+@link[uri="http://electron.atom.io/"](Electron).
+
+@begin(section)
+@title(Features)
+
+@begin(deflist)
+@term(Multi-platform)
+@def(Runs on Linux, Windows and Mac.)
+
+@term(No JavaScript)
+@def(Respects your good taste and mental health.)
+@end(deflist)
+
+@end(section)
+
+@begin(section)
+@title(Examples)
+
+@begin(section)
+@title(@link[uri="https://github.com/ceramic/marked/"](Marked))
+
+A simple Markdown editor and previewer.
+
+@end(section)
+
+@end(section)
+
+@end(section)
+
+@begin(section)
+@title(Tutorial)
+
+@begin(section)
+@title(Installation)
+
+Until Ceramic is available from Quicklisp, you have to clone it to your
+Quicklisp @c(local-projects) directory. Assuming your Quicklisp directory is
+@c(~/quicklisp):
+
+@code[lang=shell](git clone https://github.com/ceramic/ceramic.git ~/quicklisp/local-projects)
+
+Then, either restart Lisp or run @c((ql:register-local-projects)).
+
+@end(section)
+
+@begin(section)
+@title(Getting Started)
+
+First, we need to load Ceramic. We do this with Quicklisp:
+
+@code[lang=lisp](CL-USER> (ql:quickload :ceramic))
+
+Ceramic needs to download some things to run, so let's do that:
+
+@code[lang=lisp](CL-USER> (ceramic.setup:setup))
+
+Now we're all set up. Let's start creating some browser windows. Run the
+following code:
+
+@begin[lang=lisp](code)
+;; Tell Ceramic we're going to be prototyping
+(ceramic:interactive)
+
+;; Create a browser window
+(defvar window (ceramic:make-window :url "https://www.google.com/"
+                                    :width 800
+                                    :height 600))
+
+;; Show it
+(ceramic:show-window window)
+@end(code)
+
+An 800-by-600 pixel browser window pointed at Google should pop up.
+
+@end(section)
+
+@begin(section)
+@title(A web app)
+
+With Ceramic, we can write a web application @l(ndash) using
+@link[uri="http://clacklisp.org/"](Clack) @l(ndash) and create windows that use
+it.
+
+We'll be using @link[uri="https://github.com/eudoxia0/lucerne"](Lucerne), a web
+framework built on Clack to write the web app, and Ceramic to use it as a
+desktop app.
+
+First, load Lucerne:
+
+@code[lang=lisp](CL-USER> (ql:quickload :lucerne))
+
+Then, tell Ceramic we're going to use the interactive mode:
+
+@code[lang=lisp](CL-USER> (ceramic:interactive))
+
+Now, let's create a basic application:
+
+@begin[lang=lisp](code)
+@begin(verb)
+(in-package :cl-user)
+(defpackage ceramic-webapp
+  (:use :cl :lucerne)
+  (:export :run))
+(in-package :ceramic-webapp)
+(annot:enable-annot-syntax)
+
+;; Define an application
+(defapp app)
+
+;; Route requests to "/" to this function
+@route app "/"
+(defview hello ()
+  (respond "Hello, world!"))
+
+(defvar *window* nil)
+
+(defvar *port* 8000)
+
+(defun run ()
+  (start app :port *port*)
+  (setf *window*
+        (ceramic:make-window :url (format nil "http://localhost:~D/" *port*)))
+  (ceramic:show-window *window*))
+@end(verb)
+@end(code)
+
+Calling @c(run), a browser window with the text "Hello, world!" should pop up.
+
+@end(section)
+
+@begin(section)
+@title(Shipping)
+
+@end(section)
+
+@end(section)
+
+@begin(section)
+@title(API Reference)
+
+@begin(section)
+@title(Browser Windows)
+
+@cl:with-package[name="ceramic"](
+@cl:doc(class window)
+@cl:doc(function make-window)
+@cl:doc(method show-window (window window))
+@cl:doc(method hide-window (window window))
+@cl:doc(method close-window (window window))
+@cl:doc(method destroy-window (window window))
+)
+
+@end(section)
+
+@begin(section)
+@title(Interactive Development)
+
+@cl:with-package[name="ceramic"](
+@cl:doc(function interactive)
+)
+
+@end(section)
+
+@begin(section)
+@title(Setup)
+
+@cl:with-package[name="ceramic.setup"](
+@cl:doc(function setup)
+)
+
+@end(section)
+
+@begin(section)
+@title(Files and Directories)
+
+@cl:with-package[name="ceramic.file"](
+@cl:doc(variable *ceramic-directory*)
+@cl:doc(function wipe-data)
+)
+
+@end(section)
+
+@begin(section)
+@title(Operating System Utilities)
+
+@cl:with-package[name="ceramic.os"](
+@cl:doc(variable *operating-system*)
+@cl:doc(variable *architecture*)
+)
+
+@end(section)
+
+@end(section)
