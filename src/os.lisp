@@ -26,7 +26,7 @@
       :32))
 
 (defvar *operating-system* (detect-operating-system)
-  "The operating system.")
+  "The operating system. Either @c(:linux), @c(:windows) or @c(:mac).")
 
 (defvar *architecture* (detect-architecture)
-  "The OS architecture.")
+  "The OS architecture. Either @c(:64) or @c(:32).")
