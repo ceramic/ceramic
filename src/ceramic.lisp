@@ -3,6 +3,8 @@
   (:use :cl)
   (:import-from :ceramic.os
                 :*operating-system*)
+  (:import-from :ceramic.runtime
+                :*releasep*)
   (:import-from :ceramic.electron
                 :start-process
                 :release-directory)
@@ -24,6 +26,7 @@
            :destroy-window)
   (:documentation "The main interface."))
 (in-package :ceramic)
+
 ;;; Process management
 
 (defvar *process* nil
@@ -31,9 +34,15 @@
 
 (defun interactive ()
   "Start a process for interactive use."
-  (setf *process*
-        (ceramic.electron:start-process (ceramic.electron:release-directory)
-                                        :operating-system *operating-system*)))
+  (if *releasep*
+      ;; We're in a release, so don't let the user do this
+      nil
+      ;; We're in a dev environment
+      (progn
+        (setf *process*
+              (ceramic.electron:start-process (ceramic.electron:release-directory)
+                                              :operating-system *operating-system*))
+        t)))
 
 ;;; Window class
 
@@ -75,6 +84,7 @@
   (:documentation "A browser window."))
 
 (defun make-window (&key title url x y width height resizablep)
+  "Create a window."
   (let ((args (remove-if #'(lambda (pair)
                              (null (rest pair)))
                          (list (cons :title title)
@@ -184,3 +194,11 @@
   "Forcefully close the window."
   (call-with-defaults ceramic.electron:destroy-window
                       window))
+
+;;; Entry point for released applications
+
+(defmacro define-entry-point (name () &body body)
+  (let ((arguments (gensym)))
+    `(defun ,name (,arguments)
+       ;; Start the executable-relative Electron process
+       ,@body)))
