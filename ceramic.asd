@@ -14,7 +14,9 @@
                :cl-json
                :external-program
                :buildapp
-               :uuid)
+               :uuid
+               :zip
+               :cl-fad)
   :components ((:module "src"
                 :serial t
                 :components
@@ -22,6 +24,9 @@
                  (:file "error")
                  (:file "os")
                  (:file "file")
+                 (:file "runtime")
+                 (:file "resource")
+                 (:file "build")
                  (:module "electron"
                   :serial t
                   :components
@@ -29,7 +34,8 @@
                    (:static-file "main.js")
                    (:file "driver")))
                  (:file "setup")
-                 (:file "ceramic"))))
+                 (:file "ceramic")
+                 (:file "bundler"))))
   :description "Common Lisp web apps on the desktop"
   :long-description
   #.(uiop:read-file-string
