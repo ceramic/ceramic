@@ -32,7 +32,7 @@
 
 (test windows
   (finishes
-    (create-window *process* "win"))
+    (create-window *process* "win" nil))
   (finishes
     (window-load-url *process* "win" "https://www.google.com/"))
   (sleep 5))
