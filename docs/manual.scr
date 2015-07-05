@@ -190,7 +190,7 @@ For instance, assuming an application named @c(my-app):
 @begin(verb)
 (use-package :ceramic.resource)
 
-(define-resources (:my-app) ;; Name of the system
+(define-resources :my-app () ;; Name of the system
   (web-assets #p"assets/build/")
   (landsat-images #p"data/landsat/")
   (icons #p"assets/icons/"))
