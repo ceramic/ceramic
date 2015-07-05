@@ -35,12 +35,13 @@
                            (merge-pathnames #p"electron/"
                                             work-directory))
            ;; Compile the app
-           (ceramic.build:build system-name
-                                executable-pathname
-                                (concatenate 'string
-                                             "ceramic-entry::"
-                                             (string-downcase
-                                              (symbol-name system-name))))
+           (ceramic.build:build :system-name system-name
+                                :eval "(push :ceramic-release *features*)"
+                                :output-pathname executable-pathname
+                                :entry-point (concatenate 'string
+                                                          "ceramic-entry::"
+                                                          (string-downcase
+                                                           (symbol-name system-name))))
            ;; Zip up the folder
            (zip:zip bundle-pathname work-directory))
       (uiop:delete-directory-tree work-directory :validate t)
