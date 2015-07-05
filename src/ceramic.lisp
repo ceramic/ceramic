@@ -8,7 +8,9 @@
   (:import-from :ceramic.electron
                 :start-process
                 :release-directory)
-  (:export :interactive)
+  ;; Main interface
+  (:export :interactive
+           :define-entry-point)
   ;; Window & accessors
   (:export :window
            :make-window
