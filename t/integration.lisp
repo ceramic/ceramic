@@ -17,3 +17,7 @@
     (sleep 1)
     (finishes
      (ceramic:close-window window))))
+
+(test compiled
+  (finishes
+   (ceramic.bundler:bundle :ceramic-test-app)))
