@@ -12,6 +12,7 @@
 (in-package :ceramic.bundler)
 
 (defun bundle (system-name &key output)
+  (asdf:load-system system-name)
   (let* ((application-name (string-downcase
                             (symbol-name system-name)))
          (bundle (make-pathname :name application-name
@@ -27,6 +28,7 @@
     (ensure-directories-exist work-directory)
     (unwind-protect
          (progn
+           (format t "~&Copying resources...")
            ;; Copy application resources
            (copy-resources (merge-pathnames #p"resources/"
                                             work-directory))
@@ -35,6 +37,7 @@
                            (merge-pathnames #p"electron/"
                                             work-directory))
            ;; Compile the app
+           (format t "~&Compiling app...")
            (ceramic.build:build :system-name system-name
                                 :eval "(push :ceramic-release *features*)"
                                 :output-pathname executable-pathname
@@ -43,6 +46,10 @@
                                                           (string-downcase
                                                            (symbol-name system-name))))
            ;; Zip up the folder
+           (format t "~&Compressing...")
+           (when (probe-file bundle-pathname)
+             (format t "~&Found existing bundle, deleting...")
+             (delete-file bundle-pathname))
            (zip:zip bundle-pathname work-directory))
       (uiop:delete-directory-tree work-directory :validate t)
       bundle-pathname)))
