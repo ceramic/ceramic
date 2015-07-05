@@ -16,8 +16,11 @@
   (let ((position (mismatch (pathname-directory root)
                             (pathname-directory pathname)
                             :test #'equalp)))
-    (make-pathname :directory (cons :relative (subseq (pathname-directory pathname)
-                                                      position))
+    (make-pathname :directory (if (null position)
+                                  nil
+                                  (cons :relative
+                                        (subseq (pathname-directory pathname)
+                                                position)))
                    :defaults pathname)))
 
 (defun copy-directory (source destination)
@@ -25,13 +28,14 @@
   (ensure-directories-exist destination)
   (fad:walk-directory source
                       #'(lambda (pathname)
-                          (let* ((relative-path (subtract-pathname source pathname))
-                                 (target (merge-pathnames relative-path
-                                                          destination)))
-                            (if (uiop:directory-pathname-p pathname)
-                                ;; Ensure an equivalent directory exists
-                                (ensure-directories-exist target)
-                                ;; Copy the absolute source file to the target
-                                (uiop:copy-file pathname target))))
+                          (unless (equal pathname source)
+                            (let* ((relative-path (subtract-pathname source pathname))
+                                   (target (merge-pathnames relative-path
+                                                            destination)))
+                              (if (uiop:directory-pathname-p pathname)
+                                  ;; Ensure an equivalent directory exists
+                                  (ensure-directories-exist target)
+                                  ;; Copy the absolute source file to the target
+                                  (uiop:copy-file pathname target)))))
                       :directories :breadth-first)
   destination)
