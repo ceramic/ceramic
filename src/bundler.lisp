@@ -12,13 +12,13 @@
   (:documentation "Release applications."))
 (in-package :ceramic.bundler)
 
-(defun bundle (system-name &key output)
+(defun bundle (system-name &key bundle-pathname)
   (asdf:load-system system-name)
   (let* ((application-name (string-downcase
                             (symbol-name system-name)))
          (bundle (make-pathname :name application-name
                                 :type "zip"))
-         (bundle-pathname (or output
+         (bundle-pathname (or bundle-pathname
                               (asdf:system-relative-pathname system-name
                                                              bundle)))
          (work-directory (merge-pathnames #p"working/"
@@ -47,10 +47,11 @@
                                                           (string-downcase
                                                            (symbol-name system-name))))
            ;; Zip up the folder
-           (format t "~&Compressing...")
            (when (probe-file bundle-pathname)
              (format t "~&Found existing bundle, deleting...")
              (delete-file bundle-pathname))
+           (format t "~&Compressing...")
            (zip-up work-directory bundle-pathname))
       (uiop:delete-directory-tree work-directory :validate t)
+      (format t "~&Done!")
       bundle-pathname)))

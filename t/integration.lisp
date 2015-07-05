@@ -19,17 +19,22 @@
      (ceramic:close-window window))))
 
 (test compiled
-  (let* ((app-directory (asdf:system-relative-pathname :ceramic #p"t/app/"))
+  (let* ((extraction-directory (asdf:system-relative-pathname :ceramic-test-app
+                                                              #p"extract/"))
          (app-file (merge-pathnames #p"ceramic-test-app.zip"
-                                    app-directory)))
+                                    extraction-directory)))
+    (ensure-directories-exist extraction-directory)
     (finishes
-      (ceramic.bundler:bundle :ceramic-test-app))
+      (ceramic.bundler:bundle :ceramic-test-app
+                              :bundle-pathname app-file))
     (is-true
      (probe-file app-file))
     (finishes
       (trivial-extract:extract-zip app-file))
     (is-true
      (probe-file (merge-pathnames #p"ceramic-test-app"
-                                  app-directory)))
-    (when (probe-file app-file)
-      (delete-file app-file))))
+                                  extraction-directory)))
+    (is-true
+     (probe-file (merge-pathnames #p"resources/files/file.txt"
+                                  extraction-directory)))
+    (uiop:delete-directory-tree extraction-directory :validate t)))
