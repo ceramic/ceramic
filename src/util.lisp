@@ -69,11 +69,12 @@
 
 (defun tar-up (directory output)
   "Create a tar archive from the contents of a directory."
-  (archive:with-open-archive (archive output :direction :output)
-    (cl-fad:walk-directory directory
-                           #'(lambda (pathname)
-                               (let ((entry (archive:create-entry-from-pathname archive
-                                                                                pathname)))
-                                 (archive:write-entry-to-archive archive entry)))
-                           :directories :breadth-first)
-    (archive:finalize-archive archive)))
+  (let ((*default-pathname-defaults* (uiop:pathname-parent-directory-pathname directory))
+        (files (list)))
+    (flet ((relativize (pathname)
+             (subtract-pathname *default-pathname-defaults* pathname)))
+      (cl-fad:walk-directory directory
+                             #'(lambda (pathname)
+                                 (push (relativize pathname) files))))
+    (archive::create-tar-file output files)
+    output))

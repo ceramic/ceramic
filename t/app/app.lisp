@@ -9,6 +9,5 @@
 (ceramic:define-entry-point :ceramic-test-app ()
   (print ceramic.runtime::*releasep*)
   (print (ceramic.resource:resource 'files #p"file.txt"))
-  (print
   (let ((window (ceramic:make-window :url "http://google.com/")))
     (ceramic:show-window window)))
