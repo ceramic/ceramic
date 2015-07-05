@@ -21,7 +21,7 @@
 (test compiled
   (let* ((extraction-directory (asdf:system-relative-pathname :ceramic-test-app
                                                               #p"extract/"))
-         (app-file (merge-pathnames #p"ceramic-test-app.zip"
+         (app-file (merge-pathnames #p"ceramic-test-app.tar"
                                     extraction-directory)))
     (ensure-directories-exist extraction-directory)
     (finishes
@@ -30,7 +30,7 @@
     (is-true
      (probe-file app-file))
     (finishes
-      (trivial-extract:extract-zip app-file))
+      (trivial-extract:extract-tar app-file))
     (is-true
      (probe-file (merge-pathnames #p"ceramic-test-app"
                                   extraction-directory)))

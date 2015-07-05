@@ -3,21 +3,38 @@
   (:use :cl)
   (:import-from :ceramic.util
                 :zip-up
+                :tar-up
                 :copy-directory)
   (:import-from :ceramic.file
                 :*ceramic-directory*)
+  (:import-from :ceramic.os
+                :*operating-system*)
   (:import-from :ceramic.resource
                 :copy-resources)
   (:export :bundle)
   (:documentation "Release applications."))
 (in-package :ceramic.bundler)
 
+(defun archive-extension ()
+  "Use zip files on Windows and tar archives on Unix. This is necessary because
+tar archives preserve permissions (important for executing!), but Windows
+doesn't care about that, and Windows doesn't natively know about tar files (But
+most people can unzip)."
+  (if (eq *operating-system* :windows)
+      "zip"
+      "tar"))
+
+(defun create-archive (directory output)
+  (if (eq *operating-system* :windows)
+      (zip-up directory output)
+      (tar-up directory output)))
+
 (defun bundle (system-name &key bundle-pathname)
   (asdf:load-system system-name)
   (let* ((application-name (string-downcase
                             (symbol-name system-name)))
          (bundle (make-pathname :name application-name
-                                :type "zip"))
+                                :type (archive-extension)))
          (bundle-pathname (or bundle-pathname
                               (asdf:system-relative-pathname system-name
                                                              bundle)))
@@ -46,12 +63,12 @@
                                                           "ceramic-entry::"
                                                           (string-downcase
                                                            (symbol-name system-name))))
-           ;; Zip up the folder
+           ;; Compress the folder
            (when (probe-file bundle-pathname)
              (format t "~&Found existing bundle, deleting...")
              (delete-file bundle-pathname))
            (format t "~&Compressing...")
-           (zip-up work-directory bundle-pathname))
+           (create-archive work-directory bundle-pathname))
       (uiop:delete-directory-tree work-directory :validate t)
       (format t "~&Done!")
       bundle-pathname)))
