@@ -19,5 +19,12 @@
      (ceramic:close-window window))))
 
 (test compiled
-  (finishes
-   (ceramic.bundler:bundle :ceramic-test-app)))
+  (let* ((app-directory (asdf:system-relative-pathname :ceramic #p"t/app/"))
+         (app-file (merge-pathnames #p"ceramic-test-app.zip"
+                                    app-directory)))
+    (finishes
+      (ceramic.bundler:bundle :ceramic-test-app))
+    (is-true
+     (probe-file app-file))
+    (when (probe-file app-file)
+      (delete-file app-file))))
