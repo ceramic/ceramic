@@ -248,6 +248,8 @@ To easily create a pathname relative to a resource directory, you have the
 @begin(section)
 @title(Browser Windows)
 
+The core API is available on the @c(ceramic) package.
+
 @cl:with-package[name="ceramic"](
 @cl:doc(class window)
 @cl:doc(function make-window)
@@ -271,6 +273,9 @@ To easily create a pathname relative to a resource directory, you have the
 @begin(section)
 @title(Setup)
 
+The @c(ceramic.setup) package exports a single function to get everything
+prepared.
+
 @cl:with-package[name="ceramic.setup"](
 @cl:doc(function setup)
 )
@@ -279,6 +284,9 @@ To easily create a pathname relative to a resource directory, you have the
 
 @begin(section)
 @title(Files and Directories)
+
+The basic filesystem-related operations ceramic performs are defined the
+@c(ceramic.file) package.
 
 @cl:with-package[name="ceramic.file"](
 @cl:doc(variable *ceramic-directory*)
@@ -289,6 +297,8 @@ To easily create a pathname relative to a resource directory, you have the
 
 @begin(section)
 @title(Operating System Utilities)
+
+These utilities are kept in the @c(ceramic.os) package.
 
 @cl:with-package[name="ceramic.os"](
 @cl:doc(variable *operating-system*)
