@@ -69,7 +69,7 @@
 
 (defun tar-up (directory output)
   "Create a tar archive from the contents of a directory."
-  (let ((*default-pathname-defaults* (uiop:pathname-parent-directory-pathname directory))
+  (let ((*default-pathname-defaults* directory)
         (files (list)))
     (flet ((relativize (pathname)
              (subtract-pathname *default-pathname-defaults* pathname)))
