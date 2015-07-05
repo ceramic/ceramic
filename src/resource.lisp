@@ -35,8 +35,8 @@
 (defvar *resources* (list)
   "The list of resources.")
 
-(defun get-resource-directory (resource-tag)
-  "Return the pathname associated to a resource tag."
+(defun get-resource (resource-tag)
+  "Return the resource associated to a resource tag."
   (or (find resource-tag *resources* :key #'resource-tag)
       (error 'no-such-tag :tag resource-tag)))
 
@@ -66,12 +66,14 @@ executable pathname."
 
 (defun resource-directory (resource-tag)
   "Return the directory associated to a resource tag."
-  (if *releasep*
-      ;; Find the pathname relative to the executable pathname
-      (merge-pathnames (get-resource-directory resource-tag)
-                       (release-resources-directory))
-      ;; Return the original pathname
-      (get-resource-directory resource-tag)))
+  (let ((resource (get-resource resource-tag)))
+    (if *releasep*
+        ;; Find the pathname relative to the executable pathname
+        (merge-pathnames (resource-pathname resource)
+                         (release-resources-directory))
+        ;; Return the original pathname
+        (asdf:system-relative-pathname (resource-system resource)
+                                       (resource-pathname resource)))))
 
 (defun resource (resource-tag pathname)
   "Return the pathname of a resource relative to the directory of a resource

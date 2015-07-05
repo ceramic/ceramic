@@ -4,10 +4,13 @@
   (:import-from :ceramic.os
                 :*operating-system*)
   (:import-from :ceramic.runtime
-                :*releasep*)
+                :*releasep*
+                :executable-relative-pathname)
   (:import-from :ceramic.electron
                 :start-process
                 :release-directory)
+  (:import-from :ceramic.electron.tools
+                :binary-pathname)
   ;; Main interface
   (:export :interactive
            :define-entry-point)
@@ -205,7 +208,17 @@
 (defmacro define-entry-point (system-name () &body body)
   (let ((entry-point (intern (symbol-name system-name)
                              (find-package :ceramic-entry)))
-        (arguments (gensym)))
+        (arguments (gensym))
+        (electron-directory (gensym))
+        (binary (gensym)))
     `(defun ,entry-point (,arguments)
+       (declare (ignore ,arguments))
        ;; Start the executable-relative Electron process
-       ,@body)))
+       (let* ((*releasep* t)
+              (,electron-directory (executable-relative-pathname #p"electron/"))
+              (,binary (binary-pathname ,electron-directory
+                                        :operating-system *operating-system*)))
+         (setf *process*
+               (ceramic.electron:start-process ,binary
+                                               :operating-system *operating-system*))
+         ,@body))))
