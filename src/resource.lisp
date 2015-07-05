@@ -47,15 +47,15 @@
     (push (make-instance 'resource
                          :tag tag
                          :pathname directory
-                         :system-name system-name)
+                         :system system-name)
           *resources*)))
 
-(defmacro define-resources ((system-name) &rest pairs)
+(defmacro define-resources (system-name () &rest pairs)
   "Define resource tags for a system."
-  `(call-define-resouces ,system-name
-                         (list
-                          ,@(loop for (tag source-directory) in pairs collecting
-                              `(cons ,tag ,source-directory)))))
+  `(call-define-resources ,system-name
+                          (list
+                           ,@(loop for (tag source-directory) in pairs collecting
+                                   `(cons ',tag ,source-directory)))))
 
 ;;; Find resources
 
