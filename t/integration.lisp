@@ -36,5 +36,4 @@
                                   extraction-directory)))
     (is-true
      (probe-file (merge-pathnames #p"resources/files/file.txt"
-                                  extraction-directory)))
-    (uiop:delete-directory-tree extraction-directory :validate t)))
+                                  extraction-directory)))))

@@ -3,7 +3,8 @@
   (:use :cl)
   (:export :copy-directory
            :zip-up
-           :tar-up)
+           :tar-up
+           :ensure-executable)
   (:documentation "Ceramic's utilities."))
 (in-package :ceramic.util)
 
@@ -78,3 +79,15 @@
                                  (push (relativize pathname) files))))
     (archive::create-tar-file output files)
     output))
+
+(defun ensure-executable (pathname)
+  "Ensure a binary is executable."
+  #-(or win32 mswindows)
+  (progn
+    (setf (osicat:file-permissions pathname)
+          (list :user-read
+                :user-write
+                :user-exec))
+    t)
+  #+(or win32 mswindows)
+  t)

@@ -52,10 +52,7 @@ system, architecture.")
                      (probe-file (binary-pathname parent
                                                   :operating-system :mac)))))
     (when binary
-      (setf (osicat:file-permissions binary)
-            (list :user-read
-                  :user-write
-                  :user-exec)))))
+      (ceramic.util:ensure-executable binary))))
 
 (defun get-release (directory &key operating-system version architecture)
   "Download an Electron release to the directory."
