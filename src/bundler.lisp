@@ -10,7 +10,7 @@
   (:documentation "Release applications."))
 (in-package :ceramic.bundler)
 
-(defun bundle (system-name entry-point &key output)
+(defun bundle (system-name &key output)
   (let* ((application-name (string-downcase
                             (symbol-name system-name)))
          (bundle (make-pathname :name application-name
@@ -32,6 +32,12 @@
                            (merge-pathnames #p"electron/"
                                             work-directory))
            ;; Compile the app
+           (ceramic.build:build system-name
+                                bundle-pathname
+                                (concatenate 'string
+                                             "ceramic-entry::"
+                                             (string-downcase
+                                              (symbol-name system-name))))
            ;; Zip up the folder
            (zip:zip bundle-pathname work-directory))
       (uiop:delete-directory-tree work-directory :validate t)

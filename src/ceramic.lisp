@@ -197,8 +197,13 @@
 
 ;;; Entry point for released applications
 
-(defmacro define-entry-point (name () &body body)
-  (let ((arguments (gensym)))
-    `(defun ,name (,arguments)
+(defpackage ceramic-entry
+  (:use :cl))
+
+(defmacro define-entry-point (system-name () &body body)
+  (let ((entry-point (intern (symbol-name system-name)
+                             (find-package :ceramic-entry)))
+        (arguments (gensym)))
+    `(defun ,entry-point (,arguments)
        ;; Start the executable-relative Electron process
        ,@body)))
