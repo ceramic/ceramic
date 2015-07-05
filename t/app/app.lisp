@@ -4,7 +4,7 @@
 (in-package :ceramic-test-app)
 
 (ceramic.resource:define-resources :ceramic-test-app ()
-  (files #p"app/resources/"))
+  (files #p"resources/"))
 
 (ceramic:define-entry-point :ceramic-test-app ()
   (print

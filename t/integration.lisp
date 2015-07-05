@@ -26,5 +26,10 @@
       (ceramic.bundler:bundle :ceramic-test-app))
     (is-true
      (probe-file app-file))
+    (finishes
+      (trivial-extract:extract-zip app-file))
+    (is-true
+     (probe-file (merge-pathnames #p"ceramic-test-app"
+                                  app-directory)))
     (when (probe-file app-file)
       (delete-file app-file))))
