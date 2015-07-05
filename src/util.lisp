@@ -69,10 +69,11 @@
 
 (defun tar-up (directory output)
   "Create a tar archive from the contents of a directory."
-  (archive:with-open-archive (archive pathname :direction :output)
+  (archive:with-open-archive (archive output :direction :output)
     (cl-fad:walk-directory directory
                            #'(lambda (pathname)
-                               (let ((entry (archive:create-entry-from-pathname archive pathname)))
+                               (let ((entry (archive:create-entry-from-pathname archive
+                                                                                pathname)))
                                  (archive:write-entry-to-archive archive entry)))
                            :directories :breadth-first)
     (archive:finalize-archive archive)))

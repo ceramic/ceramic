@@ -8,12 +8,14 @@
   :source-control (:git "git@github.com:ceramic/ceramic.git")
   :depends-on (:trivial-download
                :trivial-extract
+               :uiop
+               :archive
+               :zip
                :jonathan
                :cl-json
                :external-program
                :buildapp
                :uuid
-               :ceramic
                :cl-fad
                #-(or win32 mswindows)
                :osicat)
