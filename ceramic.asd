@@ -26,7 +26,6 @@
                  (:file "file")
                  (:file "runtime")
                  (:file "resource")
-                 (:file "build")
                  (:module "electron"
                   :serial t
                   :components
@@ -35,6 +34,9 @@
                    (:file "driver")))
                  (:file "setup")
                  (:file "ceramic")
+                 #-ceramic-release
+                 (:file "build")
+                 #-ceramic-release
                  (:file "bundler"))))
   :description "Common Lisp web apps on the desktop"
   :long-description
