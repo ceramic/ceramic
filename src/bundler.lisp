@@ -7,6 +7,7 @@
                 :*ceramic-directory*)
   (:import-from :ceramic.resource
                 :copy-resources)
+  (:export :bundle)
   (:documentation "Release applications."))
 (in-package :ceramic.bundler)
 
@@ -19,7 +20,9 @@
                               (asdf:system-relative-pathname system-name
                                                              bundle)))
          (work-directory (merge-pathnames #p"working/"
-                                          *ceramic-directory*)))
+                                          *ceramic-directory*))
+         (executable-pathname (merge-pathnames (make-pathname :name application-name)
+                                               work-directory)))
     ;; We do everything inside the work directory, then zip it up and delete it
     (ensure-directories-exist work-directory)
     (unwind-protect
@@ -33,7 +36,7 @@
                                             work-directory))
            ;; Compile the app
            (ceramic.build:build system-name
-                                bundle-pathname
+                                executable-pathname
                                 (concatenate 'string
                                              "ceramic-entry::"
                                              (string-downcase
