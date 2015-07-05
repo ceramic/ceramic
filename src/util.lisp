@@ -2,7 +2,8 @@
 (defpackage ceramic.util
   (:use :cl)
   (:export :copy-directory
-           :zip-up)
+           :zip-up
+           :tar-up)
   (:documentation "Ceramic's utilities."))
 (in-package :ceramic.util)
 
@@ -42,6 +43,7 @@
   destination)
 
 (defun zip-up (directory output)
+  "Create a zip archive from the contents of a directory."
   (zip:with-output-to-zipfile (zipfile output)
     (flet ((write-directory (pathname)
              (zip:write-zipentry zipfile
@@ -64,3 +66,13 @@
                                      (write-directory pathname)
                                      (write-file pathname))))
                            :directories :breadth-first))))
+
+(defun tar-up (directory output)
+  "Create a tar archive from the contents of a directory."
+  (archive:with-open-archive (archive pathname :direction :output)
+    (cl-fad:walk-directory directory
+                           #'(lambda (pathname)
+                               (let ((entry (archive:create-entry-from-pathname archive pathname)))
+                                 (archive:write-entry-to-archive archive entry)))
+                           :directories :breadth-first)
+    (archive:finalize-archive archive)))

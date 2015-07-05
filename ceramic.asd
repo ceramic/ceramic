@@ -16,6 +16,7 @@
                :buildapp
                :uuid
                :zip
+               :ceramic
                :cl-fad)
   :components ((:module "src"
                 :serial t
