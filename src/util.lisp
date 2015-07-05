@@ -1,7 +1,8 @@
 (in-package :cl-user)
 (defpackage ceramic.util
   (:use :cl)
-  (:export :copy-directory)
+  (:export :copy-directory
+           :zip-up)
   (:documentation "Ceramic's utilities."))
 (in-package :ceramic.util)
 
@@ -39,3 +40,27 @@
                                   (uiop:copy-file pathname target)))))
                       :directories :breadth-first)
   destination)
+
+(defun zip-up (directory output)
+  (zip:with-output-to-zipfile (zipfile output)
+    (flet ((write-directory (pathname)
+             (zip:write-zipentry zipfile
+                                 (namestring
+                                  (subtract-pathname directory pathname))
+                                 (make-concatenated-stream)
+                                 :file-write-date (file-write-date pathname)))
+           (write-file (pathname)
+             (with-open-file (stream pathname
+                                     :element-type '(unsigned-byte 8))
+               (zip:write-zipentry zipfile
+                                   (namestring
+                                    (subtract-pathname directory pathname))
+                                   stream
+                                   :file-write-date (file-write-date pathname)))))
+    (cl-fad:walk-directory directory
+                           #'(lambda (pathname)
+                               (unless (equal pathname directory)
+                                 (if (uiop:directory-pathname-p pathname)
+                                     (write-directory pathname)
+                                     (write-file pathname))))
+                           :directories :breadth-first))))

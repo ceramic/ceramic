@@ -2,6 +2,7 @@
 (defpackage ceramic.bundler
   (:use :cl)
   (:import-from :ceramic.util
+                :zip-up
                 :copy-directory)
   (:import-from :ceramic.file
                 :*ceramic-directory*)
@@ -50,6 +51,6 @@
            (when (probe-file bundle-pathname)
              (format t "~&Found existing bundle, deleting...")
              (delete-file bundle-pathname))
-           (zip:zip bundle-pathname work-directory))
+           (zip-up work-directory bundle-pathname))
       (uiop:delete-directory-tree work-directory :validate t)
       bundle-pathname)))
