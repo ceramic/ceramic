@@ -22,7 +22,9 @@
   (let* ((extraction-directory (asdf:system-relative-pathname :ceramic-test-app
                                                               #p"extract/"))
          (app-file (merge-pathnames #p"ceramic-test-app.tar"
-                                    extraction-directory)))
+                                    extraction-directory))
+         (binary (merge-pathnames #p"ceramic-test-app"
+                                  extraction-directory)))
     (ensure-directories-exist extraction-directory)
     (finishes
       (ceramic.bundler:bundle :ceramic-test-app
@@ -32,8 +34,27 @@
     (finishes
       (trivial-extract:extract-tar app-file))
     (is-true
-     (probe-file (merge-pathnames #p"ceramic-test-app"
-                                  extraction-directory)))
+     (probe-file binary))
     (is-true
      (probe-file (merge-pathnames #p"resources/files/file.txt"
-                                  extraction-directory)))))
+                                  extraction-directory)))
+    (finishes
+      (ceramic.util:ensure-executable (merge-pathnames #p"electron/electron"
+                                                       extraction-directory))
+      (ceramic.util:ensure-executable binary))
+    ;; Run the app
+    (let* ((process (external-program:start (namestring binary) (list)
+                                            :output :stream))
+           (stdout (external-program:process-output-stream process)))
+      (sleep 0.1)
+      (is
+       (equal (read-line stdout) "T"))
+      (is
+       (equal (read-line stdout)
+              (namestring
+               (merge-pathnames #p"resources/files/file.txt"
+                                extraction-directory))))
+      (is
+       (equal (read-line stdout)
+              "opened window")))
+    (uiop:delete-directory-tree extraction-directory :validate t)))

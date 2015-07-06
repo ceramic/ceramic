@@ -4,13 +4,16 @@
   (:import-from :ceramic.util
                 :zip-up
                 :tar-up
-                :copy-directory)
+                :copy-directory
+                :ensure-executable)
   (:import-from :ceramic.file
                 :*ceramic-directory*)
   (:import-from :ceramic.os
                 :*operating-system*)
   (:import-from :ceramic.resource
                 :copy-resources)
+  (:import-from :ceramic.electron.tools
+                :binary-pathname)
   (:export :bundle)
   (:documentation "Release applications."))
 (in-package :ceramic.bundler)
@@ -40,6 +43,8 @@ most people can unzip)."
                                                              bundle)))
          (work-directory (merge-pathnames #p"working/"
                                           *ceramic-directory*))
+         (electron-directory (merge-pathnames #p"electron/"
+                                              work-directory))
          (executable-pathname (merge-pathnames (make-pathname :name application-name)
                                                work-directory)))
     ;; We do everything inside the work directory, then zip it up and delete it
@@ -52,8 +57,11 @@ most people can unzip)."
                                             work-directory))
            ;; Copy the electron directory
            (copy-directory (ceramic.electron:release-directory)
-                           (merge-pathnames #p"electron/"
-                                            work-directory))
+                           electron-directory)
+           ;; Ensure Electron is executable
+           (ensure-executable
+            (binary-pathname electron-directory
+                             :operating-system *operating-system*))
            ;; Compile the app
            (format t "~&Compiling app...")
            (ceramic.build:build :system-name system-name

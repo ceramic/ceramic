@@ -13,7 +13,8 @@
                 :binary-pathname)
   ;; Main interface
   (:export :interactive
-           :define-entry-point)
+           :define-entry-point
+           :quit)
   ;; Window & accessors
   (:export :window
            :make-window
@@ -200,6 +201,11 @@
   (call-with-defaults ceramic.electron:destroy-window
                       window))
 
+(defun quit (&optional (exit-status 0))
+  "Quit the application."
+  (ceramic.electron:quit *process*)
+  (uiop:quit exit-status))
+
 ;;; Entry point for released applications
 
 (defpackage ceramic-entry
@@ -217,8 +223,24 @@
        (let* ((*releasep* t)
               (,electron-directory (executable-relative-pathname #p"electron/"))
               (,binary (binary-pathname ,electron-directory
-                                        :operating-system *operating-system*)))
-         (setf *process*
-               (ceramic.electron:start-process ,binary
-                                               :operating-system *operating-system*))
-         ,@body))))
+                                        :operating-system *operating-system*))
+              (*process*
+                (ceramic.electron:start-process ,binary
+                                                :operating-system *operating-system*)))
+         (labels ((read-all-from-stream (stream)
+                    (concatenate 'string
+                                 (loop for byte = (read-char-no-hang stream nil nil)
+                                       while byte collecting byte)))
+                  (process-stdout ()
+                    (read-all-from-stream
+                     (external-program:process-output-stream
+                      *process*)))
+                  (wait-until-startup ()
+                    (let ((output (process-stdout)))
+                      (loop until (search "READY" output) do
+                        (let ((new-output (process-stdout)))
+                          (setf output (concatenate 'string output new-output)))))
+                    ;; Clear all stdout
+                    (process-stdout)))
+           (wait-until-startup)
+           ,@body)))))
