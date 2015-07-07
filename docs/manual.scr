@@ -61,7 +61,7 @@ First, we need to load Ceramic. We do this with Quicklisp:
 
 Ceramic needs to download some things to run, so let's do that:
 
-@code[lang=lisp](CL-USER> (ceramic.setup:setup))
+@code[lang=lisp](CL-USER> (ceramic:setup))
 
 Now we're all set up. Let's start creating some browser windows. Run the
 following code:
@@ -148,11 +148,14 @@ Calling @c(run), a browser window with the text "Hello, world!" should pop up.
 @title(Releasing)
 
 @begin(section)
-@title(Bundling)
+@title(Bundler)
 
 Ceramic applications can be compiled to native executables. This is done through
 the bundler, which compiles the app and its resources and external dependencies
-into a bundle, which is just a .zip file.
+into a bundle. On Windows, the bundle is just a .zip file. On Unix, it's a tar
+file. The reason for this is that everyone on Windows can open a zip file, and
+zip files don't preserve executable permissions, which are rather important on
+Unix.
 
 A bundle looks like this:
 
@@ -164,6 +167,15 @@ my-app.zip/
   resources/
     ... ;; Application resources
 @end(code)
+
+@begin(section)
+@title(API)
+
+@cl:with-package[name="ceramic.bundler"](
+@cl:doc(function bundle)
+)
+
+@end(section)
 
 @end(section)
 
@@ -246,6 +258,16 @@ To easily create a pathname relative to a resource directory, you have the
 @title(API Reference)
 
 @begin(section)
+@title(General)
+
+@cl:with-package[name="ceramic"](
+@cl:doc(function setup)
+@cl:doc(function interactive)
+)
+
+@end(section)
+
+@begin(section)
 @title(Browser Windows)
 
 The core API is available on the @c(ceramic) package.
@@ -259,51 +281,29 @@ The core API is available on the @c(ceramic) package.
 @cl:doc(method destroy-window (window window))
 )
 
-@end(section)
-
 @begin(section)
-@title(Interactive Development)
+@title(Resources)
 
-@cl:with-package[name="ceramic"](
-@cl:doc(function interactive)
+Resource management tools are defined in the @c(ceramic.resource) package.
+
+@cl:with-package[name="ceramic.resource"](
+@cl:doc(macro define-resources)
+@cl:doc(function resource-directory)
+@cl:doc(function resource)
 )
 
 @end(section)
 
 @begin(section)
-@title(Setup)
+@title(Releasing)
 
-The @c(ceramic.setup) package exports a single function to get everything
-prepared.
+The bundler is defined in the @c(ceramic.bundler) package.
 
-@cl:with-package[name="ceramic.setup"](
-@cl:doc(function setup)
+@cl:with-package[name="ceramic.bundler"](
+@cl:doc(function bundle)
 )
 
 @end(section)
-
-@begin(section)
-@title(Files and Directories)
-
-The basic filesystem-related operations ceramic performs are defined the
-@c(ceramic.file) package.
-
-@cl:with-package[name="ceramic.file"](
-@cl:doc(variable *ceramic-directory*)
-@cl:doc(function wipe-data)
-)
-
-@end(section)
-
-@begin(section)
-@title(Operating System Utilities)
-
-These utilities are kept in the @c(ceramic.os) package.
-
-@cl:with-package[name="ceramic.os"](
-@cl:doc(variable *operating-system*)
-@cl:doc(variable *architecture*)
-)
 
 @end(section)
 

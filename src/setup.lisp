@@ -16,7 +16,6 @@
   (buildapp:build-buildapp (namestring *buildapp-pathname*)))
 
 (defun setup ()
-  "Set up everything needed for Ceramic to run."
   (ensure-directories-exist *ceramic-directory*)
   (install-buildapp)
   (ceramic.electron:setup))

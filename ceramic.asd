@@ -35,11 +35,11 @@
                    (:static-file "main.js")
                    (:file "driver")))
                  (:file "setup")
-                 (:file "ceramic")
                  #-ceramic-release
                  (:file "build")
                  #-ceramic-release
-                 (:file "bundler"))))
+                 (:file "bundler")
+                 (:file "ceramic"))))
   :description "Common Lisp web apps on the desktop"
   :long-description
   #.(uiop:read-file-string

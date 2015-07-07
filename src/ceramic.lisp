@@ -12,7 +12,8 @@
   (:import-from :ceramic.electron.tools
                 :binary-pathname)
   ;; Main interface
-  (:export :interactive
+  (:export :setup
+           :interactive
            :define-entry-point
            :quit)
   ;; Window & accessors
@@ -32,6 +33,12 @@
            :destroy-window)
   (:documentation "The main interface."))
 (in-package :ceramic)
+
+;;; Setup
+
+(defun setup ()
+  "Set up everything needed for Ceramic to run."
+  (ceramic.setup:setup))
 
 ;;; Process management
 
