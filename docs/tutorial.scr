@@ -52,9 +52,8 @@ With Ceramic, we can write a web application @l(ndash) using
 @link[uri="http://clacklisp.org/"](Clack) @l(ndash) and create windows that use
 it.
 
-We'll be using @link[uri="https://github.com/eudoxia0/lucerne"](Lucerne), a web
-framework built on Clack to write the web app, and Ceramic to use it as a
-desktop app.
+We'll be using @link[uri="http://eudoxia.me/lucerne/"](Lucerne), a web framework
+built on Clack to write the web app, and Ceramic to use it as a desktop app.
 
 First, load Lucerne:
 
@@ -121,6 +120,12 @@ And that's it. Head over to the directory of the hello world example,
 @c(examples/hello-world/), you'll see a @c(.tar) file with the app's
 executable. Extract it and run the app. A window should pop up and you should
 see the 'Hello, World!' text.
+
+You can also tell it where to store the bundle through an optional argument:
+
+@begin[lang=lisp](code)
+(ceramic.bundler:bundle :ceramic-hello-world #p"build/bundle.tar")
+@end(code)
 
 @end(section)
 
