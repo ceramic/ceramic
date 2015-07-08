@@ -17,8 +17,6 @@
                :buildapp
                :uuid
                :cl-fad
-               :clack
-               :prove
                :clack-handler-hunchentoot
                #-(or win32 mswindows)
                :osicat)
@@ -38,6 +36,8 @@
                    (:static-file "main.js")
                    (:file "driver")))
                  (:file "setup")
+                 #-quicklisp
+                 (:file "ql-patch")
                  #+quicklisp
                  (:file "build")
                  #+quicklisp

@@ -94,15 +94,6 @@
   #+(or win32 mswindows)
   t)
 
-(defmacro without-feature ((feature) &body body)
-  "Execute body without a feature."
-  (let ((muffle (gensym)))
-    `(let ((,muffle (delete ,feature *features*)))
-       (declare (ignore ,muffle))
-       (unwind-protect
-            (progn ,@body)
-         (push ,feature *features*)))))
-
 (defmacro tell (format-string &rest args)
   "Log a message."
   `(format t (concatenate 'string "~&" ,format-string)

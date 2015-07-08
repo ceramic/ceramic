@@ -38,6 +38,7 @@ most people can unzip)."
 
 (defun bundle (system-name &key bundle-pathname)
   "Compile the application to an executable, and ship it with its resources."
+  (asdf:load-system system-name)
   (let* ((application-name (string-downcase
                             (symbol-name system-name)))
          (bundle (make-pathname :name application-name
