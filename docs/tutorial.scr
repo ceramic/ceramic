@@ -46,7 +46,7 @@ An 800-by-600 pixel browser window pointed at Google should pop up.
 @end(section)
 
 @begin(section)
-@title(A web app)
+@title(Building a Desktop Web App)
 
 With Ceramic, we can write a web application @l(ndash) using
 @link[uri="http://clacklisp.org/"](Clack) @l(ndash) and create windows that use
@@ -64,15 +64,17 @@ Then, tell Ceramic we're going to use the interactive mode:
 
 @code[lang=lisp](CL-USER> (ceramic:interactive))
 
-Now, let's create a basic application:
+Now, let's create a basic application. The source code and system definition of
+this app is in the @c(examples/hello-world/) directory of the Ceramic source
+code, so you can play around with it.
 
 @begin[lang=lisp](code)
 @begin(verb)
 (in-package :cl-user)
-(defpackage ceramic-webapp
+(defpackage ceramic-hello-world
   (:use :cl :lucerne)
   (:export :run))
-(in-package :ceramic-webapp)
+(in-package :ceramic-hello-world)
 (annot:enable-annot-syntax)
 
 ;; Define an application
@@ -88,12 +90,17 @@ Now, let's create a basic application:
 (defvar *port* 8000)
 
 (defun run ()
-  (start app :port *port*)
   (setf *window*
         (ceramic:make-window :url (format nil "http://localhost:~D/" *port*)))
-  (ceramic:show-window *window*))
+  (ceramic:show-window *window*)
+  (start app :port *port*))
+
+(ceramic:define-entry-point :ceramic-hello-world ()
+  (run))
 @end(verb)
 @end(code)
+
+Don't worry about that @c(define-entry-point) macro, we'll get to that later.
 
 Calling @c(run), a browser window with the text "Hello, world!" should pop up.
 
@@ -101,6 +108,27 @@ Calling @c(run), a browser window with the text "Hello, world!" should pop up.
 
 @begin(section)
 @title(Shipping)
+
+Ceramic can compile an application -- both produce an executable of the server
+and compile all the required resources -- into a bundle, which is basically an
+archive file. All you have to do is call the @c(bundle) function:
+
+@begin[lang=lisp](code)
+(ceramic.bundler:bundle :ceramic-hello-world)
+@end(code)
+
+And that's it. Head over to the directory of the hello world example,
+@c(examples/hello-world/), you'll see a @c(.tar) file with the app's
+executable. Extract it and run the app. A window should pop up and you should
+see the 'Hello, World!' text.
+
+@end(section)
+
+@begin(section)
+@title(More Complex Apps)
+
+Of course, a web application isn't just routes, you also have to bundle all
+sorts of assets. Ceramic takes care of that for you.
 
 @end(section)
 
