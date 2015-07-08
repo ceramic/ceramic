@@ -18,10 +18,10 @@
 (defvar *port* 8000)
 
 (defun run ()
-  (start app :port *port*)
   (setf *window*
         (ceramic:make-window :url (format nil "http://localhost:~D/" *port*)))
-  (ceramic:show-window *window*))
+  (ceramic:show-window *window*)
+  (start app :port *port*))
 
-(ceramic:define-entry-point :ceramic-test-app ()
+(ceramic:define-entry-point :ceramic-hello-world ()
   (run))
