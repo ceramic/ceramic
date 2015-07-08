@@ -17,6 +17,9 @@
                :buildapp
                :uuid
                :cl-fad
+               :clack
+               :prove
+               :clack-handler-hunchentoot
                #-(or win32 mswindows)
                :osicat)
   :components ((:module "src"
@@ -35,9 +38,9 @@
                    (:static-file "main.js")
                    (:file "driver")))
                  (:file "setup")
-                 #-ceramic-release
+                 #+quicklisp
                  (:file "build")
-                 #-ceramic-release
+                 #+quicklisp
                  (:file "bundler")
                  (:file "ceramic"))))
   :description "Common Lisp web apps on the desktop"
