@@ -2,7 +2,10 @@
 (defpackage ceramic.error
   (:use :cl)
   (:export :ceramic-error
-           :unsupported-operating-system)
+           :unsupported-operating-system
+           :not-in-release
+           :no-such-tag
+           :compilation-error)
   (:documentation "Error conditions."))
 (in-package :ceramic.error)
 
@@ -38,3 +41,19 @@
      (format stream "No such resource tag: ~A." (error-tag condition))))
   (:documentation "Signalled when the program references a resource tag that
   doesn't exist."))
+
+(define-condition compilation-error (ceramic-error)
+  ((command :reader error-command
+            :initarg :command
+            :type string
+            :documentation "The command used to run buildapp.")
+   (message :reader error-message
+            :initarg :message
+            :type string
+            :documentation "The error message produced by buildapp."))
+  (:report
+   (lambda (condition stream)
+     (format stream "Compilation failed with output: ~%~A~%~%The command was: ~A"
+             (error-message condition)
+             (error-command condition))))
+  (:documentation "Signalled when Buildapp fails."))
