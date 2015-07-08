@@ -218,7 +218,11 @@
 (defpackage ceramic-entry
   (:use :cl))
 
+(defmacro wait-forever ()
+  `(loop))
+
 (defmacro define-entry-point (system-name () &body body)
+  "Define the application's entry point."
   (let ((entry-point (intern (symbol-name system-name)
                              (find-package :ceramic-entry)))
         (arguments (gensym))
@@ -232,8 +236,10 @@
               (,binary (binary-pathname ,electron-directory
                                         :operating-system *operating-system*))
               (*process*
-                (ceramic.electron:start-process ,binary
-                                                :operating-system *operating-system*)))
+                (progn
+                  ;(format t "~&Starting Electron process...")
+                  (ceramic.electron:start-process ,binary
+                                                  :operating-system *operating-system*))))
          (labels ((read-all-from-stream (stream)
                     (concatenate 'string
                                  (loop for byte = (read-char-no-hang stream nil nil)
@@ -249,5 +255,12 @@
                           (setf output (concatenate 'string output new-output)))))
                     ;; Clear all stdout
                     (process-stdout)))
+           ;(format t "~&Waiting for startup...")
            (wait-until-startup)
-           ,@body)))))
+           ;(format t "~&Electron process started.")
+           (handler-case
+               (progn
+                 ,@body
+                 (wait-forever))
+             (t () (uiop:quit -1)))
+           (uiop:quit 0))))))
