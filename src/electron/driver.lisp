@@ -1,6 +1,8 @@
 (in-package :cl-user)
 (defpackage ceramic.electron
   (:use :cl)
+  (:import-from :ceramic.util
+                :tell)
   (:import-from :ceramic.file
                 :*ceramic-directory*)
   (:import-from :ceramic.os
@@ -194,8 +196,11 @@
 (defun setup ()
   "Set up the Electron driver."
   (ensure-directories-exist (release-directory))
-  (get-release (release-directory)
-               :operating-system *operating-system*
-               :architecture *architecture*
-               :version *electron-version*)
-  (prepare-release (release-directory)))
+  (if (probe-file (release-directory))
+      (tell "Already exists")
+      (progn
+        (get-release (release-directory)
+                     :operating-system *operating-system*
+                     :architecture *architecture*
+                     :version *electron-version*)
+        (prepare-release (release-directory)))))
