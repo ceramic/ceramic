@@ -5,7 +5,8 @@
                 :zip-up
                 :tar-up
                 :copy-directory
-                :ensure-executable)
+                :ensure-executable
+                :tell)
   (:import-from :ceramic.file
                 :*ceramic-directory*)
   (:import-from :ceramic.os
@@ -17,6 +18,9 @@
   (:export :bundle)
   (:documentation "Release applications."))
 (in-package :ceramic.bundler)
+
+(defvar +prelude+
+  "(progn (push :ceramic-release *features*))")
 
 (defun archive-extension ()
   "Use zip files on Windows and tar archives on Unix. This is necessary because
@@ -34,7 +38,6 @@ most people can unzip)."
 
 (defun bundle (system-name &key bundle-pathname)
   "Compile the application to an executable, and ship it with its resources."
-  (asdf:load-system system-name)
   (let* ((application-name (string-downcase
                             (symbol-name system-name)))
          (bundle (make-pathname :name application-name
@@ -52,7 +55,7 @@ most people can unzip)."
     (ensure-directories-exist work-directory)
     (unwind-protect
          (progn
-           (format t "~&Copying resources...")
+           (tell "Copying resources...")
            ;; Copy application resources
            (copy-resources (merge-pathnames #p"resources/"
                                             work-directory))
@@ -64,9 +67,9 @@ most people can unzip)."
             (binary-pathname electron-directory
                              :operating-system *operating-system*))
            ;; Compile the app
-           (format t "~&Compiling app...")
-           (ceramic.build:build :system-name system-name
-                                :eval "(push :ceramic-release *features*)"
+           (tell "Compiling app...")
+           (ceramic.build:build :eval +prelude+
+                                :system-name system-name
                                 :output-pathname executable-pathname
                                 :entry-point (concatenate 'string
                                                           "ceramic-entry::"
@@ -74,10 +77,10 @@ most people can unzip)."
                                                            (symbol-name system-name))))
            ;; Compress the folder
            (when (probe-file bundle-pathname)
-             (format t "~&Found existing bundle, deleting...")
+             (tell "Found existing bundle, deleting...")
              (delete-file bundle-pathname))
-           (format t "~&Compressing...")
+           (tell "Compressing...")
            (create-archive work-directory bundle-pathname))
       (uiop:delete-directory-tree work-directory :validate t)
-      (format t "~&Done!")
+      (tell "Done!")
       bundle-pathname)))
