@@ -4,7 +4,9 @@
   (:export :copy-directory
            :zip-up
            :tar-up
-           :ensure-executable)
+           :ensure-executable
+           :without-feature
+           :tell)
   (:documentation "Ceramic's utilities."))
 (in-package :ceramic.util)
 
@@ -91,3 +93,17 @@
     t)
   #+(or win32 mswindows)
   t)
+
+(defmacro without-feature ((feature) &body body)
+  "Execute body without a feature."
+  (let ((muffle (gensym)))
+    `(let ((,muffle (delete ,feature *features*)))
+       (declare (ignore ,muffle))
+       (unwind-protect
+            (progn ,@body)
+         (push ,feature *features*)))))
+
+(defmacro tell (format-string &rest args)
+  "Log a message."
+  `(format t (concatenate 'string "~&" ,format-string)
+           ,@args))
