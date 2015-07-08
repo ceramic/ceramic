@@ -1,0 +1,37 @@
+@begin(section)
+@title(Introduction)
+
+Ceramic is a library for creating desktop applications with web technologies and
+Common Lisp. It allows you to ship a native application that runs a Lisp web
+server, and displays browser windows to use that server, effectively turning a
+web application into a desktop app.
+
+Ceramic is inspired by @link[uri="http://nwjs.io/"](NW.js) and uses
+@link[uri="http://electron.atom.io/"](Electron).
+
+@begin(section)
+@title(Features)
+
+@begin(deflist)
+@term(Multi-platform)
+@def(Runs on Linux, Windows and Mac.)
+
+@term(No JavaScript)
+@def(Respects your good taste and mental health.)
+@end(deflist)
+
+@end(section)
+
+@begin(section)
+@title(Examples)
+
+@begin(section)
+@title(@link[uri="https://github.com/ceramic/marked/"](Marked))
+
+A simple Markdown editor and previewer.
+
+@end(section)
+
+@end(section)
+
+@end(section)
