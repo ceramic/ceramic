@@ -6,7 +6,7 @@ Common Lisp. It allows you to ship a native application that runs a Lisp web
 server, and displays browser windows to use that server, effectively turning a
 web application into a desktop app.
 
-Ceramic is inspired by @link[uri="http://nwjs.io/"](NW.js) and uses
+Ceramic was inspired by @link[uri="http://nwjs.io/"](NW.js) and uses
 @link[uri="http://electron.atom.io/"](Electron).
 
 @begin(section)

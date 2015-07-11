@@ -135,6 +135,16 @@ You can also tell it where to store the bundle through an optional argument:
 Of course, a web application isn't just routes, you also have to bundle all
 sorts of assets. Ceramic takes care of that for you.
 
+For this example, we'll use
+@link[uri="https://github.com/ceramic/marked/"](Marked): This is a simple
+Markdown editor and previewer. On startup, you get a window with two panes: On
+the left pane, you type Markdown code, and on the left, you get the rendered
+HTML. You can see it in action below:
+
+[SCREENSHOT]
+
+To test the app locally, just run @c((marked:start-app)). To deploy the app
+
 @end(section)
 
 @end(section)
