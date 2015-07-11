@@ -30,6 +30,8 @@ Ceramic was inspired by @link[uri="http://nwjs.io/"](NW.js) and uses
 
 A simple Markdown editor and previewer.
 
+@image[src=marked.png]()
+
 @end(section)
 
 @end(section)

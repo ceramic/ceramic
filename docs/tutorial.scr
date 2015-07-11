@@ -141,7 +141,7 @@ Markdown editor and previewer. On startup, you get a window with two panes: On
 the left pane, you type Markdown code, and on the left, you get the rendered
 HTML. You can see it in action below:
 
-[SCREENSHOT]
+@image[src=marked.png]()
 
 To test the app locally, just run @c((marked:start-app)). To deploy the app, we
 run the bundler command:
