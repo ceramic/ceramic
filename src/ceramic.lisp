@@ -25,7 +25,11 @@
            :window-y
            :window-width
            :window-height
-           :window-resizable-p)
+           :window-resizable-p
+           :maximize-window
+           :unmaximize-window
+           :minimize-window
+           :unminimize-window)
   ;; Methods
   (:export :show-window
            :hide-window
@@ -206,6 +210,31 @@
 (defmethod destroy-window ((window window))
   "Forcefully close the window."
   (call-with-defaults ceramic.electron:destroy-window
+                      window))
+
+(defmethod maximize-window ((window window))
+  "Maximize the window."
+  (call-with-defaults ceramic.electron:maximize-window
+                      window))
+
+(defmethod unmaximize-window ((window window))
+  "Un-maximize the window."
+  (call-with-defaults ceramic.electron:unmaximize-window
+                      window))
+
+(defmethod minimize-window ((window window))
+  "Minimize the window."
+  (call-with-defaults ceramic.electron:minimize-window
+                      window))
+
+(defmethod unminimize-window ((window window))
+  "Un-minimize the window."
+  (call-with-defaults ceramic.electron:unminimize-window
+                      window))
+
+(defmethod center-window ((window window))
+  "Center the window."
+  (call-with-defaults ceramic.electron:center-window
                       window))
 
 (defun quit (&optional (exit-status 0))
