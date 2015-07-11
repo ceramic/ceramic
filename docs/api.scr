@@ -23,7 +23,14 @@ The core API is available on the @c(ceramic) package.
 @cl:doc(method hide-window (window window))
 @cl:doc(method close-window (window window))
 @cl:doc(method destroy-window (window window))
+@cl:doc(method maximize-window (window window))
+@cl:doc(method unmaximize-window (window window))
+@cl:doc(method minimize-window (window window))
+@cl:doc(method unminimize-window (window window))
+@cl:doc(method center-window (window window))
 )
+
+@end(section)
 
 @begin(section)
 @title(Resources)
@@ -46,8 +53,6 @@ The bundler is defined in the @c(ceramic.bundler) package.
 @cl:with-package[name="ceramic.bundler"](
 @cl:doc(function bundle)
 )
-
-@end(section)
 
 @end(section)
 
