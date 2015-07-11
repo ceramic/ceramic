@@ -1,0 +1,31 @@
+language: common-lisp
+sudo: required
+
+env:
+  matrix:
+    - LISP=sbcl COVERALLS=true
+
+install:
+  # Install cl-travis
+  - curl https://raw.githubusercontent.com/luismbo/cl-travis/master/install.sh | bash
+  # Coveralls support
+  - git clone https://github.com/fukamachi/cl-coveralls ~/lisp/cl-coveralls
+  # Set up a virtual X framebuffer
+  - sudo apt-get install xvfb
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3 # give xvfb time to start
+
+script:
+  - cl -l fiveam -l cl-coveralls
+       -e '(setf fiveam:*debug-on-error* t)'
+       -e '(setf *debugger-hook*
+                 (lambda (c h)
+                   (declare (ignore c h))
+                   (uiop:quit -1)))'
+       -e '(coveralls:with-coveralls (:exclude (list "t"))
+             (ql:quickload :ceramic-test))'
+
+notifications:
+  email:
+    - eudoxiahp@gmail.com
