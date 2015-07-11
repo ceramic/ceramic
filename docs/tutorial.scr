@@ -164,9 +164,11 @@ If you look at the source of the Marked application, you'll see resources are
 defined like this:
 
 @begin[lang=lisp](code)
+@begin(verb)
 (define-resources :marked ()
   (assets #p"assets/")
   (templates #p"templates/"))
+@end(verb)
 @end(code)
 
 What this means is the tag @c(assets) is associated to the @c(assets/) directory
@@ -179,11 +181,13 @@ tag. In Marked we use this to set the directory where templates are stored so
 Djula can access them:
 
 @begin[lang=lisp](code)
+@begin(verb)
 (djula:add-template-directory
  (resource-directory 'templates))
 
 (defparameter +index+
   (djula:compile-template* "index.html"))
+@end(verb)
 @end(code)
 
 A useful function @l(ndash) to prevent you from calling @c(merge-pathnames) all
