@@ -143,7 +143,61 @@ HTML. You can see it in action below:
 
 [SCREENSHOT]
 
-To test the app locally, just run @c((marked:start-app)). To deploy the app
+To test the app locally, just run @c((marked:start-app)). To deploy the app, we
+run the bundler command:
+
+@begin[lang=lisp](code)
+(ceramic.bundler:bundle :marked)
+@end(code)
+
+Extract the app and run it: You'll see the window pop up and you can start
+editing. Close it and the app shuts down.
+
+The way Ceramic handles resources is by associating tags (such as @c(web-assets)
+or @c(data-files)) to certain pathnames relative to the system's source
+directory. In development, you reference a @i(resource tag) and get the pathname
+to that source directory. When bundling the app, resource directories are
+copied, and in production, when you reference a tag, you get the pathname to the
+copied directory inside the app's bundle.
+
+If you look at the source of the Marked application, you'll see resources are
+defined like this:
+
+@begin[lang=lisp](code)
+(define-resources :marked ()
+  (assets #p"assets/")
+  (templates #p"templates/"))
+@end(code)
+
+What this means is the tag @c(assets) is associated to the @c(assets/) directory
+in the directory of the @c(:marked) system, and the @c(templates) tag is
+associated to the @c(templates/) directory. You can associate tags to
+directories at any depth.
+
+We the @c(resource-directory) function to get the directory associated to a
+tag. In Marked we use this to set the directory where templates are stored so
+Djula can access them:
+
+@begin[lang=lisp](code)
+(djula:add-template-directory
+ (resource-directory 'templates))
+
+(defparameter +index+
+  (djula:compile-template* "index.html"))
+@end(code)
+
+A useful function @l(ndash) to prevent you from calling @c(merge-pathnames) all
+the time @l(ndash) is the @c(resource) function: This takes a tag and a
+pathname, and is the equivalent of adding that pathname to the end of the
+directory associated to that tag:
+
+@begin[lang=lisp](code)
+(resource 'assets #p"css/style.css")
+
+;; is the same as
+(merge-pathnames #p"css/style.css"
+                 (resource-directory 'assets))
+@end(code)
 
 @end(section)
 
