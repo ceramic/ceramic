@@ -196,11 +196,9 @@
 (defun setup ()
   "Set up the Electron driver."
   (ensure-directories-exist (release-directory))
-  (if (probe-file (release-directory))
-      (tell "Already exists")
-      (progn
-        (get-release (release-directory)
-                     :operating-system *operating-system*
-                     :architecture *architecture*
-                     :version *electron-version*)
-        (prepare-release (release-directory)))))
+  (progn
+    (get-release (release-directory)
+                 :operating-system *operating-system*
+                 :architecture *architecture*
+                 :version *electron-version*)
+    (prepare-release (release-directory))))

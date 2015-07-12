@@ -23,15 +23,15 @@
    (probe-file (binary-pathname directory
                                 :operating-system os))))
 
-(defun test-changes (directory)
+(defun test-changes (directory os)
   (finishes
-    (prepare-release directory))
+    (prepare-release directory :operating-system os))
   (is-true
    (probe-file (merge-pathnames #p"main.js"
-                                (app-directory directory))))
+                                (app-directory directory :operating-system os))))
   (is-true
    (probe-file (merge-pathnames #p"package.json"
-                                (app-directory directory)))))
+                                (app-directory directory :operating-system os)))))
 
 (defun test-release (os arch)
   (let ((directory (merge-pathnames
@@ -39,7 +39,7 @@
                                                     (format nil "~A~A" os arch)))
                     *test-directory*)))
     (test-download-and-extract os arch directory)
-    (test-changes directory)))
+    (test-changes directory os)))
 
 (def-suite tests
   :description "Electron tools tests.")
@@ -48,7 +48,6 @@
 (test linux64-release
  (test-release :linux :64))
 
-#| Takes too long
 (test linux32-release
  (test-release :linux :32))
 
@@ -57,4 +56,3 @@
 
 (test mac-download
  (test-release :mac :64))
-|#
