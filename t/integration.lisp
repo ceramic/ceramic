@@ -11,6 +11,7 @@
 (test interactive
   (finishes
    (ceramic:interactive))
+  (sleep 1)
   (let ((window (ceramic:make-window :title "My Window")))
     (finishes
      (ceramic:show-window window))
