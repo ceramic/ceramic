@@ -22,7 +22,7 @@ Ceramic was inspired by @link[uri="http://nwjs.io/"](NW.js) and uses
 
 @end(section)
 
-@begin(section)
+@begin[ref=intro-examples](section)
 @title(Examples)
 
 @begin(section)

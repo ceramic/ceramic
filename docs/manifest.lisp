@@ -6,5 +6,6 @@
                               :template :minima)
               :sources ("introduction.scr"
                         "tutorial.scr"
+                        "examples.scr"
                         "releasing.scr"
                         "api.scr"))))

@@ -1,0 +1,285 @@
+@begin[ref=examples](section)
+@title(Examples)
+
+The following examples illustrate the structure of a Ceramic application.
+
+@begin(section)
+@title(Marked)
+
+@link[uri="https://github.com/ceramic/marked/"](Marked) is a simple Markdown
+editor and previewer, designed to showcase the basic set of Ceramic's
+functionality. This is a breakdown of its implementation.
+
+@begin(section)
+@title(Server)
+
+First, the package definition. We use all of @c(:lucerne) to make the views
+easier, import @(define-resources) and @(resource-directory) from
+@c(:ceramic.resource) and export both the @c(app) object and the @c(start-app)
+function.
+
+Note how at the end we insert a call to @c(annot:enable-annot-syntax). This
+allows us to use the @c(@route) reader macro.
+
+@begin[lang=lisp](code)
+@begin(verb)
+(in-package :cl-user)
+(defpackage marked
+  (:use :cl :lucerne)
+  (:import-from :ceramic.resource
+                :define-resources
+                :resource-directory)
+  (:export :app
+           :start-app)
+  (:documentation "Main marked code."))
+(in-package :marked)
+(annot:enable-annot-syntax)
+@end(verb)
+@end(code)
+
+Now we define the app's resources, by associating the @c(assets) tag with the
+@c(assets/) directory and, similarly, associating @c(templates) with
+@c(templates/).
+
+Then, we define the app, and tell it to use the static-file middleware to serve
+files in the @c(assets) directory on the @c(/static/) path.
+
+@begin[lang=lisp](code)
+@begin(verb)
+;;; App resources
+
+(define-resources :marked ()
+  (assets #p"assets/")
+  (templates #p"templates/"))
+
+;;; App
+
+(defapp app
+  :middlewares ((clack.middleware.static:<clack-middleware-static>
+                 :root (resource-directory 'assets)
+                 :path "/static/")))
+@end(verb)
+@end(code)
+
+Next, templates: We tell Djula to look for them in the directory in the
+@c(templates) tag, and tell it to compile the "index.html" template it finds
+there.
+
+@begin[lang=lisp](code)
+@begin(verb)
+;;; Templates
+
+(djula:add-template-directory
+ (resource-directory 'templates))
+
+(defparameter +index+
+  (djula:compile-template* "index.html"))
+@end(verb)
+@end(code)
+
+And now, the actual views: We define a convenience @c(markdown-to-html) function
+that does precisely what it says on the tin. Then, two views: The index view
+that shows the editor/previewer template and the API view that takes a Markdown
+string and responds with the corresponding HTML.
+
+@begin[lang=lisp](code)
+@begin(verb)
+;;; Views
+
+(defun markdown-to-html (string)
+  (with-output-to-string (stream)
+    (let ((3bmd-code-blocks:*code-blocks* t)
+          (3bmd:*smart-quotes* t))
+      (3bmd:parse-string-and-print-to-stream string stream))))
+
+@route app "/"
+(defview index ()
+  "The index page displays the editor."
+  (render-template (+index+)))
+
+@route app (:post "/to-html")
+(defview to-html ()
+  "This part of the API receives Markdown and emits HTML"
+  (with-params (markdown)
+    (respond (markdown-to-html markdown))))
+@end(verb)
+@end(code)
+
+Finally, some startup code:
+
+@begin[lang=lisp](code)
+@begin(verb)
+;;; Startup
+
+(defvar *port* 40000)
+
+(defun start-app ()
+  (start app :port *port*))
+
+(ceramic:define-entry-point :marked ()
+  (let ((window (ceramic:make-window :url (format nil "http://localhost:~D/" *port*))))
+    (ceramic:show-window window)
+    (start-app)))
+@end(verb)
+@end(code)
+
+@end(section)
+
+@begin(section)
+@title(Templates)
+
+@end(section)
+
+@begin(section)
+@title(JavaScript)
+
+We'll just write some awful JavaScript that checks periodically for changes to
+the input @c(textarea), and if it finds them, sends them to the server and
+inserts the result into the output pane.
+
+@begin[lang=javascript](code)
+@begin(verb)
+/* JavaScript */
+
+function textareaHasInput(node) {
+  return (node.value != null && node.value != "");
+};
+
+var last_text = null;
+
+function changed(text) {
+  return !(last_text != null && text == last_text);
+}
+
+function postMarkdown() {
+  // When the Markdown changes, POST it to the server and get the resulting HTML
+  var input = document.getElementById("input");
+  if(textareaHasInput(input) && changed(input.value)) {
+    console.log("Sending input");
+    last_text = input.value;
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+      var output = document.getElementById("output");
+      const new_html = req.responseText;
+      if(output.innerHTML != new_html) {
+        output.innerHTML = new_html;
+      }
+    };
+    req.open("POST", "/to-html", true);
+    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    req.send("markdown=" + encodeURIComponent(input.value));
+  }
+};
+
+document.addEventListener("DOMContentLoaded", function(event) {
+  setInterval(postMarkdown, 500);
+  postMarkdown();
+});
+@end(verb)
+@end(code)
+
+@end(section)
+
+@begin(section)
+@title(Style)
+
+First, the general layout:
+
+@begin[lang=css](code)
+@begin(verb)
+@charset "utf-8";
+
+/* Make the textarea and output occupy two columns on the entire screen. */
+
+body {
+    margin: 0 auto;
+}
+
+#input-container, #output-container {
+    width: 50%;
+    height: 100vh;
+    margin: 0;
+    border: 0;
+    float: left;
+}
+
+/* Give both input and output a gap separating them from their containers */
+
+#input, #output {
+    display: block; /* <textarea> needs this */
+    width: 90%;
+    margin: 0 auto;
+    border: 0;
+    padding: 0;
+}
+
+#input {
+    height: 100%;
+    font-family: Consolas, Menlo, Monaco, Lucida Console, monospace;
+    resize: none;
+}
+@end(verb)
+@end(code)
+
+We then style the input @c(textarea): Here's where we create the black border
+separating the two panes, and add some padding.
+
+@begin[lang=css](code)
+@begin(verb)
+/* Input textarea style */
+
+#input-container {
+    border-right: 1px solid black;
+    box-sizing: border-box;
+    padding: 25px;
+}
+@end(verb)
+@end(code)
+
+The next section is just styling the output so it looks good:
+
+@begin[lang=css](code)
+@begin(verb)
+/* Output style */
+
+a:link, a:visited, a:hover, a:active {
+    color: #4183C4;
+    text-decoration: none;
+}
+
+#output-container {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+}
+
+code {
+    font-size: 90%;
+    font-family: Consolas, Menlo, Monaco, Lucida Console, monospace;
+}
+
+pre {
+    padding: 5px;
+    background-color: #F8F8F8;
+    border: 1px solid #CCC;
+    width: 80%;
+    margin: 0 auto;
+    border-radius: 3px;
+}
+
+pre code {
+    margin: 0;
+    padding: 0;
+}
+
+blockquote {
+    font-style: italic;
+    width: 80%;
+}
+@end(verb)
+@end(code)
+
+@end(section)
+
+@end(section)
+
+@end(section)
