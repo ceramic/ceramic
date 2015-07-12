@@ -11,10 +11,53 @@ editor and previewer, designed to showcase the basic set of Ceramic's
 functionality. This is a breakdown of its implementation.
 
 @begin(section)
+@title(System Definition)
+
+This is where we start: we define the project's metadata, depend on Lucerne (for
+the web app) and 3bmd for Markdown-to-HTML conversion. We also depend on a small
+extension for GitHub-style code blocks.
+
+@begin[lang=lisp](code)
+@begin(verb)
+(defsystem marked
+  :author "Fernando Borretti <eudoxiahp@gmail.com>"
+  :maintainer "Fernando Borretti <eudoxiahp@gmail.com>"
+  :license "MIT"
+  :version "0.1"
+  :homepage "https://github.com/ceramic/marked"
+  :bug-tracker "https://github.com/ceramic/marked/issues"
+  :source-control (:git "git@github.com:ceramic/marked.git")
+  :depends-on (:ceramic
+               :lucerne
+               :3bmd
+               :3bmd-ext-code-blocks)
+  :components ((:module "assets"
+                :components
+                ((:module "css"
+                  :components
+                  ((:static-file "style.css")))
+                 (:module "js"
+                  :components
+                  ((:static-file "scripts.js")))))
+               (:module "src"
+                :serial t
+                :components
+                ((:file "marked"))))
+  :description "A Markdown editor example with Ceramic."
+  :long-description
+  #.(uiop:read-file-string
+     (uiop:subpathname *load-pathname* "README.md"))
+  :in-order-to ((test-op (test-op marked-test))))
+@end(verb)
+@end(code)
+
+@end(section)
+
+@begin(section)
 @title(Server)
 
 First, the package definition. We use all of @c(:lucerne) to make the views
-easier, import @(define-resources) and @(resource-directory) from
+easier, import @c(define-resources) and @c(resource-directory) from
 @c(:ceramic.resource) and export both the @c(app) object and the @c(start-app)
 function.
 
@@ -127,6 +170,55 @@ Finally, some startup code:
 
 @begin(section)
 @title(Templates)
+
+As usual, we begin with a @c(base.html) template that other templates inherit
+from:
+
+@begin[lang=djula](code)
+@begin(verb)
+<!DOCTYPE html>
+<html lang="en">
+  {% include "includes/head.html" %}
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+</html>
+@end(verb)
+@end(code)
+
+In @c(includes/head.html), we just load our assets:
+
+@begin[lang=djula](code)
+@begin(verb)
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marked</title>
+  <link href="/static/css/style.css" rel="stylesheet">
+  <script src="/static/js/scripts.js"></script>
+</head>
+@end(verb)
+@end(code)
+
+And finally, the @c(index.html) template, which holds the editor and previewer
+panes:
+
+@begin[lang=djula](code)
+@begin(verb)
+{% extends "base.html" %}
+
+{% block content %}
+  <div id="input-container">
+    <textarea id="input"></textarea>
+  </div>
+  <div id="output-container">
+    <div id="output">
+    </div>
+  </div>
+{% endblock %}
+@end(verb)
+@end(code)
 
 @end(section)
 
