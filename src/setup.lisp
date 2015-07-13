@@ -15,7 +15,7 @@
 
 (defun install-buildapp ()
   "Install a local copy of Buildapp."
-  (tell "Installing Buildap...")
+  (tell "Installing Buildapp...")
   (if (probe-file *buildapp-pathname*)
       (tell "Already installed")
       (buildapp:build-buildapp (namestring *buildapp-pathname*))))
