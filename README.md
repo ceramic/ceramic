@@ -1,5 +1,7 @@
 # [Ceramic](http://ceramic.github.io/)
 
+[![Build Status](https://travis-ci.org/ceramic/ceramic.svg?branch=master)](https://travis-ci.org/ceramic/ceramic)
+
 Common Lisp web apps on the desktop.
 
 ## Overview
