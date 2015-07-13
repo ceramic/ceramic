@@ -25,16 +25,17 @@
            :window-y
            :window-width
            :window-height
-           :window-resizable-p
-           :maximize-window
-           :unmaximize-window
-           :minimize-window
-           :unminimize-window)
+           :window-resizable-p)
   ;; Methods
   (:export :show-window
            :hide-window
            :close-window
-           :destroy-window)
+           :destroy-window
+           :maximize-window
+           :unmaximize-window
+           :minimize-window
+           :unminimize-window
+           :center-window)
   (:documentation "The main interface."))
 (in-package :ceramic)
 

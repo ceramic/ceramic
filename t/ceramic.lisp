@@ -19,4 +19,4 @@
     (run! 'ceramic-test.integration:tests)
     (run! 'ceramic-test.misc:tests)
     ;; Cleanup
-    (uiop:delete-directory-tree *ceramic-directory* :validate t)))
+    (ceramic.file:wipe-data)))
