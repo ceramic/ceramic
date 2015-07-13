@@ -17,5 +17,6 @@
     (run! 'ceramic-test.electron:tests)
     (run! 'ceramic-test.setup:tests)
     (run! 'ceramic-test.integration:tests)
+    (run! 'ceramic-test.misc:tests)
     ;; Cleanup
     (uiop:delete-directory-tree *ceramic-directory* :validate t)))

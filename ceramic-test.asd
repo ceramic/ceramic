@@ -14,4 +14,5 @@
                    (:file "driver")))
                  (:file "setup")
                  (:file "integration")
+                 (:file "misc")
                  (:file "ceramic")))))
