@@ -1,4 +1,4 @@
-# Ceramic
+# [Ceramic](http://ceramic.github.io/)
 
 Common Lisp web apps on the desktop.
 
