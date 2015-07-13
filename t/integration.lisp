@@ -43,6 +43,14 @@
       (ceramic.util:ensure-executable (merge-pathnames #p"electron/electron"
                                                        extraction-directory))
       (ceramic.util:ensure-executable binary))
+    (is
+     (equal (ceramic.resource:resource-directory 'ceramic-test-app::files)
+            (asdf:system-relative-pathname :ceramic-test-app
+                                           #p"files/")))
+    (is
+     (equal (ceramic.resource:resource 'ceramic-test-app::files #p"file.txt")
+            (asdf:system-relative-pathname :ceramic-test-app
+                                           #p"files/file.txt")))
     ;; Run the app
     (let* ((process (external-program:start (namestring binary) (list)
                                             :output :stream))

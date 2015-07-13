@@ -15,8 +15,6 @@
                                                *ceramic-directory*)))
     (run! 'ceramic-test.electron.tools:tests)
     (run! 'ceramic-test.electron:tests)
-    (print *ceramic-directory*)
-    (print (ceramic.electron:release-directory))
     (run! 'ceramic-test.setup:tests)
     (run! 'ceramic-test.integration:tests)
     ;; Cleanup
