@@ -201,4 +201,4 @@
                  :operating-system *operating-system*
                  :architecture *architecture*
                  :version *electron-version*)
-    (prepare-release (release-directory))))
+    (prepare-release (release-directory) :operating-system *operating-system*)))
