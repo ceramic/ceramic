@@ -136,18 +136,18 @@ Of course, a web application isn't just routes, you also have to bundle all
 sorts of assets. Ceramic takes care of that for you.
 
 For this example, we'll use
-@link[uri="https://github.com/ceramic/marked/"](Marked): This is a simple
+@link[uri="https://github.com/ceramic/markedit/"](MarkEdit): This is a simple
 Markdown editor and previewer. On startup, you get a window with two panes: On
 the left pane, you type Markdown code, and on the left, you get the rendered
 HTML. You can see it in action below:
 
-@image[src=marked.png]()
+@image[src=markedit.png]()
 
-To test the app locally, just run @c((marked:start-app)). To deploy the app, we
+To test the app locally, just run @c((markedit:start-app)). To deploy the app, we
 run the bundler command:
 
 @begin[lang=lisp](code)
-(ceramic.bundler:bundle :marked)
+(ceramic.bundler:bundle :markedit)
 @end(code)
 
 Extract the app and run it: You'll see the window pop up and you can start
@@ -160,24 +160,24 @@ to that source directory. When bundling the app, resource directories are
 copied, and in production, when you reference a tag, you get the pathname to the
 copied directory inside the app's bundle.
 
-If you look at the source of the Marked application, you'll see resources are
+If you look at the source of the MarkEdit application, you'll see resources are
 defined like this:
 
 @begin[lang=lisp](code)
 @begin(verb)
-(define-resources :marked ()
+(define-resources :markedit ()
   (assets #p"assets/")
   (templates #p"templates/"))
 @end(verb)
 @end(code)
 
 What this means is the tag @c(assets) is associated to the @c(assets/) directory
-in the directory of the @c(:marked) system, and the @c(templates) tag is
+in the directory of the @c(:markedit) system, and the @c(templates) tag is
 associated to the @c(templates/) directory. You can associate tags to
 directories at any depth.
 
 We the @c(resource-directory) function to get the directory associated to a
-tag. In Marked we use this to set the directory where templates are stored so
+tag. In MarkEdit we use this to set the directory where templates are stored so
 Djula can access them:
 
 @begin[lang=lisp](code)

@@ -4,9 +4,9 @@
 The following examples illustrate the structure of a Ceramic application.
 
 @begin(section)
-@title(Marked)
+@title(MarkEdit)
 
-@link[uri="https://github.com/ceramic/marked/"](Marked) is a simple Markdown
+@link[uri="https://github.com/ceramic/markedit/"](MarkEdit) is a simple Markdown
 editor and previewer, designed to showcase the basic set of Ceramic's
 functionality. This is a breakdown of its implementation.
 
@@ -19,14 +19,14 @@ extension for GitHub-style code blocks.
 
 @begin[lang=lisp](code)
 @begin(verb)
-(defsystem marked
+(defsystem markedit
   :author "Fernando Borretti <eudoxiahp@gmail.com>"
   :maintainer "Fernando Borretti <eudoxiahp@gmail.com>"
   :license "MIT"
   :version "0.1"
-  :homepage "https://github.com/ceramic/marked"
-  :bug-tracker "https://github.com/ceramic/marked/issues"
-  :source-control (:git "git@github.com:ceramic/marked.git")
+  :homepage "https://github.com/ceramic/markedit"
+  :bug-tracker "https://github.com/ceramic/markedit/issues"
+  :source-control (:git "git@github.com:ceramic/markedit.git")
   :depends-on (:ceramic
                :lucerne
                :3bmd
@@ -42,12 +42,12 @@ extension for GitHub-style code blocks.
                (:module "src"
                 :serial t
                 :components
-                ((:file "marked"))))
+                ((:file "markedit"))))
   :description "A Markdown editor example with Ceramic."
   :long-description
   #.(uiop:read-file-string
      (uiop:subpathname *load-pathname* "README.md"))
-  :in-order-to ((test-op (test-op marked-test))))
+  :in-order-to ((test-op (test-op markedit-test))))
 @end(verb)
 @end(code)
 
@@ -67,15 +67,15 @@ allows us to use the @c(@route) reader macro.
 @begin[lang=lisp](code)
 @begin(verb)
 (in-package :cl-user)
-(defpackage marked
+(defpackage markedit
   (:use :cl :lucerne)
   (:import-from :ceramic.resource
                 :define-resources
                 :resource-directory)
   (:export :app
            :start-app)
-  (:documentation "Main marked code."))
-(in-package :marked)
+  (:documentation "Main MarkEdit code."))
+(in-package :markedit)
 (annot:enable-annot-syntax)
 @end(verb)
 @end(code)
@@ -84,17 +84,21 @@ Now we define the app's resources, by associating the @c(assets) tag with the
 @c(assets/) directory and, similarly, associating @c(templates) with
 @c(templates/).
 
+@begin[lang=lisp](code)
+@begin(verb)
+;;; App resources
+
+(define-resources :markedit ()
+  (assets #p"assets/")
+  (templates #p"templates/"))
+@end(verb)
+@end(code)
+
 Then, we define the app, and tell it to use the static-file middleware to serve
 files in the @c(assets) directory on the @c(/static/) path.
 
 @begin[lang=lisp](code)
 @begin(verb)
-;;; App resources
-
-(define-resources :marked ()
-  (assets #p"assets/")
-  (templates #p"templates/"))
-
 ;;; App
 
 (defapp app
@@ -159,7 +163,7 @@ Finally, some startup code:
 (defun start-app ()
   (start app :port *port*))
 
-(ceramic:define-entry-point :marked ()
+(ceramic:define-entry-point :markedit ()
   (let ((window (ceramic:make-window :url (format nil "http://localhost:~D/" *port*))))
     (ceramic:show-window window)
     (start-app)))
@@ -194,7 +198,7 @@ In @c(includes/head.html), we just load our assets:
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Marked</title>
+  <title>MarkEdit</title>
   <link href="/static/css/style.css" rel="stylesheet">
   <script src="/static/js/scripts.js"></script>
 </head>

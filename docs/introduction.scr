@@ -26,11 +26,11 @@ Ceramic was inspired by @link[uri="http://nwjs.io/"](NW.js) and uses
 @title(Examples)
 
 @begin(section)
-@title(@link[uri="https://github.com/ceramic/marked/"](Marked))
+@title(@link[uri="https://github.com/ceramic/markedit/"](MarkEdit))
 
 A simple Markdown editor and previewer.
 
-@image[src=marked.png]()
+@image[src=markedit.png]()
 
 @end(section)
 
