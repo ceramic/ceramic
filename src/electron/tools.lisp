@@ -43,7 +43,15 @@ system, architecture.")
 
 (defun extract (pathname)
   "Extract an Electron snapshot into its containing directory."
-  (trivial-extract:extract-zip pathname)
+  (if (probe-file #P"/usr/bin/unzip")
+      ;; Electron archive file for Darwin has symbolic links inside,
+      ;; and zip:unzip doesn't handle them.
+      ;; for now avoid problem from this by using /usr/bin/unzip
+      (external-program:run #P"/usr/bin/unzip"
+			      (list pathname
+				    "-d"
+				    (cl-fad:pathname-directory-pathname pathname)))
+      (trivial-extract:extract-zip pathname))
   ;; When on Unix, set the executable bit on the file
   #-(or win32 mswindows)
   (let* ((parent (uiop:pathname-directory-pathname pathname))
