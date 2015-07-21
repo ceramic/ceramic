@@ -124,7 +124,7 @@ see the 'Hello, World!' text.
 You can also tell it where to store the bundle through an optional argument:
 
 @begin[lang=lisp](code)
-(ceramic.bundler:bundle :ceramic-hello-world #p"build/bundle.tar")
+(ceramic.bundler:bundle :ceramic-hello-world :bundle-pathname #p"build/bundle.tar")
 @end(code)
 
 @end(section)
