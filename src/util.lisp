@@ -42,7 +42,8 @@
                                   (ensure-directories-exist target)
                                   ;; Copy the absolute source file to the target
                                   (uiop:copy-file pathname target)))))
-                      :directories :breadth-first)
+                      :directories :breadth-first
+                      :follow-symlinks nil)
   destination)
 
 (defun zip-up (directory output)
