@@ -1,10 +1,25 @@
 /* JavaScript code for the main process */
 
 var app = require('app');
+var ipc = require('ipc');
 var readline = require('readline');
 var BrowserWindow = require('browser-window');
 
 require('crash-reporter').start();
+
+/* Events */
+
+function writeEvent(object) {
+  process.stdout.write('JSON ' + JSON.stringify(object) + '\n');
+};
+
+function eventAllClosed() {
+  writeEvent({ "event": "all-closed" });
+};
+
+function eventIPC(message) {
+  writeEvent({ "event": "async", "msg": message });
+};
 
 /* Commands */
 
@@ -147,7 +162,7 @@ function quit() {
 
 app.on('window-all-closed', function() {
   if (process.platform != 'darwin') {
-    quit();
+    eventAllClosed();
   }
 });
 
@@ -262,6 +277,14 @@ function dispatchCommand(data) {
   const command = data['cmd'];
   dispatcher[command](data);
 };
+
+/* IPC */
+
+ipc.on('ceramic-channel', function(event, object) {
+  /* When receiving an asynchronous message, we write it to stdout as an async
+     event. */
+  eventIPC(object);
+});
 
 /* Start up */
 
