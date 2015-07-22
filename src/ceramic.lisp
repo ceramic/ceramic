@@ -35,7 +35,10 @@
            :unmaximize-window
            :minimize-window
            :unminimize-window
-           :center-window)
+           :center-window
+           :open-dev-tools)
+  ;; Events
+  (:export :*event-dispatcher*)
   (:documentation "The main interface."))
 (in-package :ceramic)
 
@@ -57,10 +60,21 @@
       nil
       ;; We're in a dev environment
       (progn
+        (when *process*
+          (warn "Interactive process already running. Restarting.")
+          (ceramic.electron:quit *process*))
         (setf *process*
               (ceramic.electron:start-process (ceramic.electron:release-directory)
                                               :operating-system *operating-system*))
         t)))
+
+;;; Events
+
+(defvar *event-dispatcher*
+  (lambda (event)
+    (declare (ignore event))
+    nil)
+  "A function that takes an event (A JSON object) and does something with it.")
 
 ;;; Window class
 
@@ -238,6 +252,11 @@
   (call-with-defaults ceramic.electron:center-window
                       window))
 
+(defmethod open-dev-tools ((window window))
+  "Open the dev tools."
+  (call-with-defaults ceramic.electron:window-open-dev-tools
+                      window))
+
 (defun quit (&optional (exit-status 0))
   "Quit the application."
   (ceramic.electron:quit *process*)
@@ -248,8 +267,25 @@
 (defpackage ceramic-entry
   (:use :cl))
 
-(defmacro wait-forever ()
-  `(loop))
+(defun read-all-from-stream (stream)
+  (concatenate 'string
+               (loop for byte = (read-char-no-hang stream nil nil)
+                     while byte collecting byte)))
+
+(defun process-stdout ()
+  (read-all-from-stream
+   (external-program:process-output-stream
+    *process*)))
+
+(defun dispatch-events ()
+  "Read events from the process stdout."
+  (format t "~&Dispatching events")
+  (loop for string = (read-line (external-program:process-output-stream
+                                 *process*))
+        do
+    (when (alexandria:starts-with-subseq "JSON" string)
+      (let ((json (jonathan:parse (subseq string 4))))
+        (funcall *event-dispatcher* json)))))
 
 (defmacro define-entry-point (system-name () &body body)
   "Define the application's entry point."
@@ -267,30 +303,22 @@
                                         :operating-system *operating-system*))
               (*process*
                 (progn
-                  ;(format t "~&Starting Electron process...")
+                  (format t "~&Starting Electron process...")
                   (ceramic.electron:start-process ,binary
                                                   :operating-system *operating-system*))))
-         (labels ((read-all-from-stream (stream)
-                    (concatenate 'string
-                                 (loop for byte = (read-char-no-hang stream nil nil)
-                                       while byte collecting byte)))
-                  (process-stdout ()
-                    (read-all-from-stream
-                     (external-program:process-output-stream
-                      *process*)))
-                  (wait-until-startup ()
-                    (let ((output (process-stdout)))
-                      (loop until (search "READY" output) do
-                        (let ((new-output (process-stdout)))
-                          (setf output (concatenate 'string output new-output)))))
-                    ;; Clear all stdout
-                    (process-stdout)))
-           ;(format t "~&Waiting for startup...")
+         (flet ((wait-until-startup ()
+                  (let ((output (process-stdout)))
+                    (loop until (search "READY" output) do
+                      (let ((new-output (process-stdout)))
+                        (setf output (concatenate 'string output new-output)))))
+                  ;; Clear all stdout
+                  (process-stdout)))
+           (format t "~&Waiting for startup...")
            (wait-until-startup)
-           ;(format t "~&Electron process started.")
+           (format t "~&Electron process started.")
            (handler-case
                (progn
                  ,@body
-                 (wait-forever))
-             (t () (uiop:quit -1)))
-           (uiop:quit 0))))))
+                 (dispatch-events))
+             (t () (quit)))
+           (quit))))))
