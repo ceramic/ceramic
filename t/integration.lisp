@@ -33,14 +33,16 @@
     (finishes
      (ceramic:close-window window))))
 
+(defvar *extraction-directory*
+  (asdf:system-relative-pathname :ceramic-test-app
+                                 #p"extract/"))
+
 (test compiled
-  (let* ((extraction-directory (asdf:system-relative-pathname :ceramic-test-app
-                                                              #p"extract/"))
-         (app-file (merge-pathnames #p"ceramic-test-app.tar"
-                                    extraction-directory))
+  (let* ((app-file (merge-pathnames #p"ceramic-test-app.tar"
+                                    *extraction-directory*))
          (binary (merge-pathnames #p"ceramic-test-app"
-                                  extraction-directory)))
-    (ensure-directories-exist extraction-directory)
+                                  *extraction-directory*)))
+    (ensure-directories-exist *extraction-directory*)
     (finishes
       (ceramic.bundler:bundle :ceramic-test-app
                               :bundle-pathname app-file))
@@ -52,10 +54,10 @@
      (probe-file binary))
     (is-true
      (probe-file (merge-pathnames #p"resources/files/file.txt"
-                                  extraction-directory)))
+                                  *extraction-directory*)))
     (finishes
       (ceramic.util:ensure-executable (merge-pathnames #p"electron/electron"
-                                                       extraction-directory))
+                                                       *extraction-directory*))
       (ceramic.util:ensure-executable binary))
     (is
      (equal (ceramic.resource:resource-directory 'ceramic-test-app::files)
@@ -76,7 +78,7 @@
        (equal (read-line stdout)
               (namestring
                (merge-pathnames #p"resources/files/file.txt"
-                                extraction-directory)))))))
+                                *extraction-directory*)))))))
 
 (test cleanup
-  (uiop:delete-directory-tree extraction-directory :validate t))
+  (uiop:delete-directory-tree *extraction-directory* :validate t))
