@@ -12,6 +12,5 @@
           (ceramic.resource:resource 'files #p"file.txt"))
   (let ((window (ceramic:make-window :url "http://google.com/")))
     (ceramic:show-window window)
-    (format t "opened window")
     (sleep 1)
     (ceramic:quit)))

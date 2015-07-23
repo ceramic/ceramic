@@ -76,8 +76,7 @@
        (equal (read-line stdout)
               (namestring
                (merge-pathnames #p"resources/files/file.txt"
-                                extraction-directory))))
-      (is
-       (equal (read-line stdout)
-              "opened window")))
-    (uiop:delete-directory-tree extraction-directory :validate t)))
+                                extraction-directory)))))))
+
+(test cleanup
+  (uiop:delete-directory-tree extraction-directory :validate t))
