@@ -31,6 +31,7 @@
            :hide-window
            :close-window
            :destroy-window
+           :send-message
            :maximize-window
            :unmaximize-window
            :minimize-window
@@ -226,6 +227,12 @@
   "Forcefully close the window."
   (call-with-defaults ceramic.electron:destroy-window
                       window))
+
+(defmethod send-message ((window window) message)
+  "Send an alist message to the window."
+  (call-with-defaults ceramic.electron:send-message
+                      window
+                      message))
 
 (defmethod maximize-window ((window window))
   "Maximize the window."
