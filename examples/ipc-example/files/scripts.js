@@ -6,4 +6,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   node.onclick = function() {
     ipc.send('ceramic-channel', { text: 'Clicked button' });
   };
+
+  ipc.on('ceramic-channel', function(event, msg) {
+    console.log(msg);
+  });
 });
