@@ -63,7 +63,7 @@
       (progn
         (when *process*
           (warn "Interactive process already running. Restarting.")
-          (ceramic.electron:quit *process*))
+          (ignore-errors (ceramic.electron:quit *process*)))
         (setf *process*
               (ceramic.electron:start-process (ceramic.electron:release-directory)
                                               :operating-system *operating-system*))
