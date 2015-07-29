@@ -31,6 +31,7 @@
            :hide-window
            :close-window
            :destroy-window
+           :send-message
            :maximize-window
            :unmaximize-window
            :minimize-window
@@ -62,7 +63,7 @@
       (progn
         (when *process*
           (warn "Interactive process already running. Restarting.")
-          (ceramic.electron:quit *process*))
+          (ignore-errors (ceramic.electron:quit *process*)))
         (setf *process*
               (ceramic.electron:start-process (ceramic.electron:release-directory)
                                               :operating-system *operating-system*))
@@ -226,6 +227,12 @@
   "Forcefully close the window."
   (call-with-defaults ceramic.electron:destroy-window
                       window))
+
+(defmethod send-message ((window window) message)
+  "Send an alist message to the window."
+  (call-with-defaults ceramic.electron:send-message
+                      window
+                      message))
 
 (defmethod maximize-window ((window window))
   "Maximize the window."

@@ -31,16 +31,23 @@
 (defview hello ()
   (render-template (+index+)))
 
-(defvar *port* 8000)
+(defvar *port* 8001)
+
+(defvar *window*)
 
 (setf ceramic:*event-dispatcher*
       (lambda (event)
-        (format t "Got event! ~A~%" event)))
+        (let ((event-type (getf event :|event|)))
+          (format t "Got event of type ~S~%" event-type)
+          (when (string= event-type "async")
+            (ceramic:send-message *window*
+                                  (list (cons "text" "received!")))))))
 
 (defun run ()
-  (let ((window (ceramic:make-window :url (format nil "http://localhost:~D/" *port*))))
-    (ceramic:show-window window)
+  (let ((*window* (ceramic:make-window :url (format nil "http://localhost:~D/" *port*))))
     (start app :port *port*)
+    (ceramic:show-window *window*)
+    (ceramic:open-dev-tools *window*)
     (ceramic::dispatch-events)))
 
 (ceramic:define-entry-point :ceramic-hello-world ()
