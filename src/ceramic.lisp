@@ -81,10 +81,10 @@
 
 (defmacro with-interactive (() &body body)
   "Execute body while running an interactive process."
-  (unwind-protect
-       (progn
-         ,@body)
-    (stop-interactive)))
+  `(unwind-protect
+        (progn
+          ,@body)
+     (stop-interactive)))
 
 ;;; Events
 
