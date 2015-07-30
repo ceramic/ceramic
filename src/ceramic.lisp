@@ -14,6 +14,7 @@
   ;; Main interface
   (:export :setup
            :interactive
+           :stop-interactive
            :define-entry-point
            :quit)
   ;; Window & accessors
@@ -31,6 +32,7 @@
            :hide-window
            :close-window
            :destroy-window
+           :send-message
            :maximize-window
            :unmaximize-window
            :minimize-window
@@ -62,11 +64,19 @@
       (progn
         (when *process*
           (warn "Interactive process already running. Restarting.")
-          (ceramic.electron:quit *process*))
+          (stop-interactive))
         (setf *process*
               (ceramic.electron:start-process (ceramic.electron:release-directory)
                                               :operating-system *operating-system*))
         t)))
+
+(defun stop-interactive ()
+  "Stop the interactive process."
+  (handler-case
+      (ceramic.electron:quit *process*)
+    (t ()
+      (warn "Error quitting the Electron process. Forcing shutdown...")
+      (external-program:signal-process *process* :killed))))
 
 ;;; Events
 
@@ -226,6 +236,12 @@
   "Forcefully close the window."
   (call-with-defaults ceramic.electron:destroy-window
                       window))
+
+(defmethod send-message ((window window) message)
+  "Send an alist message to the window."
+  (call-with-defaults ceramic.electron:send-message
+                      window
+                      message))
 
 (defmethod maximize-window ((window window))
   "Maximize the window."
