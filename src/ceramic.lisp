@@ -83,6 +83,7 @@
   "Execute body while running an interactive process."
   `(unwind-protect
         (progn
+          (interactive)
           ,@body)
      (stop-interactive)))
 
