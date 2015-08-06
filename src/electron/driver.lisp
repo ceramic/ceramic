@@ -184,7 +184,7 @@
 
 ;;; Interface
 
-(defvar *electron-version* "0.28.1"
+(defvar *electron-version* "0.30.2"
   "The version of Electron to use.")
 
 (defun release-directory ()
