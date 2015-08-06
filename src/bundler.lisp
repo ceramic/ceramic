@@ -61,12 +61,12 @@ most people can unzip)."
            (copy-resources (merge-pathnames #p"resources/"
                                             work-directory))
            ;; Copy the electron directory
-           (copy-directory (ceramic.electron:release-directory)
-                           electron-directory)
-           ;; Ensure Electron is executable
-           (ensure-executable
-            (binary-pathname electron-directory
-                             :operating-system *operating-system*))
+           ;; (copy-directory (ceramic.electron:release-directory)
+           ;;                 electron-directory)
+           ;; ;; Ensure Electron is executable
+           ;; (ensure-executable
+           ;;  (binary-pathname electron-directory
+           ;;                   :operating-system *operating-system*))
            ;; Compile the app
            (tell "Compiling app...")
            (ceramic.build:build :eval +prelude+
@@ -81,7 +81,8 @@ most people can unzip)."
              (tell "Found existing bundle, deleting...")
              (delete-file bundle-pathname))
            (tell "Compressing...")
-           (create-archive work-directory bundle-pathname))
-      (uiop:delete-directory-tree work-directory :validate t)
+           ;; (create-archive work-directory bundle-pathname)
+	   )
+      ;; (Uiop:delete-directory-tree work-directory :validate t)
       (tell "Done!")
       bundle-pathname)))
