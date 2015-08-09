@@ -23,7 +23,7 @@ script:
                  (lambda (c h)
                    (declare (ignore c h))
                    (uiop:quit -1)))'
-       -e '(coveralls:with-coveralls (:exclude (list "src/error.lisp" "t/app/app.lisp"))
+       -e '(coveralls:with-coveralls (:exclude (list "src/error.lisp" "t"))
              (ceramic-test:run-tests))'
 
 notifications:
