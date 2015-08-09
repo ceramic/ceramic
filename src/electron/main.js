@@ -21,6 +21,16 @@ function eventIPC(message) {
   writeEvent({ "event": "async", "msg": message });
 };
 
+/* IPC */
+
+const CHANNEL = 'ceramic-channel';
+
+ipc.on(CHANNEL, function(event, object) {
+  /* When receiving an asynchronous message, we write it to stdout as an async
+     event. */
+  eventIPC(object);
+});
+
 /* Commands */
 
 // Windows
@@ -42,6 +52,12 @@ function windowClose(name) {
 
 function windowDestroy(name) {
   window_db[name].destroy();
+};
+
+//// IPC
+
+function windowSendMessage(name, message) {
+  window_db[name].webContents.send(CHANNEL, message);
 };
 
 //// Display
@@ -186,6 +202,9 @@ const dispatcher = {
   'destroy-window': function(data) {
     windowDestroy(data['name']);
   },
+  'send-message-to-window': function(data) {
+    windowSendMessage(data['name'], data['message']);
+  },
   //// Display
   'show-window': function(data) {
     windowShow(data['name']);
@@ -277,14 +296,6 @@ function dispatchCommand(data) {
   const command = data['cmd'];
   dispatcher[command](data);
 };
-
-/* IPC */
-
-ipc.on('ceramic-channel', function(event, object) {
-  /* When receiving an asynchronous message, we write it to stdout as an async
-     event. */
-  eventIPC(object);
-});
 
 /* Start up */
 

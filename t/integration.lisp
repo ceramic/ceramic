@@ -65,19 +65,7 @@
     (is
      (equal (ceramic.resource:resource 'ceramic-test-app::files #p"file.txt")
             (asdf:system-relative-pathname :ceramic-test-app
-                                           #p"files/file.txt")))
-    ;; Run the app
-    (let* ((process (external-program:start (namestring binary) (list)
-                                            :output :stream))
-           (stdout (external-program:process-output-stream process)))
-      (sleep 0.1)
-      (is
-       (equal (read-line stdout) "T"))
-      (is
-       (equal (read-line stdout)
-              (namestring
-               (merge-pathnames #p"resources/files/file.txt"
-                                *extraction-directory*)))))))
+                                           #p"files/file.txt")))))
 
 (test cleanup
   (uiop:delete-directory-tree *extraction-directory* :validate t))

@@ -25,6 +25,7 @@
   (:export :create-window
            :close-window
            :destroy-window
+           :send-message
            :show-window
            :hide-window
            :resize-window
@@ -93,6 +94,9 @@
 
 (define-window-command destroy-window "destroy-window" ()
   ())
+
+(define-window-command send-message "send-message-to-window" (message)
+  message)
 
 (define-window-command show-window "show-window" ()
   ())
