@@ -14,6 +14,8 @@
   ;; Main interface
   (:export :setup
            :interactive
+           :stop-interactive
+           :with-interactive
            :define-entry-point
            :quit)
   ;; Window & accessors
@@ -62,11 +64,27 @@
       (progn
         (when *process*
           (warn "Interactive process already running. Restarting.")
-          (ceramic.electron:quit *process*))
+          (stop-interactive))
         (setf *process*
               (ceramic.electron:start-process (ceramic.electron:release-directory)
                                               :operating-system *operating-system*))
         t)))
+
++(defun stop-interactive ()
+  "Stop the interactive process."
+  (handler-case
+      (ceramic.electron:quit *process*)
+    (t ()
+      (warn "Error quitting the Electron process. Forcing shutdown...")
+      (external-program:signal-process *process* :killed))))
+
+(defmacro with-interactive (() &body body)
+  "Execute body while running an interactive process."
+  `(unwind-protect
+        (progn
+          (interactive)
+          ,@body)
+     (stop-interactive)))
 
 ;;; Events
 
