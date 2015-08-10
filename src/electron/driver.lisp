@@ -58,7 +58,7 @@
   "Start an Electron process, returning the process object."
   (let ((binary-pathname (binary-pathname directory
                                           :operating-system operating-system)))
-    (external-program:start binary-pathname
+    (external-program:start directory
                             (list)
                             :input :stream
                             :output :stream)))
