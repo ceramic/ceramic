@@ -54,14 +54,36 @@
            :quit))
 (in-package :ceramic.electron)
 
+(defun wait-for-startup (process)
+  "Wait until the Electron process has started and is ready to go."
+  (labels ((read-all-from-stream (stream)
+             (concatenate 'string
+                          (loop for byte = (read-char-no-hang stream nil nil)
+                                while byte collecting byte)))
+           (process-stdout ()
+             (read-all-from-stream
+              (external-program:process-output-stream
+               process))))
+    (ceramic.log:log-message "Waiting for startup...")
+    (let ((output (process-stdout)))
+      (loop until (search "READY" output) do
+        (let ((new-output (process-stdout)))
+          (setf output (concatenate 'string output new-output)))))
+    ;; Clear all stdout
+    (process-stdout)
+    (ceramic.log:log-message "Electron process started.")
+    t))
+
 (defun start-process (directory &key operating-system)
   "Start an Electron process, returning the process object."
-  (let ((binary-pathname (binary-pathname directory
-                                          :operating-system operating-system)))
-    (external-program:start binary-pathname
-                            (list)
-                            :input :stream
-                            :output :stream)))
+  (let* ((binary-pathname (binary-pathname directory
+                                           :operating-system operating-system))
+         (process (external-program:start binary-pathname
+                                          (list)
+                                          :input :stream
+                                          :output :stream)))
+    (wait-for-startup process)
+    process))
 
 (defun send-command (process command alist)
   "Send a command Electron process."
@@ -73,6 +95,7 @@
     (write-string json-string input-stream)
     (write-char #\Newline input-stream)
     (finish-output input-stream)
+    (ceramic.log:log-message "sent JSON ~A" json-string)
     json-string))
 
 ;;; Commands

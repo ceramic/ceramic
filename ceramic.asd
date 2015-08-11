@@ -27,6 +27,7 @@
                  (:file "error")
                  (:file "os")
                  (:file "file")
+                 (:file "logging")
                  (:file "runtime")
                  (:file "resource")
                  (:module "electron"

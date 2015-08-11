@@ -127,6 +127,22 @@
            :initarg :height
            :type integer
            :documentation "The window's height, in pixels.")
+   (min-width :reader window-min-width
+              :initarg :min-width
+              :type integer
+              :documentation "The window's minimum width, in pixels.")
+   (min-height :reader window-min-height
+               :initarg :min-height
+               :type integer
+               :documentation "The window's minimum height, in pixels.")
+   (max-width :reader window-max-width
+              :initarg :max-width
+              :type integer
+              :documentation "The window's maximum width, in pixels.")
+   (max-height :reader window-max-height
+               :initarg :max-height
+               :type integer
+               :documentation "The window's maximum height, in pixels.")
    (resizablep :reader window-resizable-p
                :initarg :resizablep
                :initform t
@@ -134,17 +150,24 @@
                :documentation "Whether or not the window is resizable."))
   (:documentation "A browser window."))
 
-(defun make-window (&key title url x y width height resizablep)
+(defun make-window (&key title url x y width height
+                      min-width min-height max-width max-height
+                      resizablep)
   "Create a window."
-  (let ((args (remove-if #'(lambda (pair)
-                             (null (rest pair)))
-                         (list (cons :title title)
-                               (cons :url url)
-                               (cons :x x)
-                               (cons :y y)
-                               (cons :width width)
-                               (cons :height height)
-                               (cons :resizablep resizablep)))))
+  (let ((args (cons
+               (cons :resizablep resizablep)
+               (remove-if #'(lambda (pair)
+                              (null (rest pair)))
+                          (list (cons :title title)
+                                (cons :url url)
+                                (cons :x x)
+                                (cons :y y)
+                                (cons :width width)
+                                (cons :height height)
+                                (cons :min-width min-width)
+                                (cons :min-height min-height)
+                                (cons :max-width max-width)
+                                (cons :max-height max-height))))))
     (apply #'make-instance
            (cons 'window
                  (loop for (key . value) in args appending
@@ -220,7 +243,12 @@
                          (slot y "y")
                          (slot width "width")
                          (slot height "height")
-                         (list (cons "resizable" (window-resizable-p window)))))
+                         (slot min-width "min-width")
+                         (slot min-height "min-height")
+                         (slot max-width "max-width")
+                         (slot max-height "max-height")
+                         (list (cons "resizable"
+                                     (cl-json:json-bool (window-resizable-p window))))))
     (when (slot-boundp window 'url)
       (call-with-defaults ceramic.electron:window-load-url
                           window
@@ -292,16 +320,6 @@
 (defpackage ceramic-entry
   (:use :cl))
 
-(defun read-all-from-stream (stream)
-  (concatenate 'string
-               (loop for byte = (read-char-no-hang stream nil nil)
-                     while byte collecting byte)))
-
-(defun process-stdout ()
-  (read-all-from-stream
-   (external-program:process-output-stream
-    *process*)))
-
 (defun dispatch-events ()
   "Read events from the process stdout."
   (format t "~&Dispatching events")
@@ -331,19 +349,9 @@
                   (format t "~&Starting Electron process...")
                   (ceramic.electron:start-process ,binary
                                                   :operating-system *operating-system*))))
-         (flet ((wait-until-startup ()
-                  (let ((output (process-stdout)))
-                    (loop until (search "READY" output) do
-                      (let ((new-output (process-stdout)))
-                        (setf output (concatenate 'string output new-output)))))
-                  ;; Clear all stdout
-                  (process-stdout)))
-           (format t "~&Waiting for startup...")
-           (wait-until-startup)
-           (format t "~&Electron process started.")
-           (handler-case
-               (progn
-                 ,@body
+         (handler-case
+             (progn
+               ,@body
                  (dispatch-events))
-             (t () (quit)))
-           (quit))))))
+           (t () (quit)))
+         (quit)))))
