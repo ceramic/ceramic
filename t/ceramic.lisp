@@ -12,7 +12,8 @@
   (let* ((*ceramic-directory* (asdf:system-relative-pathname :ceramic-test
                                                              #p"t/ceramic/"))
          (*buildapp-pathname* (merge-pathnames #p"buildapp"
-                                               *ceramic-directory*)))
+                                               *ceramic-directory*))
+         (ceramic.log:*logging* t))
     (run! 'ceramic-test.electron.tools:tests)
     (run! 'ceramic-test.electron:tests)
     (run! 'ceramic-test.setup:tests)
