@@ -36,6 +36,15 @@ most people can unzip)."
       (zip-up directory output)
       (tar-up directory output)))
 
+(defun create-archive (directory output)
+  (case *operating-system*
+    (:windows
+     (zip-up directory output))
+    (:mac
+     (tar-up-mac-fallback directory output))
+    (otherwise
+     (tar-up directory output))))
+
 (defun bundle (system-name &key bundle-pathname)
   "Compile the application to an executable, and ship it with its resources."
   (asdf:load-system system-name)
@@ -61,8 +70,13 @@ most people can unzip)."
            (copy-resources (merge-pathnames #p"resources/"
                                             work-directory))
            ;; Copy the electron directory
-           (copy-directory (ceramic.electron:release-directory)
-                           electron-directory)
+	   (case *operating-system*
+	     (:mac
+	      (copy-directory-mac-fallback (ceramic.electron:release-directory)
+			      electron-directory))
+	     (otherwise
+	      (copy-directory (ceramic.electron:release-directory)
+			      electron-directory)))
            ;; Ensure Electron is executable
            (ensure-executable
             (binary-pathname electron-directory
@@ -85,3 +99,19 @@ most people can unzip)."
       (uiop:delete-directory-tree work-directory :validate t)
       (tell "Done!")
       bundle-pathname)))
+
+
+;;;; fallback functions for mac symbolic link
+(defun copy-directory-mac-fallback (source destination)
+  "Copy everything under source to destination, fallbacking to binary for symlinks"
+  (external-program:run #P"/bin/cp"
+			(list "-r"
+			      source
+			      destination))
+  destination)
+
+(defun tar-up-mac-fallback (directory output)
+  "Create a tar archive from the contents of a directory, fallbacking to binary for symlinks"
+  (external-program:run "/usr/bin/tar"
+			(list "cv" "-C" (merge-pathnames ".." directory) "-f"  output "working"))
+  output)

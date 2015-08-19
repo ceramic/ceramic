@@ -342,12 +342,10 @@
        ;; Start the executable-relative Electron process
        (let* ((*releasep* t)
               (,electron-directory (executable-relative-pathname #p"electron/"))
-              (,binary (binary-pathname ,electron-directory
-                                        :operating-system *operating-system*))
               (*process*
                 (progn
                   (format t "~&Starting Electron process...")
-                  (ceramic.electron:start-process ,binary
+                  (ceramic.electron:start-process ,electron-directory
                                                   :operating-system *operating-system*))))
          (handler-case
              (progn
