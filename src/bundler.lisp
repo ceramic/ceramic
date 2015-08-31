@@ -32,11 +32,6 @@ most people can unzip)."
       "tar"))
 
 (defun create-archive (directory output)
-  (if (eq *operating-system* :windows)
-      (zip-up directory output)
-      (tar-up directory output)))
-
-(defun create-archive (directory output)
   (case *operating-system*
     (:windows
      (zip-up directory output))
