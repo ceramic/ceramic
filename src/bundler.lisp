@@ -20,7 +20,12 @@
 (in-package :ceramic.bundler)
 
 (defvar +prelude+
-  "(progn (push :ceramic-release *features*))")
+  "(progn (push :ceramic-release *features*) ~A )")
+
+(defparameter +asdf-registry-prelude+
+  "(asdf:clear-source-registry)
+   (asdf:initialize-source-registry 
+    '(:source-registry :inherit-configuration (:tree ~S)))")
 
 (defun archive-extension ()
   "Use zip files on Windows and tar archives on Unix. This is necessary because
@@ -40,7 +45,7 @@ most people can unzip)."
     (otherwise
      (tar-up directory output))))
 
-(defun bundle (system-name &key bundle-pathname)
+(defun bundle (system-name &key bundle-pathname system-directory)
   "Compile the application to an executable, and ship it with its resources."
   (asdf:load-system system-name)
   (let* ((application-name (string-downcase
@@ -55,7 +60,13 @@ most people can unzip)."
          (electron-directory (merge-pathnames #p"electron/"
                                               work-directory))
          (executable-pathname (merge-pathnames (make-pathname :name application-name)
-                                               work-directory)))
+                                               work-directory))
+         (asdf-registry-prelude 
+          (if system-directory 
+              (format nil +asdf-registry-prelude+ 
+                      (asdf/pathname:pathname-directory-pathname 
+                       system-directory)
+                      ""))))
     ;; We do everything inside the work directory, then zip it up and delete it
     (ensure-directories-exist work-directory)
     (unwind-protect
@@ -78,7 +89,8 @@ most people can unzip)."
                              :operating-system *operating-system*))
            ;; Compile the app
            (tell "Compiling app...")
-           (ceramic.build:build :eval +prelude+
+           (ceramic.build:build :eval (format nil 
+                                              +prelude+ asdf-registry-prelude)
                                 :system-name system-name
                                 :output-pathname executable-pathname
                                 :entry-point (concatenate 'string
