@@ -7,7 +7,7 @@
                 :app-directory
                 :prepare-release)
   (:export :*test-directory*
-           :tests))
+           :electron-tools))
 (in-package :ceramic-test.electron.tools)
 
 (defvar *test-directory*
@@ -41,9 +41,9 @@
     (test-download-and-extract os arch directory)
     (test-changes directory os)))
 
-(def-suite tests
+(def-suite electron-tools
   :description "Electron tools tests.")
-(in-suite tests)
+(in-suite electron-tools)
 
 (test linux64-release
  (test-release :linux :64))

@@ -14,7 +14,7 @@
          (*buildapp-pathname* (merge-pathnames #p"buildapp"
                                                *ceramic-directory*))
          (ceramic.log:*logging* t))
-    (run! 'ceramic-test.electron.tools:tests)
+    (run! 'ceramic-test.electron.tools:electron-tools)
     (run! 'ceramic-test.electron:tests)
     (run! 'ceramic-test.setup:tests)
     (run! 'ceramic-test.integration:tests)
