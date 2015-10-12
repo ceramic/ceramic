@@ -1,12 +1,12 @@
 (in-package :cl-user)
 (defpackage ceramic-test.setup
   (:use :cl :fiveam)
-  (:export :tests))
+  (:export :setup))
 (in-package :ceramic-test.setup)
 
-(def-suite tests
+(def-suite setup
   :description "Setup tests.")
-(in-suite tests)
+(in-suite setup)
 
 (test setup
   (finishes

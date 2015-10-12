@@ -16,8 +16,8 @@
          (ceramic.log:*logging* t))
     (run! 'ceramic-test.electron.tools:electron-tools)
     (run! 'ceramic-test.electron:electron-driver)
-    (run! 'ceramic-test.setup:tests)
-    (run! 'ceramic-test.integration:tests)
-    (run! 'ceramic-test.misc:tests)
+    (run! 'ceramic-test.setup:setup)
+    (run! 'ceramic-test.integration:integration)
+    (run! 'ceramic-test.misc:misc)
     ;; Cleanup
     (ceramic.file:wipe-data)))

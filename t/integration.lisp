@@ -1,12 +1,12 @@
 (in-package :cl-user)
 (defpackage ceramic-test.integration
   (:use :cl :fiveam)
-  (:export :tests))
+  (:export :integration))
 (in-package :ceramic-test.integration)
 
-(def-suite tests
+(def-suite integration
   :description "Integration tests.")
-(in-suite tests)
+(in-suite integration)
 
 (test interactive
   (ceramic:with-interactive ()

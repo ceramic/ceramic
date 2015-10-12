@@ -1,12 +1,12 @@
 (in-package :cl-user)
 (defpackage ceramic-test.misc
   (:use :cl :fiveam)
-  (:export :tests))
+  (:export :misc))
 (in-package :ceramic-test.misc)
 
-(def-suite tests
+(def-suite misc
   :description "Miscellaneous tests.")
-(in-suite tests)
+(in-suite misc)
 
 (test runtime
   (let ((ceramic.runtime:*releasep* t))
