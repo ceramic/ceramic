@@ -10,12 +10,16 @@ env:
   matrix:
     - LISP=sbcl-bin COVERALLS=true
 
+addons:
+  apt:
+    packages:
+      - xfvb
+
 install:
   # Roswell & coveralls
   - curl -L https://raw.githubusercontent.com/snmsts/roswell/$ROSWELL_BRANCH/scripts/install-for-ci.sh | sh
   - git clone https://github.com/fukamachi/cl-coveralls ~/lisp/cl-coveralls
   # Set up a virtual X framebuffer
-  - sudo apt-get install xvfb
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - sleep 3 # give xvfb time to start
