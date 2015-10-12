@@ -11,14 +11,14 @@
                 :quit)
   (:import-from :ceramic-test.electron.tools
                 :*test-directory*)
-  (:export :tests))
+  (:export :electron-driver))
 (in-package :ceramic-test.electron)
 
 (defparameter *process* nil)
 
-(def-suite tests
+(def-suite electron-driver
   :description "Electron driver tests.")
-(in-suite tests)
+(in-suite electron-driver)
 
 (test start-app
   (let ((release (merge-pathnames #p"LINUX64/"
