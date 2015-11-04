@@ -16,18 +16,7 @@
   "Return the executable's pathname."
   (unless *releasep*
     (error 'not-in-release))
-  #+sbcl
-  sb-ext:*runtime-pathname*
-  #+ccl
-  (truename (make-pathname :host "ccl"))
-  #+ecl
-  (truename (make-pathname :host "sys"))
-  #-(or sbcl ccl ecl)
-  (if (probe-file #p"/proc/self/exe")
-      ;; Linux
-      (uiop:resolve-absolute-location #p"/proc/self/exe")
-      ;; FreeBSD
-      (uiop:resolve-absolute-location #p"/proc/curproc/file")))
+  (trivial-exe:executable-pathname))
 
 (defun executable-relative-pathname (pathname)
   "Return an absolute pathname relative to the executable pathname."
