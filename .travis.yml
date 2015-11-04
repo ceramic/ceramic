@@ -19,6 +19,9 @@ install:
   # Roswell & coveralls
   - curl -L https://raw.githubusercontent.com/snmsts/roswell/$ROSWELL_BRANCH/scripts/install-for-ci.sh | sh
   - git clone https://github.com/fukamachi/cl-coveralls ~/lisp/cl-coveralls
+  # Clone some libraries
+  - git clone https://github.com/ceramic/trivial-exe ~/lisp/trivial-exe
+  - git clone https://github.com/ceramic/trivial-build ~/lisp/trivial-build
   # Set up a virtual X framebuffer
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
