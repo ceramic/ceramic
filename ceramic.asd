@@ -8,6 +8,7 @@
   :source-control (:git "git@github.com:ceramic/ceramic.git")
   :depends-on (:trivial-download
                :trivial-extract
+               :trivial-exe
                :uiop
                :archive
                :zip
