@@ -5,7 +5,6 @@
                 :zip-up
                 :tar-up
                 :copy-directory
-                :ensure-executable
                 :tell)
   (:import-from :ceramic.file
                 :*ceramic-directory*)
@@ -24,7 +23,7 @@
 
 (defparameter +asdf-registry-prelude+
   "(asdf:clear-source-registry)
-   (asdf:initialize-source-registry 
+   (asdf:initialize-source-registry
     '(:source-registry :inherit-configuration (:tree ~S)))")
 
 (defun archive-extension ()
@@ -61,10 +60,10 @@ most people can unzip)."
                                               work-directory))
          (executable-pathname (merge-pathnames (make-pathname :name application-name)
                                                work-directory))
-         (asdf-registry-prelude 
-          (if system-directory 
-              (format nil +asdf-registry-prelude+ 
-                      (asdf/pathname:pathname-directory-pathname 
+         (asdf-registry-prelude
+          (if system-directory
+              (format nil +asdf-registry-prelude+
+                      (asdf/pathname:pathname-directory-pathname
                        system-directory)
                       ""))))
     ;; We do everything inside the work directory, then zip it up and delete it
@@ -89,7 +88,7 @@ most people can unzip)."
                              :operating-system *operating-system*))
            ;; Compile the app
            (tell "Compiling app...")
-           (ceramic.build:build :eval (format nil 
+           (ceramic.build:build :eval (format nil
                                               +prelude+ asdf-registry-prelude)
                                 :system-name system-name
                                 :output-pathname executable-pathname
