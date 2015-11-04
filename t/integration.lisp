@@ -55,9 +55,9 @@
      (probe-file (merge-pathnames #p"resources/files/file.txt"
                                   *extraction-directory*)))
     (finishes
-      (ceramic.util:ensure-executable (merge-pathnames #p"electron/electron"
-                                                       *extraction-directory*))
-      (ceramic.util:ensure-executable binary))
+      (trivial-exe:ensure-executable (merge-pathnames #p"electron/electron"
+                                                      *extraction-directory*))
+      (trivial-exe:ensure-executable binary))
     (is
      (equal (ceramic.resource:resource-directory 'ceramic-test-app::files)
             (asdf:system-relative-pathname :ceramic-test-app

@@ -25,10 +25,7 @@
                                   *test-directory*)))
     (finishes
       (setf *process* (start-process release
-                                     :operating-system :linux)))
-    (sleep 0.1)
-    (finishes
-      (print (read-line (process-output-stream *process*))))))
+                                     :operating-system :linux)))))
 
 (test windows
   (finishes
