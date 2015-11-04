@@ -4,7 +4,6 @@
   (:export :copy-directory
            :zip-up
            :tar-up
-           :ensure-executable
            :without-feature
            :tell)
   (:documentation "Ceramic's utilities."))
@@ -74,18 +73,6 @@
                                  (push (relativize pathname) files))))
     (archive::create-tar-file output files)
     output))
-
-(defun ensure-executable (pathname)
-  "Ensure a binary is executable."
-  #-(or win32 mswindows)
-  (progn
-    (setf (osicat:file-permissions pathname)
-          (list :user-read
-                :user-write
-                :user-exec))
-    t)
-  #+(or win32 mswindows)
-  t)
 
 (defmacro tell (format-string &rest args)
   "Log a message."
