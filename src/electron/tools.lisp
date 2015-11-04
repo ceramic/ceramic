@@ -60,7 +60,7 @@ system, architecture.")
                      (probe-file (binary-pathname parent
                                                   :operating-system :mac)))))
     (when binary
-      (ceramic.util:ensure-executable binary))))
+      (trivial-exe:ensure-executable binary))))
 
 (defun get-release (directory &key operating-system version architecture)
   "Download an Electron release to the directory."
