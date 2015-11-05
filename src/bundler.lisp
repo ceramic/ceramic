@@ -75,7 +75,7 @@ most people can unzip)."
 	      (copy-directory (ceramic.electron:release-directory)
 			      electron-directory)))
            ;; Ensure Electron is executable
-           (ensure-executable
+           (trivial-exe:ensure-executable
             (binary-pathname electron-directory
                              :operating-system *operating-system*))
            ;; Compile the app
