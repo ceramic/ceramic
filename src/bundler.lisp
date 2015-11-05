@@ -88,14 +88,11 @@ most people can unzip)."
                              :operating-system *operating-system*))
            ;; Compile the app
            (tell "Compiling app...")
-           (ceramic.build:build :eval (format nil
-                                              +prelude+ asdf-registry-prelude)
-                                :system-name system-name
-                                :output-pathname executable-pathname
-                                :entry-point (concatenate 'string
-                                                          "ceramic-entry::"
-                                                          (string-downcase
-                                                           (symbol-name system-name))))
+           (trivial-build:build system-name
+                                (format nil "(ceramic-entry::~A)"
+                                        (string-downcase
+                                         (symbol-name system-name)))
+                                executable-pathname)
            ;; Compress the folder
            (when (probe-file bundle-pathname)
              (tell "Found existing bundle, deleting...")
