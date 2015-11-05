@@ -18,14 +18,6 @@
   (:documentation "Release applications."))
 (in-package :ceramic.bundler)
 
-(defvar +prelude+
-  "(progn (push :ceramic-release *features*) ~A )")
-
-(defparameter +asdf-registry-prelude+
-  "(asdf:clear-source-registry)
-   (asdf:initialize-source-registry
-    '(:source-registry :inherit-configuration (:tree ~S)))")
-
 (defun archive-extension ()
   "Use zip files on Windows and tar archives on Unix. This is necessary because
 tar archives preserve permissions (important for executing!), but Windows
