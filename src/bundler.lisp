@@ -63,7 +63,7 @@ most people can unzip)."
          (asdf-registry-prelude
           (if system-directory
               (format nil +asdf-registry-prelude+
-                      (asdf/pathname:pathname-directory-pathname
+                      (uiop:pathname-directory-pathname
                        system-directory)
                       ""))))
     ;; We do everything inside the work directory, then zip it up and delete it
