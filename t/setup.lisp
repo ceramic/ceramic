@@ -11,8 +11,6 @@
 (test setup
   (finishes
     (ceramic.setup:setup))
-  (is-true
-   (probe-file ceramic.file:*buildapp-pathname*))
   (is
    (not
     (uiop:emptyp

@@ -1,8 +1,8 @@
 ;;;; Okay, so. So libraries use the sharpsign plus/minus macros to determine
 ;;;; whether Quicklisp is in the environment, and decide whether to use
 ;;;; `ql:quickload` or `asdf:load-system` to load a library. Libraries are
-;;;; compiled with :quicklisp in *features* into fasl files. Then, when Buildapp
-;;;; is compiling a Ceramic app, it loads those.
+;;;; compiled with :quicklisp in *features* into fasl files. Then, when
+;;;; compiling a Ceramic app, it loads those.
 ;;;;
 ;;;; Then it fails with "package `quicklisp-client` not found". Why can't we
 ;;;; make a list of those libraries and recompile them? Well, because that's

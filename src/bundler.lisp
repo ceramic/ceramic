@@ -18,14 +18,6 @@
   (:documentation "Release applications."))
 (in-package :ceramic.bundler)
 
-(defvar +prelude+
-  "(progn (push :ceramic-release *features*) ~A )")
-
-(defparameter +asdf-registry-prelude+
-  "(asdf:clear-source-registry)
-   (asdf:initialize-source-registry
-    '(:source-registry :inherit-configuration (:tree ~S)))")
-
 (defun archive-extension ()
   "Use zip files on Windows and tar archives on Unix. This is necessary because
 tar archives preserve permissions (important for executing!), but Windows
@@ -83,19 +75,16 @@ most people can unzip)."
 	      (copy-directory (ceramic.electron:release-directory)
 			      electron-directory)))
            ;; Ensure Electron is executable
-           (ensure-executable
+           (trivial-exe:ensure-executable
             (binary-pathname electron-directory
                              :operating-system *operating-system*))
            ;; Compile the app
            (tell "Compiling app...")
-           (ceramic.build:build :eval (format nil
-                                              +prelude+ asdf-registry-prelude)
-                                :system-name system-name
-                                :output-pathname executable-pathname
-                                :entry-point (concatenate 'string
-                                                          "ceramic-entry::"
-                                                          (string-downcase
-                                                           (symbol-name system-name))))
+           (trivial-build:build system-name
+                                (format nil "(ceramic-entry::~A)"
+                                        (string-downcase
+                                         (symbol-name system-name)))
+                                executable-pathname)
            ;; Compress the folder
            (when (probe-file bundle-pathname)
              (tell "Found existing bundle, deleting...")
