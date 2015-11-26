@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/ceramic/ceramic.svg?branch=master)](https://travis-ci.org/ceramic/ceramic)
 [![Coverage Status](https://coveralls.io/repos/ceramic/ceramic/badge.svg?branch=master&service=github)](https://coveralls.io/github/ceramic/ceramic?branch=master)
+[![Quicklisp](http://quickdocs.org/badge/ceramic.svg)](http://quickdocs.org/ceramic/)
 
 Common Lisp web apps on the desktop.
 
