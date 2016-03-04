@@ -157,7 +157,7 @@
 
 (defun make-window (&key title url x y width height
                       min-width min-height max-width max-height
-                      resizablep node-integration-p)
+                      (resizablep t) node-integration-p)
   "Create a window."
   (let ((args (list*
                (cons :resizablep resizablep)
