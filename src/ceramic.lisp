@@ -343,8 +343,7 @@
   (let ((entry-point (intern (symbol-name system-name)
                              (find-package :ceramic-entry)))
         (arguments (gensym))
-        (electron-directory (gensym))
-        (binary (gensym)))
+        (electron-directory (gensym)))
     `(defun ,entry-point (,arguments)
        (declare (ignore ,arguments))
        ;; Start the executable-relative Electron process
