@@ -63,7 +63,9 @@
       nil
       ;; We're in a dev environment
       (progn
-        (when *process*
+        (when (and *process*
+                   (eq (external-program:process-status *process*)
+                       :running))
           (warn "Interactive process already running. Restarting.")
           (stop-interactive))
         (setf *process*
