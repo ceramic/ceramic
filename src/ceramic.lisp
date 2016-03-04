@@ -143,6 +143,11 @@
                :initarg :max-height
                :type integer
                :documentation "The window's maximum height, in pixels.")
+   (node-integration-p :reader node-integration-p
+                       :initarg :node-integration-p
+                       :initform nil
+                       :type boolean
+                       :documentation "Whether node integration is enabled.")
    (resizablep :reader window-resizable-p
                :initarg :resizablep
                :initform t
@@ -152,10 +157,11 @@
 
 (defun make-window (&key title url x y width height
                       min-width min-height max-width max-height
-                      resizablep)
+                      resizablep node-integration-p)
   "Create a window."
-  (let ((args (cons
+  (let ((args (list*
                (cons :resizablep resizablep)
+               (cons :node-integration-p node-integration-p)
                (remove-if #'(lambda (pair)
                               (null (rest pair)))
                           (list (cons :title title)
@@ -247,6 +253,8 @@
                          (slot min-height "min-height")
                          (slot max-width "max-width")
                          (slot max-height "max-height")
+                         (list (cons "node-integration"
+                                     (cl-json:json-bool (node-integration-p window))))
                          (list (cons "resizable"
                                      (cl-json:json-bool (window-resizable-p window))))))
     (when (slot-boundp window 'url)
