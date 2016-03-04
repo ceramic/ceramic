@@ -155,29 +155,15 @@
                :documentation "Whether or not the window is resizable."))
   (:documentation "A browser window."))
 
-(defun make-window (&key title url x y width height
+(defun make-window (&rest args
+                    &key title url x y width height
                       min-width min-height max-width max-height
-                      (resizablep t) node-integration-p)
+                      resizablep node-integration-p)
   "Create a window."
-  (let ((args (list*
-               (cons :resizablep resizablep)
-               (cons :node-integration-p node-integration-p)
-               (remove-if #'(lambda (pair)
-                              (null (rest pair)))
-                          (list (cons :title title)
-                                (cons :url url)
-                                (cons :x x)
-                                (cons :y y)
-                                (cons :width width)
-                                (cons :height height)
-                                (cons :min-width min-width)
-                                (cons :min-height min-height)
-                                (cons :max-width max-width)
-                                (cons :max-height max-height))))))
-    (apply #'make-instance
-           (cons 'window
-                 (loop for (key . value) in args appending
-                   (list key value))))))
+  (declare (ignore title url x y width height
+                   min-width min-height max-width max-height
+                   resizablep node-integration-p))
+  (apply #'make-instance 'window args))
 
 ;;; Setters
 
