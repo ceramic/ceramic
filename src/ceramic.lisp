@@ -63,7 +63,9 @@
       nil
       ;; We're in a dev environment
       (progn
-        (when *process*
+        (when (and *process*
+                   (eq (external-program:process-status *process*)
+                       :running))
           (warn "Interactive process already running. Restarting.")
           (stop-interactive))
         (setf *process*
@@ -143,6 +145,11 @@
                :initarg :max-height
                :type integer
                :documentation "The window's maximum height, in pixels.")
+   (node-integration-p :reader node-integration-p
+                       :initarg :node-integration-p
+                       :initform nil
+                       :type boolean
+                       :documentation "Whether node integration is enabled.")
    (resizablep :reader window-resizable-p
                :initarg :resizablep
                :initform t
@@ -150,28 +157,15 @@
                :documentation "Whether or not the window is resizable."))
   (:documentation "A browser window."))
 
-(defun make-window (&key title url x y width height
+(defun make-window (&rest args
+                    &key title url x y width height
                       min-width min-height max-width max-height
-                      resizablep)
+                      resizablep node-integration-p)
   "Create a window."
-  (let ((args (cons
-               (cons :resizablep resizablep)
-               (remove-if #'(lambda (pair)
-                              (null (rest pair)))
-                          (list (cons :title title)
-                                (cons :url url)
-                                (cons :x x)
-                                (cons :y y)
-                                (cons :width width)
-                                (cons :height height)
-                                (cons :min-width min-width)
-                                (cons :min-height min-height)
-                                (cons :max-width max-width)
-                                (cons :max-height max-height))))))
-    (apply #'make-instance
-           (cons 'window
-                 (loop for (key . value) in args appending
-                   (list key value))))))
+  (declare (ignore title url x y width height
+                   min-width min-height max-width max-height
+                   resizablep node-integration-p))
+  (apply #'make-instance 'window args))
 
 ;;; Setters
 
@@ -247,6 +241,8 @@
                          (slot min-height "min-height")
                          (slot max-width "max-width")
                          (slot max-height "max-height")
+                         (list (cons "node-integration"
+                                     (cl-json:json-bool (node-integration-p window))))
                          (list (cons "resizable"
                                      (cl-json:json-bool (window-resizable-p window))))))
     (when (slot-boundp window 'url)
@@ -335,8 +331,7 @@
   (let ((entry-point (intern (symbol-name system-name)
                              (find-package :ceramic-entry)))
         (arguments (gensym))
-        (electron-directory (gensym))
-        (binary (gensym)))
+        (electron-directory (gensym)))
     `(defun ,entry-point (,arguments)
        (declare (ignore ,arguments))
        ;; Start the executable-relative Electron process
