@@ -1,8 +1,7 @@
 (in-package :cl-user)
 (defpackage ceramic.util
   (:use :cl)
-  (:export :copy-directory
-           :zip-up
+  (:export :zip-up
            :tar-up
            :without-feature
            :tell)
@@ -18,24 +17,6 @@
   (assert (uiop:absolute-pathname-p pathname))
   (assert (uiop:subpathp pathname root))
   (uiop:subpathp pathname root))
-
-(defun copy-directory (source destination)
-  "Copy everything under source to destination."
-  (ensure-directories-exist destination)
-  (fad:walk-directory source
-                      #'(lambda (pathname)
-                          (unless (equal pathname source)
-                            (let* ((relative-path (subtract-pathname source pathname))
-                                   (target (merge-pathnames relative-path
-                                                            destination)))
-                              (if (uiop:directory-pathname-p pathname)
-                                  ;; Ensure an equivalent directory exists
-                                  (ensure-directories-exist target)
-                                  ;; Copy the absolute source file to the target
-                                  (uiop:copy-file pathname target)))))
-                      :directories :breadth-first
-                      :follow-symlinks nil)
-  destination)
 
 (defun zip-up (directory output)
   "Create a zip archive from the contents of a directory."
