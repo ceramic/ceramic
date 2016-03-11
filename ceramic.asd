@@ -18,6 +18,7 @@
                :buildapp
                :uuid
                :cl-fad
+               :copy-directory
                :clack-handler-hunchentoot
                #-(or win32 mswindows)
                :osicat)
