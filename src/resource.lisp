@@ -1,8 +1,6 @@
 (in-package :cl-user)
 (defpackage ceramic.resource
   (:use :cl)
-  (:import-from :ceramic.util
-                :copy-directory)
   (:import-from :ceramic.error
                 :no-such-tag)
   (:import-from :ceramic.runtime
@@ -90,4 +88,4 @@ tag."
                          (make-pathname :directory (list :relative
                                                          destination-name))
                          directory)))
-      (copy-directory source-directory destination))))
+      (copy-directory:copy source-directory destination))))
