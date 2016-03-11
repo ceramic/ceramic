@@ -9,13 +9,13 @@
   :depends-on (:trivial-download
                :trivial-extract
                :trivial-exe
+               :trivial-build
                :uiop
                :archive
                :zip
                :jonathan
                :cl-json
                :external-program
-               :buildapp
                :uuid
                :cl-fad
                :copy-directory
@@ -41,8 +41,6 @@
                  (:file "setup")
                  #-quicklisp
                  (:file "ql-patch")
-                 #+quicklisp
-                 (:file "build")
                  #+quicklisp
                  (:file "bundler")
                  (:file "ceramic"))))
