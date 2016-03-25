@@ -17,7 +17,6 @@
                :cl-json
                :external-program
                :uuid
-               :cl-fad
                :copy-directory
                :clack-handler-hunchentoot)
   :components ((:module "src"
