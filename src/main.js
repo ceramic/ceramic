@@ -54,5 +54,5 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
   // Start the WebSockets server
-  Ceramic.startWebSockets(process.argv[2]);
+  Ceramic.startWebSockets(parseInt(process.argv[1]));
 });
