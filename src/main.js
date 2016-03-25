@@ -4,11 +4,13 @@ var BrowserWindow = require('browser-window');
 
 require('crash-reporter').start();
 
+var Ceramic = {};
+
 /* Communication */
 
 var RemoteJS = {};
 
-function startWebSockets(port) {
+Ceramic.startWebSockets = function() {
   RemoteJS.ws = new WebSocket('ws://localhost:' + port);
 
   RemoteJS.send = function(data) {
@@ -25,11 +27,11 @@ function startWebSockets(port) {
 
 /* Windows */
 
-var window_db = {};
+Ceramic.window_db = {};
 
 /* Lifecycle management */
 
-function quit() {
+Ceramic.quit = function() {
   app.quit();
 };
 
