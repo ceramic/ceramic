@@ -22,7 +22,10 @@
 
 (defparameter +main-javascript+
   (asdf:system-relative-pathname :ceramic #p"src/main.js")
-  "Pathname to the JavaScript file for the main process.")
+  "Pathname to the JavaScript file for the main process.")'
+
+(defparameter +ws-module+
+  (asdf:system-relative-pathname :ceramic #p"node_modules/ws/"))
 
 (defun clean-release (directory &key operating-system)
   "Clean up default files from an Electron release."
@@ -55,11 +58,19 @@
                            (asdf:find-system :ceramic)))
                   output-stream)))
 
+(defun copy-ws-module (directory &key operating-system)
+  "Copy the WebSockets module."
+  (copy-directory:copy +ws-module+
+                       (merge-pathnames #p"node_modules/ws/"
+                                        (app-directory directory
+                                                       :operating-system operating-system))))
+
 (defun prepare-release (directory &key operating-system)
   "Prepare an Electron release."
   (clean-release directory :operating-system operating-system)
   (insert-javascript directory :operating-system operating-system)
-  (insert-package-definition directory :operating-system operating-system))
+  (insert-package-definition directory :operating-system operating-system)
+  (copy-ws-module directory :operating-system operating-system))
 
 ;;; Main
 
