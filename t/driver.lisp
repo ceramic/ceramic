@@ -13,7 +13,6 @@
 (test lifecycle
   (finishes
     (ceramic.driver:start *driver*))
-  (sleep 1)
   (finishes
     (ceramic.driver:js *driver* "console.log('hello!')"))
   (is
