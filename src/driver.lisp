@@ -45,6 +45,10 @@
 
 (defmethod start-release-electron ((driver driver))
   "Start the Electron process in the release directory."
+  (with-slots (process) driver
+    (setf process
+          (ceramic.electron:start-process (executable-relative-pathname #p"electron/")
+                                          :operating-system ceramic.os:*operating-system*)))
   (values))
 
 (defmethod start-local-electron ((driver driver))
