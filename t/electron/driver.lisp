@@ -9,8 +9,6 @@
                 :create-window
                 :window-load-url
                 :quit)
-  (:import-from :ceramic-test.electron.tools
-                :*test-directory*)
   (:export :electron-driver))
 (in-package :ceramic-test.electron)
 
