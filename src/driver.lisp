@@ -49,7 +49,9 @@
     (log-message "Starting server...")
     (start-remote-js driver)
     (log-message "Starting Electron process...")
-    (start-electron driver)))
+    (start-electron driver)
+    (log-message "Waiting for startup...")
+    (wait-for-client driver)))
 
 (defgeneric stop (driver)
   (:documentation "Stop the Electron process and the remote-js server.")
@@ -138,6 +140,10 @@
                                                (on-message driver message))))
     (remote-js:start context))
   (values))
+
+(defmethod wait-for-client ((driver driver))
+  "Wait for the client to connect to the WebSockets server."
+  (loop until (remote-js:context-connected-p (driver-context driver))))
 
 (defmethod stop-remote-js ((driver driver))
   "Stop the remote-js server."
