@@ -1,9 +1,21 @@
 (in-package :cl-user)
 (defpackage ceramic
   (:use :cl)
+  (:import-from :ceramic.driver
+                :*driver*)
+  (:export :start
+           :stop
+           :define-entry-point)
   (:documentation "The main interface."))
 (in-package :ceramic)
 
+;;; Lifecycle
+
+(defun start ()
+  (ceramic.driver:start *driver*))
+
+(defun stop ()
+  (ceramic.driver:stop *driver*))
 
 ;;; Entry point for released applications
 
