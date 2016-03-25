@@ -2,8 +2,6 @@
 (defpackage ceramic.bundler
   (:use :cl)
   (:import-from :ceramic.util
-                :zip-up
-                :tar-up
                 :tell)
   (:import-from :ceramic.file
                 :*ceramic-directory*)
@@ -29,11 +27,9 @@ most people can unzip)."
 (defun create-archive (directory output)
   (case *operating-system*
     (:windows
-     (zip-up directory output))
-    (:mac
-     (tar-up-mac-fallback directory output))
+     (trivial-compress:zip directory output))
     (otherwise
-     (tar-up directory output))))
+     (trivial-compress:tar directory output))))
 
 (defun bundle (system-name &key bundle-pathname system-directory)
   "Compile the application to an executable, and ship it with its resources."
