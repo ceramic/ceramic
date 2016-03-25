@@ -30,11 +30,7 @@
                  (:file "runtime")
                  (:file "resource")
                  (:file "setup")
-                 (:module "electron"
-                  :serial t
-                  :components
-                  ((:static-file "main.js")
-                   (:file "driver")))
+                 (:static-file "main.js")
                  (:file "driver")
                  #-quicklisp
                  (:file "ql-patch")
