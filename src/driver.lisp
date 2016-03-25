@@ -21,9 +21,6 @@
 
 ;;; Interface
 
-(defgeneric on-message (driver message)
-  (:documentation "React to a message from a WebSockets client."))
-
 (defgeneric start (driver)
   (:documentation "Start the Electron process and the remote-js server.")
 
@@ -33,13 +30,15 @@
         (start-local-electron driver))
     (start-remote-js driver)))
 
-
 (defgeneric stop (driver)
   (:documentation "Stop the Electron process and the remote-js server.")
 
   (:method ((driver driver))
     (stop-process driver)
     (stop-remote-js driver)))
+
+(defgeneric on-message (driver message)
+  (:documentation "React to a message from a WebSockets client."))
 
 ;;; Internals
 
