@@ -30,6 +30,7 @@
                  (:file "runtime")
                  (:file "resource")
                  (:file "setup")
+                 (:file "driver")
                  (:module "electron"
                   :serial t
                   :components
