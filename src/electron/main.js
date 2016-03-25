@@ -24,8 +24,5 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
   /* Start listening for commands on the server */
-  process.stdout.write('READY\n');
-  iointerface.on('line', function (line) {
-    dispatchCommand(JSON.parse(line));
-  });
+
 });
