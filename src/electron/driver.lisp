@@ -11,11 +11,6 @@
                 :get-release)
   (:import-from :ceramic.electron.tools
                 :prepare-release)
-  ;; Interface
-  (:export :*electron-version*
-           :release-directory
-           :global-binary-pathame
-           :setup)
   ;; Functions
   (:export :*binary-pathname*
            :start-process
@@ -203,28 +198,3 @@
 (defun quit (process)
   "End the Electron process."
   (send-command process "quit" nil))
-
-;;; Interface
-
-(defvar *electron-version* "0.28.1"
-  "The version of Electron to use.")
-
-(defun release-directory ()
-  "Pathname to the local copy of the Electron release."
-  (merge-pathnames #p"electron/" *ceramic-directory*))
-
-(defun global-binary-pathname ()
-  "The pathname to the downloaded Electron binary. Used for interactive
-  testing."
-  (binary-pathname (release-directory)
-                   :operating-system *operating-system*))
-
-(defun setup ()
-  "Set up the Electron driver."
-  (ensure-directories-exist (release-directory))
-  (progn
-    (get-release (release-directory)
-                 :operating-system *operating-system*
-                 :architecture *architecture*
-                 :version *electron-version*)
-    (prepare-release (release-directory) :operating-system *operating-system*)))

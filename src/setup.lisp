@@ -46,3 +46,26 @@
   (clean-release directory :operating-system operating-system)
   (insert-javascript directory :operating-system operating-system)
   (insert-package-definition directory :operating-system operating-system))
+
+(defvar *electron-version* "0.28.1"
+  "The version of Electron to use.")
+
+(defun release-directory ()
+  "Pathname to the local copy of the Electron release."
+  (merge-pathnames #p"electron/" *ceramic-directory*))
+
+(defun global-binary-pathname ()
+  "The pathname to the downloaded Electron binary. Used for interactive
+  testing."
+  (binary-pathname (release-directory)
+                   :operating-system *operating-system*))
+
+(defun setup ()
+  "Set up everything needed to start developing."
+  (ensure-directories-exist (release-directory))
+  (progn
+    (get-release (release-directory)
+                 :operating-system *operating-system*
+                 :architecture *architecture*
+                 :version *electron-version*)
+    (prepare-release (release-directory) :operating-system *operating-system*)))
