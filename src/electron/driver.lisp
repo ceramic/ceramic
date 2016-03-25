@@ -48,10 +48,6 @@
 
 (defun start-process (directory &key operating-system)
   "Start an Electron process, returning the process object."
-  (let* ((binary-pathname (binary-pathname directory
-                                           :operating-system operating-system))
-         (process (external-program:start binary-pathname
-                                          (list)
-                                          :input :stream
-                                          :output :stream)))
-    process))
+  (external-program:start (electron-tools:binary-pathname directory
+                                                          :operating-system operating-system)
+                          (list)))
