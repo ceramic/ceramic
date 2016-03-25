@@ -4,7 +4,8 @@
   (:import-from :ceramic.log
                 :log-message)
   (:import-from :ceramic.file
-                :*ceramic-directory*)
+                :*ceramic-directory*
+                :release-directory)
   (:import-from :ceramic.os
                 :*operating-system*)
   (:import-from :ceramic.resource
@@ -62,7 +63,7 @@ most people can unzip)."
            (copy-resources (merge-pathnames #p"resources/"
                                             work-directory))
            ;; Copy the electron directory
-           (copy-directory:copy (ceramic.electron:release-directory)
+           (copy-directory:copy (release-directory)
                                 electron-directory)
            ;; Ensure Electron is executable
            (trivial-exe:ensure-executable

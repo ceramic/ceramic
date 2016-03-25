@@ -14,4 +14,4 @@
   (is
    (not
     (uiop:emptyp
-     (uiop:directory-files (ceramic.electron:release-directory))))))
+     (uiop:directory-files (ceramic.file:release-directory))))))
