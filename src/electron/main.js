@@ -4,6 +4,25 @@ var BrowserWindow = require('browser-window');
 
 require('crash-reporter').start();
 
+/* Communication */
+
+var RemoteJS = {};
+
+function startWebSockets(port) {
+  RemoteJS.ws = new WebSocket('ws://localhost:' + port);
+
+  RemoteJS.send = function(data) {
+    RemoteJS.ws.send(data);
+  };
+
+  RemoteJS.ws.onmessage = function(evt) {
+    eval(evt.data);
+  };
+  RemoteJS.ws.onopen = function() {
+    RemoteJS.send('connected');
+  };
+};
+
 /* Windows */
 
 var window_db = {};
@@ -23,6 +42,6 @@ app.on('window-all-closed', function() {
 /* Start up */
 
 app.on('ready', function() {
-  /* Start listening for commands on the server */
-
+  // Start the WebSockets server
+  startWebSockets(progress.argv[2]);
 });
