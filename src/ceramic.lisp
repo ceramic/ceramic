@@ -9,7 +9,7 @@
   (:import-from :ceramic.electron
                 :start-process
                 :release-directory)
-  (:import-from :ceramic.electron.tools
+  (:import-from :electron-tools
                 :binary-pathname)
   ;; Main interface
   (:export :setup
