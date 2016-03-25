@@ -33,6 +33,16 @@
   (with-slots (id) window
     (window-js "setTitle(~S)" id new-value)))
 
+(defmethod window-url ((window window))
+  "Return the window's current URL."
+  (with-slots (id) window
+    (window-js "webContents.getURL()" id)))
+
+(defmethod (setf window-url) (new-value (window window))
+  "Change the window's URL."
+  (with-slots (id) window
+    (window-js "loadURL(~S") id new-value))
+
 (defmethod center ((window window))
   "Move the window to the center of the screen."
   (with-slots (id) window
