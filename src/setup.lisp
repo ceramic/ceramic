@@ -1,8 +1,24 @@
 (in-package :cl-user)
 (defpackage ceramic.setup
   (:use :cl)
+  (:import-from :ceramic.log
+                :log-message)
+  (:import-from :ceramic.file
+                :*ceramic-directory*
+                :release-directory)
+  (:import-from :ceramic.os
+                :*operating-system*
+                :*architecture*)
+  (:import-from :electron-tools
+                :app-directory
+                :binary-pathname
+                :get-release)
+  (:export :setup
+           :global-binary-pathname)
   (:documentation "Set up everything needed to develop with Ceramic."))
 (in-package :ceramic.setup)
+
+;;; Dealing with Electron releases
 
 (defparameter +main-javascript+
   (asdf:system-relative-pathname :ceramic #p"src/electron/main.js")
@@ -47,12 +63,10 @@
   (insert-javascript directory :operating-system operating-system)
   (insert-package-definition directory :operating-system operating-system))
 
+;;; Main
+
 (defvar *electron-version* "0.28.1"
   "The version of Electron to use.")
-
-(defun release-directory ()
-  "Pathname to the local copy of the Electron release."
-  (merge-pathnames #p"electron/" *ceramic-directory*))
 
 (defun global-binary-pathname ()
   "The pathname to the downloaded Electron binary. Used for interactive
@@ -62,6 +76,9 @@
 
 (defun setup ()
   "Set up everything needed to start developing."
+  (log-message "Creating Ceramic directories...")
+  (ensure-directories-exist *ceramic-directory*)
+  (log-message "Downloading a copy of Electron...")
   (ensure-directories-exist (release-directory))
   (progn
     (get-release (release-directory)

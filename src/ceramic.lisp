@@ -7,10 +7,11 @@
                 :*releasep*
                 :executable-relative-pathname)
   (:import-from :ceramic.electron
-                :start-process
-                :release-directory)
+                :start-process)
   (:import-from :electron-tools
                 :binary-pathname)
+  (:import-from :ceramic.file
+                :release-directory)
   ;; Main interface
   (:export :setup
            :interactive
@@ -69,7 +70,7 @@
           (warn "Interactive process already running. Restarting.")
           (stop-interactive))
         (setf *process*
-              (ceramic.electron:start-process (ceramic.electron:release-directory)
+              (ceramic.electron:start-process (release-directory)
                                               :operating-system *operating-system*))
         t)))
 

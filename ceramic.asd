@@ -28,13 +28,12 @@
                  (:file "logging")
                  (:file "runtime")
                  (:file "resource")
+                 (:file "setup")
                  (:module "electron"
                   :serial t
                   :components
-                  ((:file "tools")
-                   (:static-file "main.js")
+                  ((:static-file "main.js")
                    (:file "driver")))
-                 (:file "setup")
                  #-quicklisp
                  (:file "ql-patch")
                  #+quicklisp

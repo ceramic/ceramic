@@ -9,8 +9,6 @@
   (:import-from :electron-tools
                 :binary-pathname
                 :get-release)
-  (:import-from :ceramic.electron.tools
-                :prepare-release)
   ;; Functions
   (:export :*binary-pathname*
            :start-process
