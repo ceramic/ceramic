@@ -9,6 +9,10 @@
                 :release-directory)
   (:import-from :ceramic.os
                 :*operating-system*)
+  (:export :driver
+           :*driver*
+           :start
+           :stop)
   (:documentation "The Ceramic driver interface."))
 (in-package :ceramic.driver)
 
