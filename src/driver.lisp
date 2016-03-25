@@ -44,14 +44,16 @@
 ;;; Internals
 
 (defmethod start-release-electron ((driver driver))
-  "Start the Electron process in the release directory.")
+  "Start the Electron process in the release directory."
+  (values))
 
 (defmethod start-local-electron ((driver driver))
   "Start the Electron process from the Ceramic directory for interactive use."
   (with-slots (process) driver
     (setf process
           (ceramic.electron:start-process (release-directory)
-                                          :operating-system ceramic.os:*operating-system*))))
+                                          :operating-system ceramic.os:*operating-system*)))
+  (values))
 
 (defmethod start-remote-js ((driver driver))
   "Start the remote-js server."
@@ -77,4 +79,5 @@
   "Stop the remote-js server."
   (with-slots (context) driver
     (remote-js:stop context))
-  (slot-makunbound driver 'context))
+  (slot-makunbound driver 'context)
+  (values))
