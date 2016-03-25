@@ -60,6 +60,16 @@
     (declare (type string js))
     (remote-js:eval (driver-context driver) js)))
 
+(defgeneric sync-js (driver js)
+  (:documentation "Synchronously evaluate JavaScript in the Electron process,
+  returning a string containing the result of the evaluation.")
+
+  (:method ((driver driver) js)
+    (let ((message-id (uuid:format-as-urn nil (uuid:make-v4-uuid))))
+      (js driver (format nil "RemoteJS.syncEval(~S, (function() { ~A }))"
+                         message-id
+                         js)))))
+
 (defgeneric port (driver)
   (:documentation "Return the port the WebSockets server is running on.")
 
