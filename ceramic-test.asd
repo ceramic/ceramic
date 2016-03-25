@@ -10,8 +10,7 @@
                 ((:module "electron"
                   :serial t
                   :components
-                  ((:file "tools")
-                   (:file "driver")))
+                  ((:file "driver")))
                  (:file "setup")
                  (:file "integration")
                  (:file "misc")

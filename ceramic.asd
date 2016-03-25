@@ -10,6 +10,7 @@
                :trivial-extract
                :trivial-exe
                :trivial-build
+               :electron-tools
                :uiop
                :archive
                :zip

@@ -11,7 +11,6 @@
   (let* ((*ceramic-directory* (asdf:system-relative-pathname :ceramic-test
                                                              #p"t/ceramic/"))
          (ceramic.log:*logging* t))
-    (run! 'ceramic-test.electron.tools:electron-tools)
     (run! 'ceramic-test.electron:electron-driver)
     (run! 'ceramic-test.setup:setup)
     (run! 'ceramic-test.integration:integration)
