@@ -1,8 +1,12 @@
 (in-package :cl-user)
 (defpackage ceramic.driver
   (:use :cl)
+  (:import-from :ceramic.runtime
+                :*releasep*)
   (:documentation "The Ceramic driver interface."))
 (in-package :ceramic.driver)
+
+;;; Classes
 
 (defclass driver ()
   ((process :accessor driver-process
@@ -15,11 +19,49 @@
 (defvar *driver* (make-instance 'driver)
   "The global driver object.")
 
-(defmethod initialize-instance :after ((driver driver) &key)
-  (setf (driver-context driver)
-        (remote-js:make-buffered-context :callback
-                                         #'(lambda (message)
-                                             (on-message driver message)))))
+;;; Interface
 
 (defgeneric on-message (driver message)
   (:documentation "React to a message from a WebSockets client."))
+
+(defgeneric start (driver)
+  (:documentation "Start the Electron process and the remote-js server.")
+
+  (:method ((driver driver))
+    (if *releasep*
+        (start-release-electron driver)
+        (start-local-electron driver))
+    (start-remote-js driver)))
+
+
+(defgeneric stop (driver)
+  (:documentation "Stop the Electron process and the remote-js server.")
+
+  (:method ((driver driver))
+    (stop-process driver)
+    (stop-remote-js driver)))
+
+;;; Internals
+
+(defmethod start-release-electron ((driver driver))
+  "Start the Electron process in the release directory.")
+
+(defmethod start-local-electron ((driver driver))
+  "Start the Electron process from the Ceramic directory for interactive use."
+  )
+
+(defmethod start-remote-js ((driver driver))
+  (with-slots (context) driver
+    (setf context
+          (remote-js:make-buffered-context :callback
+                                           #'(lambda (message)
+                                               (on-message driver message))))
+    (remote-js:start context)))
+
+(defmethod stop-process ((driver driver))
+  )
+
+(defmethod stop-remote-js ((driver driver))
+  (with-slots (context) driver
+    (remote-js:stop context))
+  (slot-makunbound driver 'context))
