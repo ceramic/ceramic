@@ -55,16 +55,3 @@
                                           :input :stream
                                           :output :stream)))
     process))
-
-(defun send-command (process command alist)
-  "Send a command Electron process."
-  (let ((json-string (cl-json:with-explicit-encoder
-                       (cl-json:encode-json-alist-to-string
-                        (append (list (cons "cmd" command))
-                                alist))))
-        (input-stream (external-program:process-input-stream process)))
-    (write-string json-string input-stream)
-    (write-char #\Newline input-stream)
-    (finish-output input-stream)
-    (ceramic.log:log-message "sent JSON ~A" json-string)
-    json-string))
