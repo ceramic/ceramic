@@ -24,7 +24,11 @@
             :documentation "The Electron process.")
    (context :accessor driver-context
             :type remote-js:buffered-context
-            :documentation "The remote-js object."))
+            :documentation "The remote-js object.")
+   (responses :accessor driver-responses
+              :initform (make-hash-table :test #'equal)
+              :type hash-table
+              :documentation "A hash table of message IDs to evaluation results."))
   (:documentation "The Ceramic driver."))
 
 (defvar *driver* (make-instance 'driver)
@@ -50,9 +54,6 @@
     (log-message "Stopping server...")
     (stop-remote-js driver)))
 
-(defgeneric on-message (driver message)
-  (:documentation "React to a message from a WebSockets client."))
-
 (defgeneric js (driver js)
   (:documentation "Evaluate a string of JavaScript in the Electron process.")
 
@@ -66,15 +67,29 @@
 
   (:method ((driver driver) js)
     (let ((message-id (uuid:format-as-urn nil (uuid:make-v4-uuid))))
-      (js driver (format nil "RemoteJS.syncEval(~S, (function() { ~A }))"
+      ;; Send the message
+      (js driver (format nil "Ceramic.syncEval(~S, (function() { ~A }))"
                          message-id
-                         js)))))
+                         js))
+      ;; And wait for the reply
 
 (defgeneric port (driver)
   (:documentation "Return the port the WebSockets server is running on.")
 
   (:method ((driver driver))
     (remote-js:context-port (driver-context driver))))
+
+;;; IPC
+
+(defgeneric on-message (driver message)
+  (:documentation "Receive a message from a WebSockets client.")
+
+  (:method ((driver driver))
+    (declare (type string message))
+    (let ((data (cl-json:decode-json-from-string message)))
+      (with-slots (responses) driver
+        (setf (gethash (gethash "id" data) responses)
+              (gethash "result" data))))))
 
 ;;; Internals
 
