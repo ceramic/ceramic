@@ -51,6 +51,7 @@
   )
 
 (defmethod start-remote-js ((driver driver))
+  "Start the remote-js server."
   (with-slots (context) driver
     (setf context
           (remote-js:make-buffered-context :callback
@@ -59,9 +60,11 @@
     (remote-js:start context)))
 
 (defmethod stop-process ((driver driver))
+  "Stop the Electron process."
   )
 
 (defmethod stop-remote-js ((driver driver))
+  "Stop the remote-js server."
   (with-slots (context) driver
     (remote-js:stop context))
   (slot-makunbound driver 'context))
