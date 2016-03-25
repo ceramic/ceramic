@@ -78,9 +78,10 @@
   (ensure-directories-exist *ceramic-directory*)
   (log-message "Downloading a copy of Electron...")
   (ensure-directories-exist (release-directory))
-  (progn
-    (get-release (release-directory)
-                 :operating-system *operating-system*
-                 :architecture *architecture*
-                 :version *electron-version*)
-    (prepare-release (release-directory) :operating-system *operating-system*)))
+  (get-release (release-directory)
+               :operating-system *operating-system*
+               :architecture *architecture*
+               :version *electron-version*)
+  (log-message "Preparing the files...")
+  (prepare-release (release-directory) :operating-system *operating-system*)
+  (values))
