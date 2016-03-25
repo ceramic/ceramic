@@ -8,6 +8,7 @@
                 :serial t
                 :components
                 ((:file "setup")
+                 (:file "driver")
                  (:file "integration")
                  (:file "misc")
                  (:file "ceramic")))))
