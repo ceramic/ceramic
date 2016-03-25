@@ -11,7 +11,7 @@
   (:import-from :electron-tools
                 :binary-pathname
                 :get-release)
-  (:import-from :electron.tools
+  (:import-from :ceramic.electron.tools
                 :prepare-release)
   ;; Interface
   (:export :*electron-version*
