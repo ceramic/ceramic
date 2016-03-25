@@ -8,9 +8,10 @@
   (:import-from :ceramic.os
                 :*operating-system*
                 :*architecture*)
-  (:import-from :ceramic.electron.tools
+  (:import-from :electron-tools
                 :binary-pathname
-                :get-release
+                :get-release)
+  (:import-from :electron.tools
                 :prepare-release)
   ;; Interface
   (:export :*electron-version*

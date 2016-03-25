@@ -11,7 +11,7 @@
                 :*operating-system*)
   (:import-from :ceramic.resource
                 :copy-resources)
-  (:import-from :ceramic.electron.tools
+  (:import-from :electron-tools
                 :binary-pathname)
   (:export :bundle)
   (:documentation "Release applications."))
