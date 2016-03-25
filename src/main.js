@@ -1,6 +1,7 @@
 var app = require('app');
 var ipc = require('ipc');
 var BrowserWindow = require('browser-window');
+var WebSocket = require('ws');
 
 require('crash-reporter').start();
 
@@ -30,8 +31,8 @@ Ceramic.syncEval = function(id, fn) {
   RemoteJS.send(JSON.stringify({
     id: id,
     result: result
-  })
-}
+  }))
+};
 
 /* Windows */
 
@@ -53,5 +54,5 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
   // Start the WebSockets server
-  startWebSockets(progress.argv[2]);
+  Ceramic.startWebSockets(process.argv[2]);
 });
