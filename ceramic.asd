@@ -18,7 +18,8 @@
                :external-program
                :uuid
                :copy-directory
-               :clack-handler-hunchentoot)
+               :clack-handler-hunchentoot
+               :remote-js)
   :components ((:module "src"
                 :serial t
                 :components
