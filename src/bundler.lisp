@@ -84,9 +84,3 @@ most people can unzip)."
       (uiop:delete-directory-tree work-directory :validate t)
       (tell "Done!")
       bundle-pathname)))
-
-(defun tar-up-mac-fallback (directory output)
-  "Create a tar archive from the contents of a directory, fallbacking to binary for symlinks"
-  (external-program:run "/usr/bin/tar"
-			(list "cv" "-C" (merge-pathnames ".." directory) "-f"  output "working"))
-  output)
