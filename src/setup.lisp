@@ -49,12 +49,10 @@
                                                                  :operating-system operating-system))
                                  :direction :output
                                  :if-does-not-exist :create)
-    (write-string (jonathan:to-json (list (cons "name" "Ceramic/Electron")
-                                          (cons "version"
-                                                (asdf:component-version
-                                                 (asdf:find-system :ceramic)))
-                                          (cons "main" "main.js"))
-                                    :from :alist)
+    (write-string (format nil "{ \"name\": ~S, \"version\": ~S, \"main\": \"main.js\" }"
+                          "Ceramic/Electron"
+                          (asdf:component-version
+                           (asdf:find-system :ceramic)))
                   output-stream)))
 
 (defun prepare-release (directory &key operating-system)
