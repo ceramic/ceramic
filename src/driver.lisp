@@ -6,11 +6,14 @@
   (:import-from :ceramic.log
                 :log-message)
   (:import-from :ceramic.runtime
-                :*releasep*)
+                :*releasep*
+                :executable-relative-pathname)
   (:import-from :ceramic.file
                 :release-directory)
   (:import-from :ceramic.os
                 :*operating-system*)
+  (:import-from :electron-tools
+                :binary-pathname)
   (:export :driver
            :*driver*
            :start
@@ -52,7 +55,7 @@
 
   (:method ((driver driver))
     (log-message "Stopping Electron process...")
-    (stop-process driver)
+    (stop-electron driver)
     (log-message "Stopping server...")
     (stop-remote-js driver)))
 
@@ -109,8 +112,9 @@
                        (release-directory))))
     (with-slots (process) driver
       (setf process
-            (start-process directory
-                           :operating-system ceramic.os:*operating-system*))))
+            (external-program:start (binary-pathname directory
+                                                     :operating-system ceramic.os:*operating-system*)
+                                    (list (write-to-string (port driver)))))))
   (values))
 
 (defmethod stop-electron ((driver driver))
@@ -121,7 +125,7 @@
         (error "fixme")
       (t ()
         (warn "Error quitting the Electron process. Forcing shutdown...")
-        (external-program:signal-process *process* :killed))))
+        (external-program:signal-process process :killed))))
   (values))
 
 (defmethod start-remote-js ((driver driver))
