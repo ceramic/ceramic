@@ -1,8 +1,6 @@
 (in-package :cl-user)
 (defpackage ceramic.electron
   (:use :cl)
-  (:import-from :ceramic.util
-                :tell)
   (:import-from :ceramic.file
                 :*ceramic-directory*)
   (:import-from :ceramic.os

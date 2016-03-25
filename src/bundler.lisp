@@ -1,8 +1,8 @@
 (in-package :cl-user)
 (defpackage ceramic.bundler
   (:use :cl)
-  (:import-from :ceramic.util
-                :tell)
+  (:import-from :ceramic.log
+                :log-message)
   (:import-from :ceramic.file
                 :*ceramic-directory*)
   (:import-from :ceramic.os
@@ -57,7 +57,7 @@ most people can unzip)."
     (ensure-directories-exist work-directory)
     (unwind-protect
          (progn
-           (tell "Copying resources...")
+           (log-message "Copying resources...")
            ;; Copy application resources
            (copy-resources (merge-pathnames #p"resources/"
                                             work-directory))
@@ -69,7 +69,7 @@ most people can unzip)."
             (binary-pathname electron-directory
                              :operating-system *operating-system*))
            ;; Compile the app
-           (tell "Compiling app...")
+           (log-message "Compiling app...")
            (trivial-build:build system-name
                                 (format nil "(ceramic-entry::~A)"
                                         (string-downcase
@@ -77,10 +77,10 @@ most people can unzip)."
                                 executable-pathname)
            ;; Compress the folder
            (when (probe-file bundle-pathname)
-             (tell "Found existing bundle, deleting...")
+             (log-message "Found existing bundle, deleting...")
              (delete-file bundle-pathname))
-           (tell "Compressing...")
+           (log-message "Compressing...")
            (create-archive work-directory bundle-pathname))
       (uiop:delete-directory-tree work-directory :validate t)
-      (tell "Done!")
+      (log-message "Done!")
       bundle-pathname)))
