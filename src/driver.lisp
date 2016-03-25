@@ -45,10 +45,10 @@
   (:documentation "Start the Electron process and the remote-js server.")
 
   (:method ((driver driver))
-    (log-message "Starting Electron process...")
-    (start-electron driver)
     (log-message "Starting server...")
-    (start-remote-js driver)))
+    (start-remote-js driver)
+    (log-message "Starting Electron process...")
+    (start-electron driver)))
 
 (defgeneric stop (driver)
   (:documentation "Stop the Electron process and the remote-js server.")
