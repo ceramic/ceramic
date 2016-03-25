@@ -25,6 +25,14 @@ Ceramic.startWebSockets = function() {
   };
 };
 
+Ceramic.syncEval = function(id, fn) {
+  const result = fn();
+  RemoteJS.send(JSON.stringify({
+    id: id,
+    result: result
+  })
+}
+
 /* Windows */
 
 Ceramic.window_db = {};
