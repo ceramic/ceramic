@@ -40,6 +40,12 @@
 (defgeneric on-message (driver message)
   (:documentation "React to a message from a WebSockets client."))
 
+(defgeneric port (driver)
+  (:documentation "Return the port the WebSockets server is running on.")
+
+  (:method ((driver driver))
+    (remote-js:context-port (driver-context driver))))
+
 ;;; Internals
 
 (defmethod start-release-electron ((driver driver))
