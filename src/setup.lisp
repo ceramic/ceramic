@@ -1,8 +1,8 @@
 (in-package :cl-user)
 (defpackage ceramic.setup
   (:use :cl)
-  (:import-from :ceramic.util
-                :tell)
+  (:import-from :ceramic.log
+                :log-message)
   (:import-from :ceramic.file
                 :*ceramic-directory*)
   (:import-from :ceramic.os
@@ -13,7 +13,7 @@
 (in-package :ceramic.setup)
 
 (defun setup ()
-  (tell "Creating Ceramic directories...")
+  (log-message "Creating Ceramic directories...")
   (ensure-directories-exist *ceramic-directory*)
-  (tell "Downloading a copy of Electron...")
+  (log-message "Downloading a copy of Electron...")
   (ceramic.electron:setup))

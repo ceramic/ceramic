@@ -22,8 +22,7 @@
   :components ((:module "src"
                 :serial t
                 :components
-                ((:file "util")
-                 (:file "error")
+                ((:file "error")
                  (:file "os")
                  (:file "file")
                  (:file "logging")
