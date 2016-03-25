@@ -20,8 +20,9 @@ install:
   - curl -L https://raw.githubusercontent.com/snmsts/roswell/$ROSWELL_BRANCH/scripts/install-for-ci.sh | sh
   - git clone https://github.com/fukamachi/cl-coveralls ~/lisp/cl-coveralls
   # Clone some libraries
-  - git clone https://github.com/ceramic/trivial-exe ~/lisp/trivial-exe
-  - git clone https://github.com/ceramic/trivial-build ~/lisp/trivial-build
+  - git clone https://github.com/ceramic/electron-tools ~/lisp/electron-tools
+  - git clone https://github.com/ceramic/copy-directory ~/lisp/copy-directory
+  - git clone https://github.com/eudoxia0/trivial-extract ~/lisp/trivial-extract
   # Set up a virtual X framebuffer
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
@@ -40,11 +41,6 @@ script:
   - ros -e '(ql:quickload (list :cl-coveralls :ceramic-test))'
         -e '(setf fiveam:*debug-on-error* t
                   fiveam:*debug-on-failure* t)'
-        -e '(setf *debugger-hook*
-                  (lambda (c h)
-                    (declare (ignore h))
-                    (print c)
-                    (uiop:quit -1)))'
        -e '(coveralls:with-coveralls (:exclude (list "src/error.lisp" "t"))
              (ceramic-test:run-tests))'
 
