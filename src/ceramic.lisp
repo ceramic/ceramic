@@ -46,12 +46,6 @@
   (:documentation "The main interface."))
 (in-package :ceramic)
 
-;;; Setup
-
-(defun setup ()
-  "Set up everything needed for Ceramic to run."
-  (ceramic.setup:setup))
-
 ;;; Process management
 
 (defvar *process* nil
