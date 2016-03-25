@@ -46,44 +46,6 @@
   (:documentation "The main interface."))
 (in-package :ceramic)
 
-;;; Process management
-
-(defvar *process* nil
-  "The Electron process.")
-
-(defun interactive ()
-  "Start a process for interactive use."
-  (if *releasep*
-      ;; We're in a release, so don't let the user do this
-      nil
-      ;; We're in a dev environment
-      (progn
-        (when (and *process*
-                   (eq (external-program:process-status *process*)
-                       :running))
-          (warn "Interactive process already running. Restarting.")
-          (stop-interactive))
-        (setf *process*
-              (ceramic.electron:start-process (release-directory)
-                                              :operating-system *operating-system*))
-        t)))
-
-(defun stop-interactive ()
-  "Stop the interactive process."
-  (handler-case
-      (ceramic.electron:quit *process*)
-    (t ()
-      (warn "Error quitting the Electron process. Forcing shutdown...")
-      (external-program:signal-process *process* :killed))))
-
-(defmacro with-interactive (() &body body)
-  "Execute body while running an interactive process."
-  `(unwind-protect
-        (progn
-          (interactive)
-          ,@body)
-     (stop-interactive)))
-
 ;;; Events
 
 (defvar *event-dispatcher*
