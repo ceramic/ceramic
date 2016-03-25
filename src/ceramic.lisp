@@ -46,6 +46,7 @@
   (:documentation "The main interface."))
 (in-package :ceramic)
 
+#|
 ;;; Entry point for released applications
 
 (defpackage ceramic-entry
@@ -73,3 +74,4 @@
                  (dispatch-events))
            (t () (quit)))
          (quit)))))
+|#
