@@ -20,17 +20,25 @@
 (defun js (format-control &rest args)
   (ceramic.driver:sync-js *driver* (apply #'format (cons nil (cons format-control args)))))
 
+(defmacro window-js (id &rest args)
+  `(js "Ceramic.windows[~S].~A" ,id ,@args))
+
 (defmethod window-title ((window window))
   "Return the window's title."
   (with-slots (id) window
-    (js "Ceramic.windows[~S].getTitle()" id)))
+    (window-js "getTitle()" id)))
 
-(defmethod (setf window-title) (new-value ((window window)))
+(defmethod (setf window-title) (new-value (window window))
   "Set the window's title."
   (with-slots (id) window
-    (js "Ceramic.windows[~S].setTitle(~S)" id new-value)))
+    (window-js "setTitle(~S)" id new-value)))
 
 (defmethod center ((window window))
   "Move the window to the center of the screen."
   (with-slots (id) window
-    (js "Ceramic.windows[~S].center()" id)))
+    (window-js "center()" id)))
+
+(defmethod reload ((window window))
+  "Reload the window."
+  (with-slots (id) window
+    (window-js "reload()" id)))
