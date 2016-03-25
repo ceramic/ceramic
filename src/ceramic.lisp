@@ -257,7 +257,7 @@
 
 (defun quit (&optional (exit-status 0))
   "Quit the application."
-  (ceramic.electron:quit *process*)
+  (ceramic.driver:stop ceramic.driver:*driver*)
   (uiop:quit exit-status))
 
 ;;; Entry point for released applications
