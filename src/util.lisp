@@ -1,8 +1,7 @@
 (in-package :cl-user)
 (defpackage ceramic.util
   (:use :cl)
-  (:export :without-feature
-           :tell)
+  (:export :tell)
   (:documentation "Ceramic's utilities."))
 (in-package :ceramic.util)
 
