@@ -45,9 +45,3 @@
            :window-select-all
            :quit))
 (in-package :ceramic.electron)
-
-(defun start-process (directory &key operating-system)
-  "Start an Electron process, returning the process object."
-  (external-program:start (electron-tools:binary-pathname directory
-                                                          :operating-system operating-system)
-                          (list)))
