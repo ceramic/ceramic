@@ -48,7 +48,10 @@
 
 (defmethod start-local-electron ((driver driver))
   "Start the Electron process from the Ceramic directory for interactive use."
-  )
+  (with-slots (process) driver
+    (setf process
+          (ceramic.electron:start-process (release-directory)
+                                          :operating-system ceramic.os:*operating-system*))))
 
 (defmethod start-remote-js ((driver driver))
   "Start the remote-js server."
@@ -57,11 +60,18 @@
           (remote-js:make-buffered-context :callback
                                            #'(lambda (message)
                                                (on-message driver message))))
-    (remote-js:start context)))
+    (remote-js:start context))
+  (values))
 
 (defmethod stop-process ((driver driver))
   "Stop the Electron process."
-  )
+  (with-slots (process) driver
+    (handler-case
+        (ceramic.electron:quit process)
+      (t ()
+        (warn "Error quitting the Electron process. Forcing shutdown...")
+        (external-program:signal-process *process* :killed))))
+  (values))
 
 (defmethod stop-remote-js ((driver driver))
   "Stop the remote-js server."
