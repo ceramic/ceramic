@@ -29,3 +29,8 @@
   "Set the window's title."
   (with-slots (id) window
     (js "Ceramic.windows[~S].setTitle(~S)" id new-value)))
+
+(defmethod center ((window window))
+  "Move the window to the center of the screen."
+  (with-slots (id) window
+    (js "Ceramic.windows[~S].center()" id)))
