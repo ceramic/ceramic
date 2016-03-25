@@ -21,7 +21,7 @@
 ;;; Dealing with Electron releases
 
 (defparameter +main-javascript+
-  (asdf:system-relative-pathname :ceramic #p"src/electron/main.js")
+  (asdf:system-relative-pathname :ceramic #p"src/main.js")
   "Pathname to the JavaScript file for the main process.")
 
 (defun clean-release (directory &key operating-system)
