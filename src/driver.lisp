@@ -82,9 +82,7 @@
         (loop
            (if-let (response (gethash message-id responses))
              ;; We got a reply
-             (return-from sync-js response))
-           ;; Sleep a millisecond
-           (sleep 0.001))))))
+             (return-from sync-js response)))))))
 
 (defgeneric port (driver)
   (:documentation "Return the port the WebSockets server is running on.")
@@ -101,8 +99,8 @@
     (declare (type string message))
     (let ((data (cl-json:decode-json-from-string message)))
       (with-slots (responses) driver
-        (setf (gethash (gethash "id" data) responses)
-              (gethash "result" data))))))
+        (setf (gethash (rest (assoc :id data :test #'eq)) responses)
+              (rest (assoc :result data :test #'eq)))))))
 
 ;;; Internals
 
@@ -115,7 +113,9 @@
       (setf process
             (external-program:start (binary-pathname directory
                                                      :operating-system ceramic.os:*operating-system*)
-                                    (list (write-to-string (port driver)))))))
+                                    (list (write-to-string (port driver)))
+                                    :output *standard-output*
+                                    :error :output))))
   (values))
 
 (defmethod stop-electron ((driver driver))

@@ -12,10 +12,12 @@
 
 (test lifecycle
   (finishes
-   (ceramic.driver:start *driver*))
+    (ceramic.driver:start *driver*))
+  (sleep 1)
   (finishes
-   (ceramic.driver:js *driver* "console.log('hello!')"))
-  (finishes
-   (print (ceramic.driver:sync-js *driver* "return 1+1")))
+    (ceramic.driver:js *driver* "console.log('hello!')"))
+  (is
+   (= (ceramic.driver:sync-js *driver* "return 1+1")
+      2))
   (finishes
     (ceramic.driver:stop *driver*)))
