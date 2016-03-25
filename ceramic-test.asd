@@ -7,11 +7,7 @@
   :components ((:module "t"
                 :serial t
                 :components
-                ((:module "electron"
-                  :serial t
-                  :components
-                  ((:file "driver")))
-                 (:file "setup")
+                ((:file "setup")
                  (:file "integration")
                  (:file "misc")
                  (:file "ceramic")))))
