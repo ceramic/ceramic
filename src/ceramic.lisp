@@ -48,64 +48,6 @@
 
 ;;; Window class
 
-(defclass window ()
-  ((id :reader window-id
-       :initform (uuid:format-as-urn nil (uuid:make-v4-uuid))
-       :type string
-       :documentation "A unique string ID for the window.")
-   (title :reader window-title
-          :initarg :title
-          :type string
-          :documentation "The window title.")
-   (url :reader window-url
-        :initarg :url
-        :type string
-        :documentation "The window URL.")
-   ;; Window geometry
-   (x :reader window-x
-      :initarg :x
-      :type integer
-      :documentation "Window's offset from the left.")
-   (y :reader window-y
-      :initarg :y
-      :type integer
-      :documentation "Window's offset from the top.")
-   (width :reader window-width
-          :initarg :width
-          :type integer
-          :documentation "The window's width, in pixels.")
-   (height :reader window-height
-           :initarg :height
-           :type integer
-           :documentation "The window's height, in pixels.")
-   (min-width :reader window-min-width
-              :initarg :min-width
-              :type integer
-              :documentation "The window's minimum width, in pixels.")
-   (min-height :reader window-min-height
-               :initarg :min-height
-               :type integer
-               :documentation "The window's minimum height, in pixels.")
-   (max-width :reader window-max-width
-              :initarg :max-width
-              :type integer
-              :documentation "The window's maximum width, in pixels.")
-   (max-height :reader window-max-height
-               :initarg :max-height
-               :type integer
-               :documentation "The window's maximum height, in pixels.")
-   (node-integration-p :reader node-integration-p
-                       :initarg :node-integration-p
-                       :initform nil
-                       :type boolean
-                       :documentation "Whether node integration is enabled.")
-   (resizablep :reader window-resizable-p
-               :initarg :resizablep
-               :initform t
-               :type boolean
-               :documentation "Whether or not the window is resizable."))
-  (:documentation "A browser window."))
-
 (defun make-window (&rest args
                     &key title url x y width height
                       min-width min-height max-width max-height
