@@ -1,6 +1,8 @@
 (in-package :cl-user)
 (defpackage ceramic.driver
   (:use :cl)
+  (:import-from :ceramic.log
+                :log-message)
   (:import-from :ceramic.runtime
                 :*releasep*)
   (:documentation "The Ceramic driver interface."))
@@ -28,13 +30,16 @@
     (if *releasep*
         (start-release-electron driver)
         (start-local-electron driver))
+    (log-message "Starting server...")
     (start-remote-js driver)))
 
 (defgeneric stop (driver)
   (:documentation "Stop the Electron process and the remote-js server.")
 
   (:method ((driver driver))
+    (log-message "Stopping process...")
     (stop-process driver)
+    (log-message "Stopping server...")
     (stop-remote-js driver)))
 
 (defgeneric on-message (driver message)
@@ -50,6 +55,7 @@
 
 (defmethod start-release-electron ((driver driver))
   "Start the Electron process in the release directory."
+  (log-message "Starting Electron process...")
   (with-slots (process) driver
     (setf process
           (ceramic.electron:start-process (executable-relative-pathname #p"electron/")
@@ -58,6 +64,7 @@
 
 (defmethod start-local-electron ((driver driver))
   "Start the Electron process from the Ceramic directory for interactive use."
+  (log-message "Starting Electron process for interactive use...")
   (with-slots (process) driver
     (setf process
           (ceramic.electron:start-process (release-directory)
