@@ -13,17 +13,13 @@
                :trivial-compress
                :electron-tools
                :uiop
-               :archive
-               :zip
                :jonathan
                :cl-json
                :external-program
                :uuid
                :cl-fad
                :copy-directory
-               :clack-handler-hunchentoot
-               #-(or win32 mswindows)
-               :osicat)
+               :clack-handler-hunchentoot)
   :components ((:module "src"
                 :serial t
                 :components
