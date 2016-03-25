@@ -22,7 +22,7 @@
 
 (defparameter +main-javascript+
   (asdf:system-relative-pathname :ceramic #p"src/main.js")
-  "Pathname to the JavaScript file for the main process.")'
+  "Pathname to the JavaScript file for the main process.")
 
 (defparameter +ws-module+
   (asdf:system-relative-pathname :ceramic #p"node_modules/ws/"))
