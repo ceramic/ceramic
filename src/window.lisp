@@ -14,3 +14,6 @@
   (:documentation "A browser window."))
 
 ;;; Methods
+
+(defmethod window-title ((window window))
+  "Return the window's title.")
