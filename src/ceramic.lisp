@@ -46,14 +46,6 @@
   (:documentation "The main interface."))
 (in-package :ceramic)
 
-;;; Events
-
-(defvar *event-dispatcher*
-  (lambda (event)
-    (declare (ignore event))
-    nil)
-  "A function that takes an event (A JSON object) and does something with it.")
-
 ;;; Window class
 
 (defclass window ()
@@ -272,16 +264,6 @@
 
 (defpackage ceramic-entry
   (:use :cl))
-
-(defun dispatch-events ()
-  "Read events from the process stdout."
-  (format t "~&Dispatching events")
-  (loop for string = (read-line (external-program:process-output-stream
-                                 *process*))
-        do
-    (when (alexandria:starts-with-subseq "JSON" string)
-      (let ((json (jonathan:parse (subseq string 4))))
-        (funcall *event-dispatcher* json)))))
 
 (defmacro define-entry-point (system-name () &body body)
   "Define the application's entry point."
