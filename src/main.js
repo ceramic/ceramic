@@ -11,7 +11,7 @@ var Ceramic = {};
 
 var RemoteJS = {};
 
-Ceramic.startWebSockets = function() {
+Ceramic.startWebSockets = function(port) {
   RemoteJS.ws = new WebSocket('ws://localhost:' + port);
 
   RemoteJS.send = function(data) {
