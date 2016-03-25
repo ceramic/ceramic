@@ -23,6 +23,7 @@ install:
   - git clone https://github.com/ceramic/electron-tools ~/lisp/electron-tools
   - git clone https://github.com/ceramic/copy-directory ~/lisp/copy-directory
   - git clone https://github.com/ceramic/remote-js ~/lisp/remote-js
+  - git clone https://github.com/ceramic/trivial-ws ~/lisp/trivial-ws
   - git clone https://github.com/ceramic/trivial-compress ~/lisp/trivial-compress
   - git clone https://github.com/eudoxia0/trivial-extract ~/lisp/trivial-extract
   # Set up a virtual X framebuffer
