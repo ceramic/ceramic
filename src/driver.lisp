@@ -18,7 +18,8 @@
            :*driver*
            :start
            :stop
-           :js)
+           :js
+           :sync-js)
   (:documentation "The Ceramic driver interface."))
 (in-package :ceramic.driver)
 
