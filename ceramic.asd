@@ -13,7 +13,6 @@
                :trivial-compress
                :electron-tools
                :uiop
-               :jonathan
                :cl-json
                :external-program
                :uuid
