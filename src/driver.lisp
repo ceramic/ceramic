@@ -12,7 +12,8 @@
   (:export :driver
            :*driver*
            :start
-           :stop)
+           :stop
+           :js)
   (:documentation "The Ceramic driver interface."))
 (in-package :ceramic.driver)
 
@@ -51,6 +52,13 @@
 
 (defgeneric on-message (driver message)
   (:documentation "React to a message from a WebSockets client."))
+
+(defgeneric js (driver js)
+  (:documentation "Evaluate a string of JavaScript in the Electron process.")
+
+  (:method ((driver driver) js)
+    (declare (type string js))
+    (remote-js:eval (driver-context driver) js)))
 
 (defgeneric port (driver)
   (:documentation "Return the port the WebSockets server is running on.")
