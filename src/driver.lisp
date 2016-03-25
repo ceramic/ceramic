@@ -76,7 +76,7 @@
   (with-slots (process) driver
     (handler-case
         ;;(ceramic.electron:quit process) FIXME: implement this
-        (error)
+        (error "fixme")
       (t ()
         (warn "Error quitting the Electron process. Forcing shutdown...")
         (external-program:signal-process *process* :killed))))
