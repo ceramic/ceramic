@@ -21,6 +21,8 @@ install:
   - git clone https://github.com/fukamachi/cl-coveralls ~/lisp/cl-coveralls
   # Clone some libraries
   - git clone https://github.com/ceramic/electron-tools ~/lisp/electron-tools
+  - git clone https://github.com/ceramic/copy-directory ~/lisp/copy-directory
+  - git clone https://github.com/eudoxia0/trivial-extract ~/lisp/trivial-extract
   # Set up a virtual X framebuffer
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
