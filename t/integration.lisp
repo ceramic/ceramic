@@ -9,28 +9,31 @@
 (in-suite integration)
 
 (test interactive
-  (ceramic:with-interactive ()
+  (finishes
+    (ceramic:start))
+  (sleep 1)
+  (let ((window (ceramic:make-window :title "My Window")))
+    (finishes
+      (ceramic:show-window window))
+    (finishes
+      (ceramic:hide-window window))
+    (finishes
+      (ceramic:show-window window))
+    (finishes
+      (ceramic:maximize-window window))
+    (finishes
+      (ceramic:unmaximize-window window))
+    (finishes
+      (ceramic:minimize-window window))
+    (finishes
+      (ceramic:unminimize-window window))
+    (finishes
+      (ceramic:center-window window))
     (sleep 1)
-    (let ((window (ceramic:make-window :title "My Window")))
-      (finishes
-       (ceramic:show-window window))
-      (finishes
-       (ceramic:hide-window window))
-      (finishes
-       (ceramic:show-window window))
-      (finishes
-       (ceramic:maximize-window window))
-      (finishes
-       (ceramic:unmaximize-window window))
-      (finishes
-       (ceramic:minimize-window window))
-      (finishes
-       (ceramic:unminimize-window window))
-      (finishes
-       (ceramic:center-window window))
-      (sleep 1)
-      (finishes
-       (ceramic:close-window window)))))
+    (finishes
+      (ceramic:close-window window)))
+  (finishes
+    (ceramic:stop)))
 
 (defvar *extraction-directory*
   (asdf:system-relative-pathname :ceramic-test-app
