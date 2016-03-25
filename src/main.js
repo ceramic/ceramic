@@ -36,7 +36,7 @@ Ceramic.syncEval = function(id, fn) {
 
 /* Windows */
 
-Ceramic.window_db = {};
+Ceramic.windows = {};
 
 /* Lifecycle management */
 
