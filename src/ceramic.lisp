@@ -4,7 +4,7 @@
   (:documentation "The main interface."))
 (in-package :ceramic)
 
-#|
+
 ;;; Entry point for released applications
 
 (defpackage ceramic-entry
@@ -12,6 +12,7 @@
 
 (defmacro define-entry-point (system-name () &body body)
   "Define the application's entry point."
+  #|
   (let ((entry-point (intern (symbol-name system-name)
                              (find-package :ceramic-entry)))
         (arguments (gensym))
@@ -31,5 +32,5 @@
                ,@body
                  (dispatch-events))
            (t () (quit)))
-         (quit)))))
-|#
+  (quit)))))|#
+  `())
