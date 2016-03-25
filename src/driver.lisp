@@ -93,7 +93,7 @@
 (defgeneric on-message (driver message)
   (:documentation "Receive a message from a WebSockets client.")
 
-  (:method ((driver driver))
+  (:method ((driver driver) message)
     (declare (type string message))
     (let ((data (cl-json:decode-json-from-string message)))
       (with-slots (responses) driver
