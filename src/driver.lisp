@@ -1,6 +1,8 @@
 (in-package :cl-user)
 (defpackage ceramic.driver
   (:use :cl)
+  (:import-from :alexandria
+                :if-let)
   (:import-from :ceramic.log
                 :log-message)
   (:import-from :ceramic.runtime
@@ -72,6 +74,13 @@
                          message-id
                          js))
       ;; And wait for the reply
+      (with-slots (responses) driver
+        (loop
+           (if-let (response (gethash message-id responses))
+             ;; We got a reply
+             (return-from sync-js response))
+           ;; Sleep a millisecond
+           (sleep 0.001))))))
 
 (defgeneric port (driver)
   (:documentation "Return the port the WebSockets server is running on.")
