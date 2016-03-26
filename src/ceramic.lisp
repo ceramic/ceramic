@@ -94,10 +94,8 @@
 (defmacro define-entry-point (system-name () &body body)
   "Define the application's entry point."
   (let ((entry-point (intern (symbol-name system-name)
-                             (find-package :ceramic-entry)))
-        (arguments (gensym)))
-    `(defun ,entry-point (,arguments)
-       (declare (ignore ,arguments))
+                             (find-package :ceramic-entry))))
+    `(defun ,entry-point ()
        ;; Start the executable-relative Electron process
        (let ((*releasep* t))
          (start)
