@@ -42,12 +42,6 @@
 (defun sync-js (format-control &rest args)
   (ceramic.driver:sync-js *driver* (apply #'format (cons nil (cons format-control args)))))
 
-(defmacro window-js (id &rest args)
-  `(js "Ceramic.windows[~S].~A" ,id ,@args))
-
-(defmacro window-sync-js (id &rest args)
-  `(sync-js "return Ceramic.windows[~S].~A" ,id ,@args))
-
 ;;; Classes
 
 (defclass window ()
@@ -69,11 +63,12 @@
 ;;; Methods
 
 (defmacro define-trivial-operation (name js &key docstring sync)
-  (let ((window (gensym)))
-    `(defmethod ,name ((,window window))
-       ,docstring
-       (with-slots (%id) ,window
-         (,(if sync 'window-sync-js 'window-js) %id ,js)))))
+  `(defmethod ,name ((window window))
+     ,docstring
+     (with-slots (%id) window
+       ,(if sync
+            `(sync-js "return Ceramic.windows[~S].~A" %id ,js)
+            `(js "Ceramic.windows[~S].~A" %id ,js)))))
 
 ;;; Predicates
 
@@ -100,13 +95,13 @@
 (defmethod (setf title) (new-value (window window))
   "Set the window's title."
   (with-slots (%id) window
-    (window-js "setTitle(~S)" %id new-value))
+    (js "Ceramic.windows[~S].setTitle(~S)" %id new-value))
   new-value)
 
 (defmethod (setf url) (new-value (window window))
   "Change the window's URL."
   (with-slots (%id) window
-    (window-js "loadURL(~S") %id new-value)
+    (js "Ceramic.windows[~S].loadURL(~S)" %id new-value))
   new-value)
 
 ;;; Operations
