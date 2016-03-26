@@ -48,7 +48,14 @@
   (with-slots (id) window
     (window-js "center()" id)))
 
-(defmethod reload ((window window))
-  "Reload the window."
+(defmethod reload ((window window) &key ignore-cache)
+  "Reload the window. Optionally ignore the cache."
   (with-slots (id) window
-    (window-js "reload()" id)))
+    (if ignore-cache
+        (window-js "reloadIgnoringCache()" id)
+        (window-js "reload()" id))))
+
+(defmethod stop ((window window))
+  "Stop any navigation."
+  (with-slots (id) window
+    (window-js "stop()" id)))
