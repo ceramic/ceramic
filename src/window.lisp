@@ -32,10 +32,10 @@
 
 ;;; Getters
 
-(define-trivial-operation window-title "getTitle()"
+(define-trivial-operation title "getTitle()"
   :docstring "Return the window's title.")
 
-(define-trivial-operation window-url "webContents.getURL()"
+(define-trivial-operation url "webContents.getURL()"
   :docstring "Return the window's current URL.")
 
 (define-trivial-operation center "center()"
@@ -95,12 +95,12 @@
 
 ;;; Setters
 
-(defmethod (setf window-title) (new-value (window window))
+(defmethod (setf title) (new-value (window window))
   "Set the window's title."
   (with-slots (id) window
     (window-js "setTitle(~S)" id new-value)))
 
-(defmethod (setf window-url) (new-value (window window))
+(defmethod (setf url) (new-value (window window))
   "Change the window's URL."
   (with-slots (id) window
     (window-js "loadURL(~S") id new-value))
