@@ -29,10 +29,12 @@
     (finishes
       (ceramic.window:show win))
     (sleep 1)
-    (is-false
-     (ceramic.window:crashedp win))
     (finishes
       (ceramic.window:hide win))
+    (sleep 1)
+    (finishes
+      (ceramic.window:show win))
+    (sleep 1)
     (finishes
       (ceramic.window:close win)))
   (finishes
