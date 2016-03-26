@@ -46,7 +46,7 @@
   `(js "Ceramic.windows[~S].~A" ,id ,@args))
 
 (defmacro window-sync-js (id &rest args)
-  `(sync-js "Ceramic.windows[~S].~A" ,id ,@args))
+  `(sync-js "return Ceramic.windows[~S].~A" ,id ,@args))
 
 ;;; Classes
 
