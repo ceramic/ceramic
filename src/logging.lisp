@@ -7,7 +7,7 @@
   (:documentation "Logging."))
 (in-package :ceramic.log)
 
-(defvar *logging* nil
+(defvar *logging* t
   "Whether or not to log info.")
 
 (defvar *logging-stream* *standard-output*
