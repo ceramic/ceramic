@@ -37,10 +37,16 @@
 ;;; Utilities
 
 (defun js (format-control &rest args)
+  (ceramic.driver:js *driver* (apply #'format (cons nil (cons format-control args)))))
+
+(defun sync-js (format-control &rest args)
   (ceramic.driver:sync-js *driver* (apply #'format (cons nil (cons format-control args)))))
 
 (defmacro window-js (id &rest args)
   `(js "Ceramic.windows[~S].~A" ,id ,@args))
+
+(defmacro window-sync-js (id &rest args)
+  `(sync-js "Ceramic.windows[~S].~A" ,id ,@args))
 
 ;;; Classes
 
@@ -62,40 +68,46 @@
 
 ;;; Methods
 
-(defmacro define-trivial-operation (name js &key docstring)
+(defmacro define-trivial-operation (name js &key docstring sync)
   (let ((window (gensym)))
     `(defmethod ,name ((,window window))
        ,docstring
        (with-slots (%id) ,window
-         (window-js ,js %id)))))
+         (,(if sync 'window-sync-js 'window-js) %id ,js)))))
 
 ;;; Predicates
 
 (define-trivial-operation loadingp "isLoading"
-  :docstring "Return whether the window is loading a new page.")
+  :docstring "Return whether the window is loading a new page."
+  :sync t)
 
-(define-trivial-operation crashedp "isCrashed()"
-  :docstring "Return whether the window has crashed.")
+(define-trivial-operation crashedp "webContents.isCrashed()"
+  :docstring "Return whether the window has crashed."
+  :sync t)
 
 ;;; Getters
 
 (define-trivial-operation title "getTitle()"
-  :docstring "Return the window's title.")
+  :docstring "Return the window's title."
+  :sync t)
 
 (define-trivial-operation url "webContents.getURL()"
-  :docstring "Return the window's current URL.")
+  :docstring "Return the window's current URL."
+  :sync t)
 
 ;;; Setters
 
 (defmethod (setf title) (new-value (window window))
   "Set the window's title."
   (with-slots (%id) window
-    (window-js "setTitle(~S)" %id new-value)))
+    (window-js "setTitle(~S)" %id new-value))
+  new-value)
 
 (defmethod (setf url) (new-value (window window))
   "Change the window's URL."
   (with-slots (%id) window
-    (window-js "loadURL(~S") %id new-value))
+    (window-js "loadURL(~S") %id new-value)
+  new-value)
 
 ;;; Operations
 
