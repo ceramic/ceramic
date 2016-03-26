@@ -15,5 +15,5 @@
 
 (defun log-message (message &rest args)
   (when *logging*
-    (format *logging-stream* "~%Ceramic: ~A"(apply #'format (append (list nil message)
-                                                                    args)))))
+    (format *logging-stream* "Ceramic: ~A~%" (apply #'format (append (list nil message)
+                                                                     args)))))
