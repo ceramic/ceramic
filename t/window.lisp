@@ -29,7 +29,7 @@
     (finishes
       (ceramic.window:reload win))
     (finishes
-      (ceramic.window:reload win :force t))
+      (ceramic.window:reload win :ignore-cache t))
     (finishes
       (ceramic.window:stop-loading win))
     (finishes
