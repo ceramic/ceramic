@@ -19,6 +19,8 @@
     (ceramic:stop)))
 
 (test compiled
+  (finishes
+    (asdf:load-system :ceramic-test-app))
   (let* ((app-file (merge-pathnames #p"ceramic-test-app.tar"
                                     *extraction-directory*))
          (binary (merge-pathnames #p"ceramic-test-app"
