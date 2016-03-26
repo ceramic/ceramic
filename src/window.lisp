@@ -5,6 +5,7 @@
                 :*driver*)
   (:export :window
            :window-id
+           :make-window
            :title
            :url
            :center
@@ -26,6 +27,14 @@
   (:documentation "The window class and its implementation."))
 (in-package :ceramic.window)
 
+;;; Utilities
+
+(defun js (format-control &rest args)
+  (ceramic.driver:sync-js *driver* (apply #'format (cons nil (cons format-control args)))))
+
+(defmacro window-js (id &rest args)
+  `(js "Ceramic.windows[~S].~A" ,id ,@args))
+
 ;;; Classes
 
 (defclass window ()
@@ -35,13 +44,16 @@
         :documentation "A unique string ID for the window."))
   (:documentation "A browser window."))
 
+(defun make-window (&key title url)
+  "Create a window."
+  (let ((options (cl-json:encode-json-plist-to-string
+                  (list :title title)))
+        (win (make-instance 'window)))
+    (with-slots (id) win
+      (js "Ceramic.windows[~S] = Ceramic.createWindow(~S, ~A)" id url options))
+    win))
+
 ;;; Methods
-
-(defun js (format-control &rest args)
-  (ceramic.driver:sync-js *driver* (apply #'format (cons nil (cons format-control args)))))
-
-(defmacro window-js (id &rest args)
-  `(js "Ceramic.windows[~S].~A" ,id ,@args))
 
 (defmacro define-trivial-operation (name js &key docstring)
   (let ((window (gensym)))
