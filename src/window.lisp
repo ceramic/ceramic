@@ -14,6 +14,9 @@
            :title
            :url
            ;; Operations
+           :show
+           :hide
+           :close
            :center
            :reload
            :stop
