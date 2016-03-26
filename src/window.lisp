@@ -66,6 +66,21 @@
 (define-trivial-operation crashedp "isCrashed()"
   :docstring "Return whether the window has crashed.")
 
+(define-trivial-operation undo "undo()"
+  :docstring "Undo changes.")
+
+(define-trivial-operation redo "redo()"
+  :docstring "Redo changes.")
+
+(define-trivial-operation cut "cut()"
+  :docstring "Cut selected text.")
+
+(define-trivial-operation copy "copy()"
+  :docstring "Copy selected text.")
+
+(define-trivial-operation paste "paste()"
+  :docstring "Paste text.")
+
 ;;; Setters
 
 (defmethod (setf window-title) (new-value (window window))
