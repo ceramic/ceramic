@@ -62,6 +62,14 @@
        (with-slots (%id) ,window
          (window-js ,js %id)))))
 
+;;; Predicates
+
+(define-trivial-operation loadingp "isLoading"
+  :docstring "Return whether the window is loading a new page.")
+
+(define-trivial-operation crashedp "isCrashed()"
+  :docstring "Return whether the window has crashed.")
+
 ;;; Getters
 
 (define-trivial-operation title "getTitle()"
@@ -69,6 +77,20 @@
 
 (define-trivial-operation url "webContents.getURL()"
   :docstring "Return the window's current URL.")
+
+;;; Setters
+
+(defmethod (setf title) (new-value (window window))
+  "Set the window's title."
+  (with-slots (id) window
+    (window-js "setTitle(~S)" id new-value)))
+
+(defmethod (setf url) (new-value (window window))
+  "Change the window's URL."
+  (with-slots (id) window
+    (window-js "loadURL(~S") id new-value))
+
+;;; Operations
 
 (define-trivial-operation center "center()"
   :docstring "Move the window to the center of the screen.")
@@ -83,9 +105,6 @@
       (%reload window)
       (%reload-force window)))
 
-(define-trivial-operation loadingp "isLoading"
-  :docstring "Return whether the window is loading a new page.")
-
 (define-trivial-operation stop "stop()"
   :docstring "Stop any navigation.")
 
@@ -94,9 +113,6 @@
 
 (define-trivial-operation forward "goForward()"
   :docstring "Go forward in the page history.")
-
-(define-trivial-operation crashedp "isCrashed()"
-  :docstring "Return whether the window has crashed.")
 
 (define-trivial-operation undo "undo()"
   :docstring "Undo changes.")
@@ -124,15 +140,3 @@
 
 (define-trivial-operation close-dev-tools "closeDevTools()"
   :docstring "Close the developer tools.")
-
-;;; Setters
-
-(defmethod (setf title) (new-value (window window))
-  "Set the window's title."
-  (with-slots (id) window
-    (window-js "setTitle(~S)" id new-value)))
-
-(defmethod (setf url) (new-value (window window))
-  "Change the window's URL."
-  (with-slots (id) window
-    (window-js "loadURL(~S") id new-value))
