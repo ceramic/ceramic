@@ -74,19 +74,21 @@
   returning a string containing the result of the evaluation.")
 
   (:method ((driver driver) js)
-    (let ((message-id (uuid:format-as-urn nil (uuid:make-v4-uuid))))
+    (let* ((message-id (uuid:format-as-urn nil (uuid:make-v4-uuid)))
+           (full-js (format nil "Ceramic.syncEval(~S, (function() { ~A }))"
+                            message-id
+                            js)))
       ;; Send the message
-      (js driver (format nil "Ceramic.syncEval(~S, (function() { ~A }))"
-                         message-id
-                         js))
+      (js driver full-js)
       ;; And wait for the reply
       (with-slots (responses) driver
         (loop
-           (if-let (response (gethash message-id responses))
-             ;; We got a reply
-             (progn
-               (remhash message-id responses)
-               (return-from sync-js response))))))))
+          (multiple-value-bind (response found)
+              (gethash message-id responses)
+            (when found
+              ;; We got a reply
+              (remhash message-id responses)
+              (return-from sync-js response))))))))
 
 (defgeneric port (driver)
   (:documentation "Return the port the WebSockets server is running on.")
