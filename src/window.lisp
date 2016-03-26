@@ -3,6 +3,26 @@
   (:use :cl)
   (:import-from :ceramic.driver
                 :*driver*)
+  (:export :window
+           :window-id
+           :title
+           :url
+           :center
+           :reload
+           :loadingp
+           :stop
+           :back
+           :forward
+           :crashedp
+           :undo
+           :redo
+           :cut
+           :copy
+           :paste
+           :select-all
+           :unselect
+           :open-dev-tools
+           :close-dev-tools)
   (:documentation "The window class and its implementation."))
 (in-package :ceramic.window)
 
