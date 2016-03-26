@@ -7,7 +7,8 @@
   :components ((:module "t"
                 :serial t
                 :components
-                ((:file "setup")
+                ((:file "resource")
+                 (:file "setup")
                  (:file "driver")
                  (:file "window")
                  (:file "integration")
