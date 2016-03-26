@@ -52,6 +52,21 @@
       (ceramic.window:open-dev-tools win))
     (finishes
       (ceramic.window:close-dev-tools win))
+    (let ((new-title "My Window"))
+      (is
+       (string= (setf (ceramic.window:title win) new-title)
+                new-title))
+      (is
+       (string= (ceramic.window:title win)
+                new-title)))
+    (let ((new-url "http://www.example.com/"))
+      (is
+       (string= (setf (ceramic.window:url win) new-url)
+                new-url))
+      (sleep 1)
+      (is
+       (string= (ceramic.window:url win)
+                new-url)))
     (sleep 1)
     (finishes
       (ceramic.window:close win)))
