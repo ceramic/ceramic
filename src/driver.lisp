@@ -84,7 +84,9 @@
         (loop
            (if-let (response (gethash message-id responses))
              ;; We got a reply
-             (return-from sync-js response)))))))
+             (progn
+               (remhash message-id responses)
+               (return-from sync-js response))))))))
 
 (defgeneric port (driver)
   (:documentation "Return the port the WebSockets server is running on.")
