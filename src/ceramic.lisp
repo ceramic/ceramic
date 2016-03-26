@@ -3,7 +3,10 @@
   (:use :cl)
   (:import-from :ceramic.driver
                 :*driver*)
-  (:export :start
+  (:import-from :ceramic.setup
+                :setup)
+  (:export :setup
+           :start
            :stop
            :define-entry-point)
   (:documentation "The main interface."))
