@@ -19,7 +19,7 @@
            :close
            :center
            :reload
-           :stop
+           :stop-loading
            :back
            :forward
            :undo
@@ -130,7 +130,7 @@
       (%reload window)
       (%reload-force window)))
 
-(define-trivial-operation stop "stop()"
+(define-trivial-operation stop-loading "stop()"
   :docstring "Stop any navigation.")
 
 (define-trivial-operation back "webContents.goBack()"

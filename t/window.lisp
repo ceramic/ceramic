@@ -27,7 +27,7 @@
     (is
      (stringp (ceramic.window:url win)))
     (finishes
-      (ceramic.window:stop win))
+      (ceramic.window:stop-loading win))
     (finishes
       (ceramic.window:back win))
     (finishes

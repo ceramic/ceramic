@@ -22,7 +22,7 @@
                 :hide
                 :center
                 :reload
-                :stop
+                :stop-loading
                 :back
                 :forward
                 :undo
@@ -51,7 +51,7 @@
            :close
            :center
            :reload
-           :stop
+           :stop-loading
            :back
            :forward
            :undo
