@@ -6,15 +6,18 @@
   (:export :window
            :window-id
            :make-window
+           ;; Predicates
+           :loadingp
+           :crashedp
+           ;; Accessors
            :title
            :url
+           ;; Operations
            :center
            :reload
-           :loadingp
            :stop
            :back
            :forward
-           :crashedp
            :undo
            :redo
            :cut
