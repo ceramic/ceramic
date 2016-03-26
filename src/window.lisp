@@ -55,6 +55,11 @@
         (window-js "reloadIgnoringCache()" id)
         (window-js "reload()" id))))
 
+(defmethod loadingp ((window window))
+  "Return whether the window is loading a new page."
+  (with-slots (id) window
+    (window-js "isLoading" id)))
+
 (defmethod stop ((window window))
   "Stop any navigation."
   (with-slots (id) window
