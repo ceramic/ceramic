@@ -12,6 +12,12 @@
   (asdf:system-relative-pathname :ceramic-test-app
                                  #p"extract/"))
 
+(test lifecycle
+  (finishes
+    (ceramic:start))
+  (finishes
+    (ceramic:stop)))
+
 (test compiled
   (let* ((app-file (merge-pathnames #p"ceramic-test-app.tar"
                                     *extraction-directory*))
