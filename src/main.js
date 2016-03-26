@@ -1,6 +1,7 @@
-var app = require('app');
-var BrowserWindow = require('browser-window');
-var WebSocket = require('ws');
+const electron = require('electron');
+const app = electron.app;
+const BrowserWindow = electron.BrowserWindow;
+const WebSocket = require('ws');
 
 require('crash-reporter').start();
 
@@ -42,8 +43,6 @@ Ceramic.createWindow = function(url, options) {
   copy.show = false;
 
   var win = new BrowserWindow(options);
-  console.log(win);
-  console.log(url);
   if (url) {
     win.loadURL(url);
   };
