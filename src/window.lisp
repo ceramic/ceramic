@@ -81,6 +81,18 @@
 (define-trivial-operation paste "paste()"
   :docstring "Paste text.")
 
+(define-trivial-operation select-all "selectAll()"
+  :docstring "Select all text.")
+
+(define-trivial-operation unselect "unselect()"
+  :docstring "Cancel the selection.")
+
+(define-trivial-operation open-dev-tools "openDevTools()"
+  :docstring "Open the developer tools.")
+
+(define-trivial-operation close-dev-tools "closeDevTools()"
+  :docstring "Close the developer tools.")
+
 ;;; Setters
 
 (defmethod (setf window-title) (new-value (window window))
