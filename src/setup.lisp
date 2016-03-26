@@ -13,8 +13,7 @@
                 :app-directory
                 :binary-pathname
                 :get-release)
-  (:export :setup
-           :global-binary-pathname)
+  (:export :setup)
   (:documentation "Set up everything needed to develop with Ceramic."))
 (in-package :ceramic.setup)
 
@@ -77,12 +76,6 @@
 
 (defparameter *electron-version* "0.37.2"
   "The version of Electron to use.")
-
-(defun global-binary-pathname ()
-  "The pathname to the downloaded Electron binary. Used for interactive
-  testing."
-  (binary-pathname (release-directory)
-                   :operating-system *operating-system*))
 
 (defun setup (&key force)
   "Set up everything needed to start developing."
