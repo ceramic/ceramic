@@ -2,7 +2,7 @@
   :author "Fernando Borretti <eudoxiahp@gmail.com>"
   :license "MIT"
   :depends-on (:ceramic
-               ;:ceramic-test-app
+               :ceramic-test-app
                :fiveam)
   :components ((:module "t"
                 :serial t
@@ -10,6 +10,6 @@
                 ((:file "setup")
                  (:file "driver")
                  (:file "window")
-                 #|(:file "integration")|#
+                 (:file "integration")
                  (:file "misc")
                  (:file "ceramic")))))
