@@ -9,6 +9,7 @@
                 :components
                 ((:file "setup")
                  (:file "driver")
+                 (:file "window")
                  #|(:file "integration")|#
                  (:file "misc")
                  (:file "ceramic")))))
