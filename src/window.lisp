@@ -1,6 +1,7 @@
 (in-package :cl-user)
 (defpackage ceramic.window
   (:use :cl)
+  (:shadow :close)
   (:import-from :ceramic.driver
                 :*driver*)
   (:export :window
@@ -52,8 +53,8 @@
   (let ((options (cl-json:encode-json-plist-to-string
                   (list :title title)))
         (win (make-instance 'window)))
-    (with-slots (id) win
-      (js "Ceramic.windows[~S] = Ceramic.createWindow(~S, ~A)" id url options))
+    (with-slots (%id) win
+      (js "Ceramic.windows[~S] = Ceramic.createWindow(~S, ~A)" %id url options))
     win))
 
 ;;; Methods
@@ -85,13 +86,13 @@
 
 (defmethod (setf title) (new-value (window window))
   "Set the window's title."
-  (with-slots (id) window
-    (window-js "setTitle(~S)" id new-value)))
+  (with-slots (%id) window
+    (window-js "setTitle(~S)" %id new-value)))
 
 (defmethod (setf url) (new-value (window window))
   "Change the window's URL."
-  (with-slots (id) window
-    (window-js "loadURL(~S") id new-value))
+  (with-slots (%id) window
+    (window-js "loadURL(~S") %id new-value))
 
 ;;; Operations
 
