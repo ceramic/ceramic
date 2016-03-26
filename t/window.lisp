@@ -22,6 +22,32 @@
     (sleep 1)
     (finishes
       (ceramic.window:show win))
+    (is
+     (stringp (ceramic.window:title win)))
+    (is
+     (stringp (ceramic.window:url win)))
+    (finishes
+      (ceramic.window:stop win))
+    (finishes
+      (ceramic.window:back win))
+    (finishes
+      (ceramic.window:forward win))
+    (finishes
+      (ceramic.window:undo win))
+    (finishes
+      (ceramic.window:cut win))
+    (finishes
+      (ceramic.window:copy win))
+    (finishes
+      (ceramic.window:paste win))
+    (finishes
+      (ceramic.window:select-all win))
+    (finishes
+      (ceramic.window:unselect win))
+    (finishes
+      (ceramic.window:open-dev-tools win))
+    (finishes
+      (ceramic.window:close-dev-tools win))
     (sleep 1)
     (finishes
       (ceramic.window:close win)))
