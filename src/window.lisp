@@ -95,6 +95,17 @@
 
 ;;; Operations
 
+(define-trivial-operation show "show()"
+  :docstring "Show the window to the user.")
+
+(define-trivial-operation hide "hide()"
+  :docstring "Hide the window from the user.")
+
+(defmethod close ((window window))
+  "Close the window."
+  (with-slots (%id) window
+    (js "Ceramic.closeWindow(~S)" %id)))
+
 (define-trivial-operation center "center()"
   :docstring "Move the window to the center of the screen.")
 
