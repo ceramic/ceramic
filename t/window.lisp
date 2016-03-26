@@ -56,6 +56,7 @@
       (is
        (string= (setf (ceramic.window:title win) new-title)
                 new-title))
+      (sleep 0.1)
       (is
        (string= (ceramic.window:title win)
                 new-title)))
