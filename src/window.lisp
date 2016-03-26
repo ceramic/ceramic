@@ -64,3 +64,13 @@
   "Stop any navigation."
   (with-slots (id) window
     (window-js "stop()" id)))
+
+(defmethod back ((window window))
+  "Go back in the page history."
+  (with-slots (id) window
+    (window-js "goBack()" id)))
+
+(defmethod forward ((window window))
+  "Go forward in the page history."
+  (with-slots (id) window
+    (window-js "goForward()" id)))
