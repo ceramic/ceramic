@@ -5,6 +5,8 @@
                 :*driver*)
   (:import-from :ceramic.setup
                 :setup)
+  (:import-from :ceramic.runtime
+                :*releasep*)
   (:export :setup
            :start
            :stop
@@ -15,10 +17,17 @@
 ;;; Lifecycle
 
 (defun start ()
+  "Start the Electron process."
   (ceramic.driver:start *driver*))
 
 (defun stop ()
+  "Stop the Electron process."
   (ceramic.driver:stop *driver*))
+
+(defun quit (&optional (exit-status 0))
+  "Kill the Electron process and the Lisp process."
+  (stop)
+  (uiop:quit exit-status))
 
 ;;; Entry point for released applications
 
@@ -27,25 +36,16 @@
 
 (defmacro define-entry-point (system-name () &body body)
   "Define the application's entry point."
-  #|
   (let ((entry-point (intern (symbol-name system-name)
                              (find-package :ceramic-entry)))
-        (arguments (gensym))
-        (electron-directory (gensym)))
+        (arguments (gensym)))
     `(defun ,entry-point (,arguments)
        (declare (ignore ,arguments))
        ;; Start the executable-relative Electron process
-       (let* ((*releasep* t)
-              (,electron-directory (executable-relative-pathname #p"electron/"))
-              (*process*
-                (progn
-                  (format t "~&Starting Electron process...")
-                  (ceramic.electron:start-process ,electron-directory
-                                                  :operating-system *operating-system*))))
+       (let ((*releasep* t))
+         (start)
          (handler-case
              (progn
                ,@body
-                 (dispatch-events))
-           (t () (quit)))
-  (quit)))))|#
-  `())
+               (quit))
+           (t () (quit)))))))
