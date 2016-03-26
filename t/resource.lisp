@@ -20,4 +20,6 @@
    (ceramic.resource:resource-directory 'tag))
   (let ((ceramic.runtime:*releasep* t))
     (finishes
-      (ceramic.resource:resource-directory 'tag))))
+      (ceramic.resource:resource-directory 'tag)))
+  (finishes
+    (setf ceramic.resource::*resources* (list))))
