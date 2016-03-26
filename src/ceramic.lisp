@@ -20,7 +20,6 @@
                 ;; Operations
                 :show
                 :hide
-                :close
                 :center
                 :reload
                 :stop
@@ -35,6 +34,8 @@
                 :unselect
                 :open-dev-tools
                 :close-dev-tools)
+  (:shadowing-import-from :ceramic.window
+                          :close)
   (:export :window
            :window-id
            :make-window
@@ -65,6 +66,7 @@
   (:export :setup
            :start
            :stop
+           :quit
            :define-entry-point)
   (:documentation "The main interface."))
 (in-package :ceramic)
