@@ -1,5 +1,4 @@
 var app = require('app');
-var ipc = require('ipc');
 var BrowserWindow = require('browser-window');
 var WebSocket = require('ws');
 
@@ -43,8 +42,10 @@ Ceramic.createWindow = function(url, options) {
   copy.show = false;
 
   var win = new BrowserWindow(options);
+  console.log(win);
+  console.log(url);
   if (url) {
-    win.loadURL(url)
+    win.loadURL(url);
   };
   return win;
 };

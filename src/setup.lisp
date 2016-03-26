@@ -36,7 +36,8 @@
     (loop for file in app-files do
       (let ((pathname (merge-pathnames file
                                        (app-directory directory :operating-system operating-system))))
-        (delete-file pathname)))))
+        (when (probe-file pathname)
+          (delete-file pathname))))))
 
 (defun insert-javascript (directory &key operating-system)
   "Insert the main process JavaScript into an Electron release."
@@ -83,16 +84,20 @@
   (binary-pathname (release-directory)
                    :operating-system *operating-system*))
 
-(defun setup ()
+(defun setup (&key force)
   "Set up everything needed to start developing."
   (log-message "Creating Ceramic directories...")
-  (ensure-directories-exist *ceramic-directory*)
-  (log-message "Downloading a copy of Electron...")
   (ensure-directories-exist (release-directory))
-  (get-release (release-directory)
-               :operating-system *operating-system*
-               :architecture *architecture*
-               :version *electron-version*)
+  (if (or (uiop:emptyp (uiop:directory-files (release-directory)))
+          force)
+      (progn
+        (log-message "Downloading a copy of Electron...")
+        (ensure-directories-exist (release-directory))
+        (get-release (release-directory)
+                     :operating-system *operating-system*
+                     :architecture *architecture*
+                     :version *electron-version*))
+      (log-message "Already downloaded. Use :force t to force download."))
   (log-message "Preparing the files...")
   (prepare-release (release-directory) :operating-system *operating-system*)
   (values))
