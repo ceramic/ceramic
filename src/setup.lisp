@@ -75,7 +75,7 @@
 
 ;;; Main
 
-(defvar *electron-version* "0.28.1"
+(defparameter *electron-version* "0.37.2"
   "The version of Electron to use.")
 
 (defun global-binary-pathname ()
