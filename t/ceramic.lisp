@@ -14,7 +14,7 @@
     (run! 'ceramic-test.setup:setup)
     (run! 'ceramic-test.driver:driver)
     (run! 'ceramic-test.window:window)
-    ;(run! 'ceramic-test.integration:integration)
+    (run! 'ceramic-test.integration:integration)
     (run! 'ceramic-test.misc:misc)
     ;; Cleanup
     (ceramic.file:wipe-data)))
