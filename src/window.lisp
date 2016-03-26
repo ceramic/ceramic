@@ -23,59 +23,57 @@
 (defmacro window-js (id &rest args)
   `(js "Ceramic.windows[~S].~A" ,id ,@args))
 
-(defmethod window-title ((window window))
-  "Return the window's title."
-  (with-slots (id) window
-    (window-js "getTitle()" id)))
+(defmacro define-trivial-operation (name js &key docstring)
+  (alexandria:with-gensyms (window id)
+    `(defmethod ,name ((,window window))
+       ,docstring
+       (with-slots (,id) ,window
+         (window-js ,js ,id)))))
+
+;;; Getters
+
+(define-trivial-operation window-title "getTitle()"
+  :docstring "Return the window's title.")
+
+(define-trivial-operation window-url "webContents.getURL()"
+  :docstring "Return the window's current URL.")
+
+(define-trivial-operation center "center()"
+  :docstring "Move the window to the center of the screen.")
+
+(define-trivial-operation %reload "reload()")
+
+(define-trivial-operation %reload-force "reloadIgnoringCache()")
+
+(defmethod reload ((window window) &key ignore-cache)
+  "Reload the window. Optionally ignore the cache."
+  (if ignore-cache
+      (%reload window)
+      (%reload-force window)))
+
+(define-trivial-operation loadingp "isLoading"
+  :docstring "Return whether the window is loading a new page.")
+
+(define-trivial-operation stop "stop()"
+  :docstring "Stop any navigation.")
+
+(define-trivial-operation back "goBack()"
+  :docstring "Go back in the page history.")
+
+(define-trivial-operation forward "goForward()"
+  :docstring "Go forward in the page history.")
+
+(define-trivial-operation crashedp "isCrashed()"
+  :docstring "Return whether the window has crashed.")
+
+;;; Setters
 
 (defmethod (setf window-title) (new-value (window window))
   "Set the window's title."
   (with-slots (id) window
     (window-js "setTitle(~S)" id new-value)))
 
-(defmethod window-url ((window window))
-  "Return the window's current URL."
-  (with-slots (id) window
-    (window-js "webContents.getURL()" id)))
-
 (defmethod (setf window-url) (new-value (window window))
   "Change the window's URL."
   (with-slots (id) window
     (window-js "loadURL(~S") id new-value))
-
-(defmethod center ((window window))
-  "Move the window to the center of the screen."
-  (with-slots (id) window
-    (window-js "center()" id)))
-
-(defmethod reload ((window window) &key ignore-cache)
-  "Reload the window. Optionally ignore the cache."
-  (with-slots (id) window
-    (if ignore-cache
-        (window-js "reloadIgnoringCache()" id)
-        (window-js "reload()" id))))
-
-(defmethod loadingp ((window window))
-  "Return whether the window is loading a new page."
-  (with-slots (id) window
-    (window-js "isLoading" id)))
-
-(defmethod stop ((window window))
-  "Stop any navigation."
-  (with-slots (id) window
-    (window-js "stop()" id)))
-
-(defmethod back ((window window))
-  "Go back in the page history."
-  (with-slots (id) window
-    (window-js "goBack()" id)))
-
-(defmethod forward ((window window))
-  "Go forward in the page history."
-  (with-slots (id) window
-    (window-js "goForward()" id)))
-
-(defmethod crashedp ((window window))
-  "Return whether the window has crashed."
-  (with-slots (id) window
-    (window-js "isCrashed()" id)))
