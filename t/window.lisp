@@ -27,6 +27,10 @@
     (is
      (stringp (ceramic.window:url win)))
     (finishes
+      (ceramic.window:reload win))
+    (finishes
+      (ceramic.window:reload win :force t))
+    (finishes
       (ceramic.window:stop-loading win))
     (finishes
       (ceramic.window:back win))
