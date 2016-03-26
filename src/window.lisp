@@ -133,35 +133,35 @@
 (define-trivial-operation stop "stop()"
   :docstring "Stop any navigation.")
 
-(define-trivial-operation back "goBack()"
+(define-trivial-operation back "webContents.goBack()"
   :docstring "Go back in the page history.")
 
-(define-trivial-operation forward "goForward()"
+(define-trivial-operation forward "webContents.goForward()"
   :docstring "Go forward in the page history.")
 
-(define-trivial-operation undo "undo()"
+(define-trivial-operation undo "webContents.undo()"
   :docstring "Undo changes.")
 
-(define-trivial-operation redo "redo()"
+(define-trivial-operation redo "webContents.redo()"
   :docstring "Redo changes.")
 
-(define-trivial-operation cut "cut()"
+(define-trivial-operation cut "webContents.cut()"
   :docstring "Cut selected text.")
 
-(define-trivial-operation copy "copy()"
+(define-trivial-operation copy "webContents.copy()"
   :docstring "Copy selected text.")
 
-(define-trivial-operation paste "paste()"
+(define-trivial-operation paste "webContents.paste()"
   :docstring "Paste text.")
 
-(define-trivial-operation select-all "selectAll()"
+(define-trivial-operation select-all "webContents.selectAll()"
   :docstring "Select all text.")
 
-(define-trivial-operation unselect "unselect()"
+(define-trivial-operation unselect "webContents.unselect()"
   :docstring "Cancel the selection.")
 
-(define-trivial-operation open-dev-tools "openDevTools()"
+(define-trivial-operation open-dev-tools "webContents.openDevTools()"
   :docstring "Open the developer tools.")
 
-(define-trivial-operation close-dev-tools "closeDevTools()"
+(define-trivial-operation close-dev-tools "webContents.closeDevTools()"
   :docstring "Close the developer tools.")
