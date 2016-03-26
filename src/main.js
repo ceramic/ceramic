@@ -38,6 +38,14 @@ Ceramic.syncEval = function(id, fn) {
 
 Ceramic.windows = {};
 
+Ceramic.createWindow = function(url, options) {
+  var win = new BrowserWindow(options);
+  if (url) {
+    win.loadURL(url)
+  };
+  return win;
+};
+
 /* Lifecycle management */
 
 Ceramic.quit = function() {
