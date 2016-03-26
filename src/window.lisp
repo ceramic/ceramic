@@ -74,3 +74,8 @@
   "Go forward in the page history."
   (with-slots (id) window
     (window-js "goForward()" id)))
+
+(defmethod crashedp ((window window))
+  "Return whether the window has crashed."
+  (with-slots (id) window
+    (window-js "isCrashed()" id)))
