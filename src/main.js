@@ -49,6 +49,11 @@ Ceramic.createWindow = function(url, options) {
   return win;
 };
 
+Ceramic.closeWindow = function(id) {
+  Ceramic.windows[id].close()
+  Ceramic.windows[id] = null;
+};
+
 /* Lifecycle management */
 
 Ceramic.quit = function() {
