@@ -7,6 +7,61 @@
                 :setup)
   (:import-from :ceramic.runtime
                 :*releasep*)
+  (:import-from :ceramic.window
+                :window
+                :window-id
+                :make-window
+                ;; Predicates
+                :loadingp
+                :crashedp
+                ;; Accessors
+                :title
+                :url
+                ;; Operations
+                :show
+                :hide
+                :close
+                :center
+                :reload
+                :stop
+                :back
+                :forward
+                :undo
+                :redo
+                :cut
+                :copy
+                :paste
+                :select-all
+                :unselect
+                :open-dev-tools
+                :close-dev-tools)
+  (:export :window
+           :window-id
+           :make-window
+           ;; Predicates
+           :loadingp
+           :crashedp
+           ;; Accessors
+           :title
+           :url
+           ;; Operations
+           :show
+           :hide
+           :close
+           :center
+           :reload
+           :stop
+           :back
+           :forward
+           :undo
+           :redo
+           :cut
+           :copy
+           :paste
+           :select-all
+           :unselect
+           :open-dev-tools
+           :close-dev-tools)
   (:export :setup
            :start
            :stop
