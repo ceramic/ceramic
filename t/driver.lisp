@@ -27,13 +27,13 @@
     (ceramic.driver:start *driver*))
   (let ((win (ceramic.window:make-window :url "http://www.google.com/")))
     (finishes
-      (ceramic.window:show window))
+      (ceramic.window:show win))
     (sleep 1)
     (is-false
      (ceramic.window:crashedp win))
     (finishes
-      (ceramic.window:hide window))
+      (ceramic.window:hide win))
     (finishes
-      (ceramic.window:close window)))
+      (ceramic.window:close win)))
   (finishes
     (ceramic.driver:stop *driver*)))
