@@ -113,7 +113,7 @@ and compile all the required resources -- into a bundle, which is basically an
 archive file. All you have to do is call the @c(bundle) function:
 
 @begin[lang=lisp](code)
-(ceramic.bundler:bundle :ceramic-hello-world)
+(ceramic:bundle :ceramic-hello-world)
 @end(code)
 
 And that's it. Head over to the directory of the hello world example,
@@ -124,7 +124,7 @@ see the 'Hello, World!' text.
 You can also tell it where to store the bundle through an optional argument:
 
 @begin[lang=lisp](code)
-(ceramic.bundler:bundle :ceramic-hello-world :bundle-pathname #p"build/bundle.tar")
+(ceramic:bundle :ceramic-hello-world :bundle-pathname #p"build/bundle.tar")
 @end(code)
 
 @end(section)
