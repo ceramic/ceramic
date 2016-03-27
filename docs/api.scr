@@ -14,6 +14,15 @@
 @end(section)
 
 @begin(section)
+@title(Setup)
+
+@cl:with-package[name="ceramic.setup"](
+@cl:doc(function setup)
+)
+
+@end(section)
+
+@begin(section)
 @title(Windows)
 
 @cl:with-package[name="ceramic.window"](
@@ -60,6 +69,22 @@
 @cl:doc(macro define-resources)
 @cl:doc(function resource-directory)
 @cl:doc(function resource)
+)
+
+@end(section)
+
+@begin(section)
+@title(Driver)
+
+@cl:with-package[name="ceramic.driver"](
+@cl:doc(class driver)
+@cl:doc(variable *driver*)
+@cl:doc(generic start)
+@cl:doc(generic stop)
+@cl:doc(generic js)
+@cl:doc(generic sync-js)
+@cl:doc(generic port)
+@cl:doc(generic on-message)
 )
 
 @end(section)
