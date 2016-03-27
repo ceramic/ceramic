@@ -64,7 +64,7 @@
       (is
        (string= (setf (ceramic.window:url win) new-url)
                 new-url))
-      (sleep 1)
+      (sleep 3)
       (is
        (string= (ceramic.window:url win)
                 new-url)))
