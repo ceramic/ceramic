@@ -101,6 +101,9 @@
 (defpackage ceramic-entry
   (:use :cl))
 
+(defun wait-forever ()
+  (loop (sleep 1)))
+
 (defmacro define-entry-point (system-name () &body body)
   "Define the application's entry point."
   (let ((entry-point (intern (symbol-name system-name)
@@ -112,5 +115,6 @@
          (handler-case
              (progn
                ,@body
+               (wait-forever)
                (quit))
            (t () (quit)))))))
