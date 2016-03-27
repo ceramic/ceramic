@@ -147,7 +147,7 @@ To test the app locally, just run @c((markedit:start-app)). To deploy the app, w
 run the bundler command:
 
 @begin[lang=lisp](code)
-(ceramic.bundler:bundle :markedit)
+(ceramic:bundle :markedit)
 @end(code)
 
 Extract the app and run it: You'll see the window pop up and you can start
