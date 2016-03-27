@@ -47,6 +47,7 @@ script:
        -e '(coveralls:with-coveralls (:exclude (list "src/error.lisp"
                                                      "src/os.lisp"
                                                      "src/file.lisp"
+                                                     "src/quit.lisp"
                                                      "t"))
              (ceramic-test:run-tests))'
 

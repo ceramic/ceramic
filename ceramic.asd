@@ -36,7 +36,8 @@
                  (:file "ql-patch")
                  #+quicklisp
                  (:file "bundler")
-                 (:file "ceramic"))))
+                 (:file "ceramic")
+                 (:file "quit"))))
   :description "Common Lisp web apps on the desktop"
   :long-description
   #.(uiop:read-file-string
