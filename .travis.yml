@@ -44,7 +44,10 @@ script:
   - ros -e '(ql:quickload (list :cl-coveralls :ceramic-test))'
         -e '(setf fiveam:*debug-on-error* t
                   fiveam:*debug-on-failure* t)'
-       -e '(coveralls:with-coveralls (:exclude (list "src/error.lisp" "src/os.lisp" "t"))
+       -e '(coveralls:with-coveralls (:exclude (list "src/error.lisp"
+                                                     "src/os.lisp"
+                                                     "src/file.lisp"
+                                                     "t"))
              (ceramic-test:run-tests))'
 
 notifications:
