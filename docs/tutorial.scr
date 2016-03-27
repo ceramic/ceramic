@@ -59,9 +59,9 @@ First, load Lucerne:
 
 @code[lang=lisp](CL-USER> (ql:quickload :lucerne))
 
-Then, tell Ceramic we're going to use the interactive mode:
+Then, start the Electron process,
 
-@code[lang=lisp](CL-USER> (ceramic:interactive))
+@code[lang=lisp](CL-USER> (ceramic:start))
 
 Now, let's create a basic application. The source code and system definition of
 this app is in the @c(examples/hello-world/) directory of the Ceramic source
@@ -91,7 +91,7 @@ code, so you can play around with it.
 (defun run ()
   (setf *window*
         (ceramic:make-window :url (format nil "http://localhost:~D/" *port*)))
-  (ceramic:show-window *window*)
+  (ceramic:show *window*)
   (start app :port *port*))
 
 (ceramic:define-entry-point :ceramic-hello-world ()
