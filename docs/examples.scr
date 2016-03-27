@@ -156,17 +156,12 @@ Finally, some startup code:
 
 @begin[lang=lisp](code)
 @begin(verb)
-;;; Startup
-
-(defvar *port* 40000)
-
-(defun start-app ()
-  (start app :port *port*))
+(defparameter *port* 9000)
 
 (ceramic:define-entry-point :markedit ()
+  (start app :port *port*)
   (let ((window (ceramic:make-window :url (format nil "http://localhost:~D/" *port*))))
-    (ceramic:show-window window)
-    (start-app)))
+    (ceramic:show window)))
 @end(verb)
 @end(code)
 
