@@ -29,8 +29,8 @@ Now we're all set up. Let's start creating some browser windows. Run the
 following code:
 
 @begin[lang=lisp](code)
-;; Tell Ceramic we're going to be prototyping
-(ceramic:interactive)
+;; Start the underlying Electron process
+(ceramic:start)
 
 ;; Create a browser window
 (defvar window (ceramic:make-window :url "https://www.google.com/"
@@ -38,7 +38,7 @@ following code:
                                     :height 600))
 
 ;; Show it
-(ceramic:show-window window)
+(ceramic:show window)
 @end(code)
 
 An 800-by-600 pixel browser window pointed at Google should pop up.
