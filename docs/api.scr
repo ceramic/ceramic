@@ -2,56 +2,32 @@
 @title(API Reference)
 
 @begin(section)
-@title(General)
+@title(Windows)
 
-@cl:with-package[name="ceramic"](
-@cl:doc(function setup)
-@cl:doc(function interactive)
-)
-
-@end(section)
-
-@begin(section)
-@title(Browser Windows)
-
-The core API is available on the @c(ceramic) package.
-
-@cl:with-package[name="ceramic"](
+@cl:with-package[name="ceramic.window"](
 @cl:doc(class window)
 @cl:doc(function make-window)
-@cl:doc(method show-window (window window))
-@cl:doc(method hide-window (window window))
-@cl:doc(method close-window (window window))
-@cl:doc(method destroy-window (window window))
-@cl:doc(method maximize-window (window window))
-@cl:doc(method unmaximize-window (window window))
-@cl:doc(method minimize-window (window window))
-@cl:doc(method unminimize-window (window window))
-@cl:doc(method center-window (window window))
-)
-
-@end(section)
-
-@begin(section)
-@title(Resources)
-
-Resource management tools are defined in the @c(ceramic.resource) package.
-
-@cl:with-package[name="ceramic.resource"](
-@cl:doc(macro define-resources)
-@cl:doc(function resource-directory)
-@cl:doc(function resource)
-)
-
-@end(section)
-
-@begin(section)
-@title(Releasing)
-
-The bundler is defined in the @c(ceramic.bundler) package.
-
-@cl:with-package[name="ceramic.bundler"](
-@cl:doc(function bundle)
+@cl:doc(method title (window window))
+@cl:doc(method url (window window))
+@cl:doc(method loadingp (window window))
+@cl:doc(method crashedp (window window))
+@cl:doc(method show (window window))
+@cl:doc(method hide (window window))
+@cl:doc(method close (window window))
+@cl:doc(method center (window window))
+@cl:doc(method reload (window window) &key ignore-cache)
+@cl:doc(method stop-loading (window window))
+@cl:doc(method back (window window))
+@cl:doc(method forward (window window))
+@cl:doc(method undo (window window))
+@cl:doc(method redo (window window))
+@cl:doc(method cut (window window))
+@cl:doc(method copy (window window))
+@cl:doc(method paste (window window))
+@cl:doc(method select-all (window window))
+@cl:doc(method unselect (window window))
+@cl:doc(method open-dev-tools (window window))
+@cl:doc(method close-dev-tools (window window))
 )
 
 @end(section)
