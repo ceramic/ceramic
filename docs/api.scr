@@ -2,6 +2,18 @@
 @title(API Reference)
 
 @begin(section)
+@title(Core)
+
+@cl:with-package[name="ceramic"](
+@cl:doc(function start)
+@cl:doc(function stop)
+@cl:doc(function quit)
+@cl:doc(macro define-entry-point)
+)
+
+@end(section)
+
+@begin(section)
 @title(Windows)
 
 @cl:with-package[name="ceramic.window"](
