@@ -51,14 +51,21 @@
         :documentation "A unique string ID for the window."))
   (:documentation "A browser window."))
 
-(defun make-window (&key title url)
+(defun make-window (&key title url width height)
   "Create a window."
-  (let ((options (cl-json:encode-json-plist-to-string
-                  (list :title title)))
-        (win (make-instance 'window)))
-    (with-slots (%id) win
-      (js "Ceramic.windows[~S] = Ceramic.createWindow(~S, ~A)" %id url options))
-    win))
+  (flet ((remove-null-values (plist)
+           (loop for (key value) on plist by #'cddr
+                 if value
+                 appending (list key value))))
+    (let ((options (cl-json:encode-json-plist-to-string
+                    (remove-null-values
+                     (list :title title
+                           :width width
+                           :height height))))
+          (win (make-instance 'window)))
+      (with-slots (%id) win
+        (js "Ceramic.windows[~S] = Ceramic.createWindow(~S, ~A)" %id url options))
+      win)))
 
 ;;; Methods
 
