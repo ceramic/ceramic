@@ -32,4 +32,24 @@
 
 @end(section)
 
+@begin(section)
+@title(Bundler)
+
+@cl:with-package[name="ceramic.bundler"](
+@cl:doc(function bundle)
+)
+
+@end(section)
+
+@begin(section)
+@title(Resources)
+
+@cl:with-package[name="ceramic.resource"](
+@cl:doc(macro define-resources)
+@cl:doc(function resource-directory)
+@cl:doc(function resource)
+)
+
+@end(section)
+
 @end(section)
