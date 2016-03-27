@@ -11,6 +11,6 @@
           ceramic.runtime::*releasep*
           (ceramic.resource:resource 'files #p"file.txt"))
   (let ((window (ceramic:make-window :url "http://google.com/")))
-    (ceramic:show-window window)
+    (ceramic:show window)
     (sleep 1)
     (ceramic:quit)))

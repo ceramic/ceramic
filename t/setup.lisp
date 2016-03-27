@@ -11,6 +11,8 @@
 (test setup
   (finishes
     (ceramic.setup:setup))
+  (finishes
+    (ceramic.setup:setup))
   (is
    (not
     (uiop:emptyp

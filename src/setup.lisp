@@ -13,16 +13,18 @@
                 :app-directory
                 :binary-pathname
                 :get-release)
-  (:export :setup
-           :global-binary-pathname)
+  (:export :setup)
   (:documentation "Set up everything needed to develop with Ceramic."))
 (in-package :ceramic.setup)
 
 ;;; Dealing with Electron releases
 
 (defparameter +main-javascript+
-  (asdf:system-relative-pathname :ceramic #p"src/electron/main.js")
+  (asdf:system-relative-pathname :ceramic #p"src/main.js")
   "Pathname to the JavaScript file for the main process.")
+
+(defparameter +ws-module+
+  (asdf:system-relative-pathname :ceramic #p"node_modules/ws/"))
 
 (defun clean-release (directory &key operating-system)
   "Clean up default files from an Electron release."
@@ -33,7 +35,8 @@
     (loop for file in app-files do
       (let ((pathname (merge-pathnames file
                                        (app-directory directory :operating-system operating-system))))
-        (delete-file pathname)))))
+        (when (probe-file pathname)
+          (delete-file pathname))))))
 
 (defun insert-javascript (directory &key operating-system)
   "Insert the main process JavaScript into an Electron release."
@@ -49,40 +52,45 @@
                                                                  :operating-system operating-system))
                                  :direction :output
                                  :if-does-not-exist :create)
-    (write-string (jonathan:to-json (list (cons "name" "Ceramic/Electron")
-                                          (cons "version"
-                                                (asdf:component-version
-                                                 (asdf:find-system :ceramic)))
-                                          (cons "main" "main.js"))
-                                    :from :alist)
+    (write-string (format nil "{ \"name\": ~S, \"version\": ~S, \"main\": \"main.js\" }"
+                          "Ceramic/Electron"
+                          (asdf:component-version
+                           (asdf:find-system :ceramic)))
                   output-stream)))
+
+(defun copy-ws-module (directory &key operating-system)
+  "Copy the WebSockets module."
+  (copy-directory:copy +ws-module+
+                       (merge-pathnames #p"node_modules/ws/"
+                                        (app-directory directory
+                                                       :operating-system operating-system))))
 
 (defun prepare-release (directory &key operating-system)
   "Prepare an Electron release."
   (clean-release directory :operating-system operating-system)
   (insert-javascript directory :operating-system operating-system)
-  (insert-package-definition directory :operating-system operating-system))
+  (insert-package-definition directory :operating-system operating-system)
+  (copy-ws-module directory :operating-system operating-system))
 
 ;;; Main
 
-(defvar *electron-version* "0.28.1"
+(defparameter *electron-version* "0.37.2"
   "The version of Electron to use.")
 
-(defun global-binary-pathname ()
-  "The pathname to the downloaded Electron binary. Used for interactive
-  testing."
-  (binary-pathname (release-directory)
-                   :operating-system *operating-system*))
-
-(defun setup ()
+(defun setup (&key force)
   "Set up everything needed to start developing."
   (log-message "Creating Ceramic directories...")
-  (ensure-directories-exist *ceramic-directory*)
-  (log-message "Downloading a copy of Electron...")
   (ensure-directories-exist (release-directory))
-  (progn
-    (get-release (release-directory)
-                 :operating-system *operating-system*
-                 :architecture *architecture*
-                 :version *electron-version*)
-    (prepare-release (release-directory) :operating-system *operating-system*)))
+  (if (or (uiop:emptyp (uiop:directory-files (release-directory)))
+          force)
+      (progn
+        (log-message "Downloading a copy of Electron...")
+        (ensure-directories-exist (release-directory))
+        (get-release (release-directory)
+                     :operating-system *operating-system*
+                     :architecture *architecture*
+                     :version *electron-version*))
+      (log-message "Already downloaded. Use :force t to force download."))
+  (log-message "Preparing the files...")
+  (prepare-release (release-directory) :operating-system *operating-system*)
+  (values))

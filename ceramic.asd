@@ -2,7 +2,7 @@
   :author "Fernando Borretti <eudoxiahp@gmail.com>"
   :maintainer "Fernando Borretti <eudoxiahp@gmail.com>"
   :license "MIT"
-  :version "0.1"
+  :version "0.2"
   :homepage "http://ceramic.github.io/"
   :bug-tracker "https://github.com/ceramic/ceramic/issues"
   :source-control (:git "git@github.com:ceramic/ceramic.git")
@@ -13,12 +13,12 @@
                :trivial-compress
                :electron-tools
                :uiop
-               :jonathan
                :cl-json
                :external-program
                :uuid
                :copy-directory
-               :clack-handler-hunchentoot)
+               :clack-handler-hunchentoot
+               :remote-js)
   :components ((:module "src"
                 :serial t
                 :components
@@ -29,11 +29,9 @@
                  (:file "runtime")
                  (:file "resource")
                  (:file "setup")
-                 (:module "electron"
-                  :serial t
-                  :components
-                  ((:static-file "main.js")
-                   (:file "driver")))
+                 (:static-file "main.js")
+                 (:file "driver")
+                 (:file "window")
                  #-quicklisp
                  (:file "ql-patch")
                  #+quicklisp

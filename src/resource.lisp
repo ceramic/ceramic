@@ -35,7 +35,7 @@
 
 (defun get-resource (resource-tag)
   "Return the resource associated to a resource tag."
-  (or (find resource-tag *resources* :key #'resource-tag)
+  (or (find resource-tag *resources* :key #'resource-tag :test #'eq)
       (error 'no-such-tag :tag resource-tag)))
 
 ;;; Define resources
@@ -53,7 +53,7 @@
   `(call-define-resources ,system-name
                           (list
                            ,@(loop for (tag source-directory) in pairs collecting
-                                   `(cons ',tag ,source-directory)))))
+                              `(cons ',tag ,source-directory)))))
 
 ;;; Find resources
 

@@ -29,8 +29,8 @@ Now we're all set up. Let's start creating some browser windows. Run the
 following code:
 
 @begin[lang=lisp](code)
-;; Tell Ceramic we're going to be prototyping
-(ceramic:interactive)
+;; Start the underlying Electron process
+(ceramic:start)
 
 ;; Create a browser window
 (defvar window (ceramic:make-window :url "https://www.google.com/"
@@ -38,7 +38,7 @@ following code:
                                     :height 600))
 
 ;; Show it
-(ceramic:show-window window)
+(ceramic:show window)
 @end(code)
 
 An 800-by-600 pixel browser window pointed at Google should pop up.
@@ -59,9 +59,9 @@ First, load Lucerne:
 
 @code[lang=lisp](CL-USER> (ql:quickload :lucerne))
 
-Then, tell Ceramic we're going to use the interactive mode:
+Then, start the Electron process,
 
-@code[lang=lisp](CL-USER> (ceramic:interactive))
+@code[lang=lisp](CL-USER> (ceramic:start))
 
 Now, let's create a basic application. The source code and system definition of
 this app is in the @c(examples/hello-world/) directory of the Ceramic source
@@ -91,7 +91,7 @@ code, so you can play around with it.
 (defun run ()
   (setf *window*
         (ceramic:make-window :url (format nil "http://localhost:~D/" *port*)))
-  (ceramic:show-window *window*)
+  (ceramic:show *window*)
   (start app :port *port*))
 
 (ceramic:define-entry-point :ceramic-hello-world ()
@@ -113,7 +113,7 @@ and compile all the required resources -- into a bundle, which is basically an
 archive file. All you have to do is call the @c(bundle) function:
 
 @begin[lang=lisp](code)
-(ceramic.bundler:bundle :ceramic-hello-world)
+(ceramic:bundle :ceramic-hello-world)
 @end(code)
 
 And that's it. Head over to the directory of the hello world example,
@@ -124,7 +124,7 @@ see the 'Hello, World!' text.
 You can also tell it where to store the bundle through an optional argument:
 
 @begin[lang=lisp](code)
-(ceramic.bundler:bundle :ceramic-hello-world :bundle-pathname #p"build/bundle.tar")
+(ceramic:bundle :ceramic-hello-world :bundle-pathname #p"build/bundle.tar")
 @end(code)
 
 @end(section)
@@ -147,7 +147,7 @@ To test the app locally, just run @c((markedit:start-app)). To deploy the app, w
 run the bundler command:
 
 @begin[lang=lisp](code)
-(ceramic.bundler:bundle :markedit)
+(ceramic:bundle :markedit)
 @end(code)
 
 Extract the app and run it: You'll see the window pop up and you can start

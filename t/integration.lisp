@@ -8,35 +8,19 @@
   :description "Integration tests.")
 (in-suite integration)
 
-(test interactive
-  (ceramic:with-interactive ()
-    (sleep 1)
-    (let ((window (ceramic:make-window :title "My Window")))
-      (finishes
-       (ceramic:show-window window))
-      (finishes
-       (ceramic:hide-window window))
-      (finishes
-       (ceramic:show-window window))
-      (finishes
-       (ceramic:maximize-window window))
-      (finishes
-       (ceramic:unmaximize-window window))
-      (finishes
-       (ceramic:minimize-window window))
-      (finishes
-       (ceramic:unminimize-window window))
-      (finishes
-       (ceramic:center-window window))
-      (sleep 1)
-      (finishes
-       (ceramic:close-window window)))))
-
 (defvar *extraction-directory*
   (asdf:system-relative-pathname :ceramic-test-app
                                  #p"extract/"))
 
+(test lifecycle
+  (finishes
+    (ceramic:start))
+  (finishes
+    (ceramic:stop)))
+
 (test compiled
+  (finishes
+    (asdf:load-system :ceramic-test-app))
   (let* ((app-file (merge-pathnames #p"ceramic-test-app.tar"
                                     *extraction-directory*))
          (binary (merge-pathnames #p"ceramic-test-app"

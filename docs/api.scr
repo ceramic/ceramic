@@ -2,40 +2,68 @@
 @title(API Reference)
 
 @begin(section)
-@title(General)
+@title(Core)
 
 @cl:with-package[name="ceramic"](
-@cl:doc(function setup)
-@cl:doc(function interactive)
+@cl:doc(function start)
+@cl:doc(function stop)
+@cl:doc(function quit)
+@cl:doc(macro define-entry-point)
 )
 
 @end(section)
 
 @begin(section)
-@title(Browser Windows)
+@title(Setup)
 
-The core API is available on the @c(ceramic) package.
+@cl:with-package[name="ceramic.setup"](
+@cl:doc(function setup)
+)
 
-@cl:with-package[name="ceramic"](
+@end(section)
+
+@begin(section)
+@title(Windows)
+
+@cl:with-package[name="ceramic.window"](
 @cl:doc(class window)
 @cl:doc(function make-window)
-@cl:doc(method show-window (window window))
-@cl:doc(method hide-window (window window))
-@cl:doc(method close-window (window window))
-@cl:doc(method destroy-window (window window))
-@cl:doc(method maximize-window (window window))
-@cl:doc(method unmaximize-window (window window))
-@cl:doc(method minimize-window (window window))
-@cl:doc(method unminimize-window (window window))
-@cl:doc(method center-window (window window))
+@cl:doc(method title (window window))
+@cl:doc(method url (window window))
+@cl:doc(method loadingp (window window))
+@cl:doc(method crashedp (window window))
+@cl:doc(method show (window window))
+@cl:doc(method hide (window window))
+@cl:doc(method close (window window))
+@cl:doc(method center (window window))
+@cl:doc(method reload (window window) &key ignore-cache)
+@cl:doc(method stop-loading (window window))
+@cl:doc(method back (window window))
+@cl:doc(method forward (window window))
+@cl:doc(method undo (window window))
+@cl:doc(method redo (window window))
+@cl:doc(method cut (window window))
+@cl:doc(method copy (window window))
+@cl:doc(method paste (window window))
+@cl:doc(method select-all (window window))
+@cl:doc(method unselect (window window))
+@cl:doc(method open-dev-tools (window window))
+@cl:doc(method close-dev-tools (window window))
+)
+
+@end(section)
+
+@begin(section)
+@title(Bundler)
+
+@cl:with-package[name="ceramic.bundler"](
+@cl:doc(function bundle)
 )
 
 @end(section)
 
 @begin(section)
 @title(Resources)
-
-Resource management tools are defined in the @c(ceramic.resource) package.
 
 @cl:with-package[name="ceramic.resource"](
 @cl:doc(macro define-resources)
@@ -46,12 +74,17 @@ Resource management tools are defined in the @c(ceramic.resource) package.
 @end(section)
 
 @begin(section)
-@title(Releasing)
+@title(Driver)
 
-The bundler is defined in the @c(ceramic.bundler) package.
-
-@cl:with-package[name="ceramic.bundler"](
-@cl:doc(function bundle)
+@cl:with-package[name="ceramic.driver"](
+@cl:doc(class driver)
+@cl:doc(variable *driver*)
+@cl:doc(generic start)
+@cl:doc(generic stop)
+@cl:doc(generic js)
+@cl:doc(generic sync-js)
+@cl:doc(generic port)
+@cl:doc(generic on-message)
 )
 
 @end(section)
