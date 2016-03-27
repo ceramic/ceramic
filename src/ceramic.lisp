@@ -7,6 +7,12 @@
                 :setup)
   (:import-from :ceramic.runtime
                 :*releasep*)
+  (:import-from :ceramic.bundler
+                :bundle)
+  (:import-from :ceramic.resource
+                :define-resources
+                :resource-directory
+                :resource)
   (:import-from :ceramic.window
                 :window
                 :window-id
@@ -63,6 +69,10 @@
            :unselect
            :open-dev-tools
            :close-dev-tools)
+  (:export :bundle)
+  (:export :define-resources
+           :resource-directory
+           :resource)
   (:export :setup
            :start
            :stop
