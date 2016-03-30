@@ -51,7 +51,8 @@
     (log-message "Starting Electron process...")
     (start-electron driver)
     (log-message "Waiting for startup...")
-    (wait-for-client driver)))
+    (wait-for-client driver)
+    (log-message "Electron started")))
 
 (defgeneric stop (driver)
   (:documentation "Stop the Electron process and the remote-js server.")
