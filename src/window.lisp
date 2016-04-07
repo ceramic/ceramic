@@ -51,7 +51,7 @@
         :documentation "A unique string ID for the window."))
   (:documentation "A browser window."))
 
-(defun make-window (&key title url width height)
+(defun make-window (&key title url width height (class 'window))
   "Create a window."
   (flet ((remove-null-values (plist)
            (loop for (key value) on plist by #'cddr
@@ -62,9 +62,9 @@
                      (list :title title
                            :width width
                            :height height))))
-          (win (make-instance 'window)))
+          (win (make-instance class)))
       (with-slots (%id) win
-        (js "Ceramic.windows[~S] = Ceramic.createWindow(~S, ~A)" %id url options))
+        (js "Ceramic.windows[~S] = Ceramic.createWindow(~S, ~A)" %id (or url "null") options))
       win)))
 
 ;;; Methods

@@ -2,6 +2,7 @@ const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const WebSocket = require('ws');
+const dialog = require('electron').dialog;
 
 require('crash-reporter').start();
 
@@ -19,7 +20,12 @@ Ceramic.startWebSockets = function(port) {
   };
 
   RemoteJS.ws.onmessage = function(evt) {
-    eval(evt.data);
+    const js = evt.data;
+    try {
+      eval(js);
+    } catch (err) {
+      dialog.showErrorBox('JavaScript Error', 'Error evaluating JavaScript from Ceramic: ' + js);
+    }
   };
   RemoteJS.ws.onopen = function() {
     RemoteJS.send('connected');
