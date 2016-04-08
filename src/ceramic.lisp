@@ -7,6 +7,7 @@
                 :setup)
   (:import-from :ceramic.runtime
                 :*releasep*)
+  #+quicklisp
   (:import-from :ceramic.bundler
                 :bundle)
   (:import-from :ceramic.resource
@@ -80,6 +81,11 @@
            :define-entry-point)
   (:documentation "The main interface."))
 (in-package :ceramic)
+
+;;; FIXME move this someone more semantic
+
+(defun bundle ()
+  nil)
 
 ;;; Lifecycle
 
