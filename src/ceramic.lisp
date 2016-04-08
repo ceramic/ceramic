@@ -84,6 +84,7 @@
 
 ;;; FIXME move this someone more semantic
 
+#-quicklisp
 (defun bundle ()
   nil)
 
