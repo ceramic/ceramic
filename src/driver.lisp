@@ -4,6 +4,7 @@
   (:import-from :alexandria
                 :if-let)
   (:import-from :ceramic.log
+                :*logging*
                 :log-message)
   (:import-from :ceramic.runtime
                 :*releasep*
@@ -121,7 +122,7 @@
             (external-program:start (binary-pathname directory
                                                      :operating-system ceramic.os:*operating-system*)
                                     (list (write-to-string (port driver)))
-                                    :output *standard-output*
+                                    :output (when *logging* *standard-output*)
                                     :error :output))))
   (values))
 

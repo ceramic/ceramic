@@ -75,7 +75,8 @@
      (with-slots (%id) window
        ,(if sync
             `(sync-js "return Ceramic.windows[~S].~A" %id ,js)
-            `(js "Ceramic.windows[~S].~A" %id ,js)))))
+            `(progn (js "Ceramic.windows[~S].~A" %id ,js)
+                    nil)))))
 
 ;;; Predicates
 
