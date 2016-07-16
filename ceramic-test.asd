@@ -11,6 +11,7 @@
                  (:file "setup")
                  (:file "driver")
                  (:file "window")
+                 (:file "crashreporter")
                  (:file "integration")
                  (:file "misc")
                  (:file "ceramic")))))
