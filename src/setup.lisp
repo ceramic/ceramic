@@ -74,7 +74,7 @@
 
 ;;; Main
 
-(defparameter *electron-version* "0.37.2"
+(defparameter *electron-version* "1.2.7"
   "The version of Electron to use.")
 
 (defun setup (&key force)
