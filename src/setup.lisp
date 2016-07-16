@@ -43,7 +43,7 @@
   (uiop:copy-file +main-javascript+
                   (merge-pathnames #p"main.js"
                                    (app-directory directory
-                                                                 :operating-system operating-system))))
+                                                  :operating-system operating-system))))
 
 (defun insert-package-definition (directory &key operating-system)
   "Insert the package.json into an Electron release."
