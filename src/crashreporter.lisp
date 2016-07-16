@@ -18,6 +18,5 @@
                               (list "companyName" company-name
                                     "submitURL" submit-url)
                               options)))))
-      (format t "~A~%" opt)
       (js *driver*
           (format nil "Ceramic.startCrashReporter(~A)" opt)))))
