@@ -67,6 +67,7 @@
 
 (defun prepare-release (directory &key operating-system)
   "Prepare an Electron release."
+  (ensure-directories-exist (app-directory directory :operating-system operating-system))
   (clean-release directory :operating-system operating-system)
   (insert-javascript directory :operating-system operating-system)
   (insert-package-definition directory :operating-system operating-system)
