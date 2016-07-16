@@ -4,8 +4,6 @@ const BrowserWindow = electron.BrowserWindow;
 const WebSocket = require('ws');
 const dialog = require('electron').dialog;
 
-require('crash-reporter').start();
-
 var Ceramic = {};
 
 /* Communication */
@@ -38,6 +36,10 @@ Ceramic.syncEval = function(id, fn) {
     id: id,
     result: result
   }))
+};
+
+Ceramic.startCrashReporter = function (options) {
+    electron.crashReporter.start(options);
 };
 
 /* Windows */

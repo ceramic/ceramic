@@ -32,6 +32,7 @@
                  (:static-file "main.js")
                  (:file "driver")
                  (:file "window")
+                 (:file "crashreporter")
                  #-quicklisp
                  (:file "ql-patch")
                  #+quicklisp

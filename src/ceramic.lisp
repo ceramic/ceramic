@@ -7,6 +7,8 @@
                 :setup)
   (:import-from :ceramic.runtime
                 :*releasep*)
+  (:import-from :ceramic.crashreporter
+                :start-crash-reporter)
   #+quicklisp
   (:import-from :ceramic.bundler
                 :bundle)
@@ -70,6 +72,7 @@
            :unselect
            :open-dev-tools
            :close-dev-tools)
+  (:export :start-crash-reporter)
   (:export :bundle)
   (:export :define-resources
            :resource-directory
