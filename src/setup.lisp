@@ -43,7 +43,7 @@
   (uiop:copy-file +main-javascript+
                   (merge-pathnames #p"main.js"
                                    (app-directory directory
-                                                                 :operating-system operating-system))))
+                                                  :operating-system operating-system))))
 
 (defun insert-package-definition (directory &key operating-system)
   "Insert the package.json into an Electron release."
@@ -67,6 +67,7 @@
 
 (defun prepare-release (directory &key operating-system)
   "Prepare an Electron release."
+  (ensure-directories-exist (app-directory directory :operating-system operating-system))
   (clean-release directory :operating-system operating-system)
   (insert-javascript directory :operating-system operating-system)
   (insert-package-definition directory :operating-system operating-system)
@@ -74,7 +75,7 @@
 
 ;;; Main
 
-(defparameter *electron-version* "0.37.2"
+(defparameter *electron-version* "1.2.7"
   "The version of Electron to use.")
 
 (defun setup (&key force)

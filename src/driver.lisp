@@ -14,6 +14,7 @@
   (:import-from :ceramic.os
                 :*operating-system*)
   (:import-from :electron-tools
+                :app-directory
                 :binary-pathname)
   (:export :driver
            :*driver*
@@ -119,9 +120,11 @@
                        (release-directory))))
     (with-slots (process) driver
       (setf process
-            (external-program:start (binary-pathname directory
-                                                     :operating-system ceramic.os:*operating-system*)
-                                    (list (write-to-string (port driver)))
+            (external-program:start (print (binary-pathname directory
+                                                            :operating-system ceramic.os:*operating-system*))
+                                    (list (app-directory directory
+                                                         :operating-system ceramic.os:*operating-system*)
+                                          (write-to-string (port driver)))
                                     :output (when *logging* *standard-output*)
                                     :error :output))))
   (values))

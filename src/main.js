@@ -4,8 +4,6 @@ const BrowserWindow = electron.BrowserWindow;
 const WebSocket = require('ws');
 const dialog = require('electron').dialog;
 
-require('crash-reporter').start();
-
 var Ceramic = {};
 
 /* Communication */
@@ -13,7 +11,7 @@ var Ceramic = {};
 var RemoteJS = {};
 
 Ceramic.startWebSockets = function(port) {
-  RemoteJS.ws = new WebSocket('ws://localhost:' + port);
+  RemoteJS.ws = new WebSocket('ws://127.0.0.1:' + port);
 
   RemoteJS.send = function(data) {
     RemoteJS.ws.send(data);
@@ -38,6 +36,10 @@ Ceramic.syncEval = function(id, fn) {
     id: id,
     result: result
   }))
+};
+
+Ceramic.startCrashReporter = function (options) {
+    electron.crashReporter.start(options);
 };
 
 /* Windows */
@@ -76,5 +78,5 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
   // Start the WebSockets server
-  Ceramic.startWebSockets(parseInt(process.argv[1]));
+  Ceramic.startWebSockets(parseInt(process.argv[2]));
 });
