@@ -99,6 +99,12 @@
   (:method ((driver driver))
     (remote-js:context-port (driver-context driver))))
 
+(defgeneric address (driver)
+  (:documentation "Return the address the WebSockets server is running on.")
+
+  (:method ((driver driver))
+    (remote-js:context-address (driver-context driver))))
+
 ;;; IPC
 
 (defgeneric on-message (driver message)
@@ -120,10 +126,11 @@
                        (release-directory))))
     (with-slots (process) driver
       (setf process
-            (external-program:start (print (binary-pathname directory
-                                                            :operating-system ceramic.os:*operating-system*))
+            (external-program:start (binary-pathname directory
+                                                     :operating-system ceramic.os:*operating-system*)
                                     (list (app-directory directory
                                                          :operating-system ceramic.os:*operating-system*)
+                                          (address driver)
                                           (write-to-string (port driver)))
                                     :output (when *logging* *standard-output*)
                                     :error :output))))
@@ -143,7 +150,8 @@
   "Start the remote-js server."
   (with-slots (context) driver
     (setf context
-          (remote-js:make-buffered-context :callback
+          (remote-js:make-buffered-context :address "localhost"
+                                           :callback
                                            #'(lambda (message)
                                                (on-message driver message))))
     (remote-js:start context))

@@ -10,8 +10,8 @@ var Ceramic = {};
 
 var RemoteJS = {};
 
-Ceramic.startWebSockets = function(port) {
-  RemoteJS.ws = new WebSocket('ws://127.0.0.1:' + port);
+Ceramic.startWebSockets = function(address, port) {
+  RemoteJS.ws = new WebSocket('ws://' + address + ':' + port);
 
   RemoteJS.send = function(data) {
     RemoteJS.ws.send(data);
@@ -78,5 +78,6 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
   // Start the WebSockets server
-  Ceramic.startWebSockets(parseInt(process.argv[2]));
+  Ceramic.startWebSockets(process.argv[2],
+                          parseInt(process.argv[3]));
 });
