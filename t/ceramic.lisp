@@ -16,6 +16,7 @@
     (run! 'ceramic-test.driver:driver)
     (run! 'ceramic-test.window:window)
     (run! 'ceramic-test.crashreporter:crashreporter)
+    (run! 'ceramic-test.dialog:dialog)
     (run! 'ceramic-test.integration:integration)
     (run! 'ceramic-test.misc:misc)
     ;; Cleanup

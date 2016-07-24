@@ -4,7 +4,9 @@ const BrowserWindow = electron.BrowserWindow;
 const WebSocket = require('ws');
 const dialog = require('electron').dialog;
 
-var Ceramic = {};
+var Ceramic = {
+    dialog: dialog
+};
 
 /* Communication */
 
