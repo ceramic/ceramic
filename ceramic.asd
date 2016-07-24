@@ -33,6 +33,7 @@
                  (:file "driver")
                  (:file "window")
                  (:file "crashreporter")
+                 (:file "dialog")
                  #-quicklisp
                  (:file "ql-patch")
                  #+quicklisp

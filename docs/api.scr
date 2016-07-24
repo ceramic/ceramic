@@ -53,6 +53,19 @@
 
 @end(section)
 
+
+@begin(section)
+@title(Dialogs)
+
+@cl:with-package[name="ceramic.dialog"](
+@cl:doc(function show-open-dialog)
+@cl:doc(function show-save-dialog)
+@cl:doc(function show-message-box)
+@cl:doc(function show-error-box)
+
+@end(section)
+
+
 @begin(section)
 @title(Bundler)
 
