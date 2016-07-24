@@ -130,7 +130,7 @@
 
 (define-trivial-operation %reload "reload()")
 
-(define-trivial-operation %reload-force "reloadIgnoringCache()")
+(define-trivial-operation %reload-force "webContents.reloadIgnoringCache()")
 
 (defmethod reload ((window window) &key ignore-cache)
   "Reload the window. Optionally ignore the cache."
@@ -138,7 +138,7 @@
       (%reload window)
       (%reload-force window)))
 
-(define-trivial-operation stop-loading "stop()"
+(define-trivial-operation stop-loading "webContents.stop()"
   :docstring "Stop any navigation.")
 
 (define-trivial-operation back "webContents.goBack()"
