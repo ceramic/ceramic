@@ -33,6 +33,12 @@
    (context :accessor driver-context
             :type remote-js:buffered-context
             :documentation "The remote-js object.")
+   (js-lock :accessor driver-js-lock
+            :initform (bt:make-lock "ceramic-js-sync")
+            :documentation "A lock object for js sync")
+   (js-cond :accessor driver-js-cond
+            :initform (bt:make-condition-variable)
+            :documentation "A condition variable for js sync")
    (responses :accessor driver-responses
               :initform (make-hash-table :test #'equal)
               :type hash-table
@@ -84,14 +90,18 @@
       ;; Send the message
       (js driver full-js)
       ;; And wait for the reply
-      (with-slots (responses) driver
-        (loop
-          (multiple-value-bind (response found)
-              (gethash message-id responses)
-            (when found
-              ;; We got a reply
-              (remhash message-id responses)
-              (return-from sync-js response))))))))
+      (with-slots (responses js-lock js-cond) driver
+        (bt:with-lock-held (js-lock)
+          (loop
+            (multiple-value-bind (response found)
+                (gethash message-id responses)
+              (if found
+                  ;; We got a reply
+                  (progn
+                    (remhash message-id responses)
+                    (return-from sync-js response))
+                  ;; Not yet
+                  (bt:condition-wait js-cond js-lock)))))))))
 
 (defgeneric port (driver)
   (:documentation "Return the port the WebSockets server is running on.")
@@ -113,9 +123,11 @@
   (:method ((driver driver) message)
     (declare (type string message))
     (let ((data (cl-json:decode-json-from-string message)))
-      (with-slots (responses) driver
-        (setf (gethash (rest (assoc :id data :test #'eq)) responses)
-              (rest (assoc :result data :test #'eq)))))))
+      (with-slots (responses js-lock js-cond) driver
+        (bt:with-lock-held (js-lock)
+          (setf (gethash (rest (assoc :id data :test #'eq)) responses)
+                (rest (assoc :result data :test #'eq)))
+          (bt:condition-notify js-cond))))))
 
 ;;; Internals
 
