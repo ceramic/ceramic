@@ -20,7 +20,7 @@
 
 (test compiled
   (finishes
-    (asdf:load-system :ceramic-test-app))
+    (asdf:load-system :ceramic-test-app :force t))
   (let* ((app-file (merge-pathnames #p"ceramic-test-app.tar"
                                     *extraction-directory*))
          (binary (merge-pathnames #p"ceramic-test-app"
