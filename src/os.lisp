@@ -14,7 +14,7 @@
      :windows)
     ((uiop:os-macosx-p)
      :mac)
-    ((uiop:os-unix-p)
+    ((equal (uiop:operating-system) :linux) ;;but not BSDs and other *nix
      :linux)
     (t
      (error 'unsupported-operating-system
