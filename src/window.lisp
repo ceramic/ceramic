@@ -57,17 +57,19 @@
            (loop for (key value) on plist by #'cddr
                  if value
                  appending (list key value))))
-    (let ((options (cl-json:encode-json-plist-to-string
-                    (remove-null-values
-                     (list :title title
-                           :width width
-                           :height height
-			   :frame frame
-			   :show show
-			   :transparent transparent
-			   :resizable resizable))))
+    (let ((options (cl-ppcre:regex-replace-all
+		    ":\"true\""
+		    (cl-json:encode-json-plist-to-string
+		     (remove-null-values
+		      (list :title title
+			    :width width
+			    :height height
+			    :frame frame
+			    :show show
+			    :transparent transparent
+			    :resizable resizable)))
+		    ":true"))
           (win (make-instance class)))
-      (format t "options: ~A" options)
       (with-slots (%id) win
         (js "Ceramic.windows[~S] = Ceramic.createWindow(~S, ~A)" %id (or url "null") options))
       win)))
@@ -92,6 +94,7 @@
 (define-trivial-operation crashedp "webContents.isCrashed()"
   :docstring "Return whether the window has crashed."
   :sync t)
+
 
 ;;; Getters
 
