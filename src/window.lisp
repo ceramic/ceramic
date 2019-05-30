@@ -67,6 +67,7 @@
 			   :transparent transparent
 			   :resizable resizable))))
           (win (make-instance class)))
+      (format t "options: ~A" options)
       (with-slots (%id) win
         (js "Ceramic.windows[~S] = Ceramic.createWindow(~S, ~A)" %id (or url "null") options))
       win)))
