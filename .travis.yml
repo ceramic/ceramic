@@ -13,7 +13,7 @@ env:
 addons:
   apt:
     packages:
-      - xfvb
+      - xvfb
 
 install:
   # Roswell & coveralls
